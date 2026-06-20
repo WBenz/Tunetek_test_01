@@ -1,0 +1,4033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunetek Studio Design | Creative Design Solutions</title>
+    <meta name="description" content="Tunetek Studio Design - Creative design solutions for graphic, motion, and web design. Based in Tunisia, serving worldwide clients.">
+    
+    <!-- Favicons -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        /* ===================== CSS VARIABLES ===================== */
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #ff6b00;
+            --tertiary-color: #ffffff;
+            --text-color: #333333;
+            --dark-bg: #1a1a1a;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --footer-bg: #1a1a1a;
+            --input-bg: #ffffff;
+            --input-border: #dddddd;
+            --accent-color: #f8f9fa;
+            --label-color: #333333;
+            --border-light: rgba(0,0,0,0.06);
+            
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --secondary: #ff6b00;
+            --secondary-dark: #e05d00;
+            
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --header-height: 72px;
+            --max-width: 1200px;
+            
+            --font-heading: 'Space Grotesk', 'Inter', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* ===================== DARK THEME ===================== */
+        [data-theme="dark"] {
+            --primary-color: #5b9aff;
+            --secondary-color: #ff8c42;
+            --tertiary-color: #121212;
+            --text-color: #e0e0e0;
+            --dark-bg: #050505;
+            --card-bg: #1e1e1e;
+            --header-bg: rgba(30, 30, 30, 0.95);
+            --footer-bg: #050505;
+            --input-bg: #2d2d2d;
+            --input-border: #444444;
+            --accent-color: #1e1e1e;
+            --label-color: #e0e0e0;
+            --border-light: rgba(255,255,255,0.06);
+        }
+
+        /* ===================== BACKGROUND IMAGES ===================== */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-repeat: repeat;
+            background-attachment: fixed;
+            background-size: 300px auto;
+            background-position: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-light {
+            background-image: url('BG2.jpg');
+            opacity: 1;
+        }
+
+        .bg-dark {
+            background-image: url('BG.jpg');
+            opacity: 0;
+            z-index: -1;
+        }
+
+        [data-theme="dark"] .bg-light {
+            opacity: 0;
+        }
+
+        [data-theme="dark"] .bg-dark {
+            opacity: 0.7;
+        }
+
+        /* ===================== RESET & BASE ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--header-height);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--tertiary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color var(--transition), color var(--transition);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ===================== UTILITY ===================== */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 60px 0;
+            }
+            .container {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+        }
+
+        /* ===================== SECTION TITLES ===================== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            transition: width 0.5s ease;
+        }
+
+        .section-title:hover::after {
+            width: 100%;
+        }
+
+        .section-title .highlight {
+            color: var(--secondary-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+
+        /* ===================== LOADING OVERLAY ===================== */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--tertiary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        [data-theme="dark"] #loading-overlay {
+            background: var(--tertiary-color);
+        }
+
+        #loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .loading-gif {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .loading-progress-container {
+            width: 250px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        [data-theme="dark"] .loading-progress-container {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .loading-text {
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.6;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .loading-percentage {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-family: var(--font-heading);
+        }
+
+        @media (max-width: 768px) {
+            .loading-gif {
+                width: 100px;
+                height: 100px;
+            }
+            .loading-progress-container {
+                width: 200px;
+            }
+            .loading-percentage {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loading-gif {
+                width: 80px;
+                height: 80px;
+            }
+            .loading-progress-container {
+                width: 160px;
+            }
+            .loading-percentage {
+                font-size: 0.9rem;
+            }
+            .loading-text {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ===================== HEADER ===================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 9900;
+            transition: all var(--transition);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            opacity: 1;
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(30, 30, 30, 1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        header.at-top {
+            background: rgba(255, 255, 255, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] header.at-top {
+            background: rgba(30, 30, 30, 1);
+        }
+
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] header.scrolled {
+            background: rgba(30, 30, 30, 0.5);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 0 16px;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-text .tunetek {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+
+        .logo-text .studio-design {
+            font-size: 1.0rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            letter-spacing: 0.5px;
+            margin-left: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .logo img {
+                height: 32px;
+            }
+            .logo-text .tunetek {
+                font-size: 1.5rem;
+            }
+            .logo-text .studio-design {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo img {
+                height: 28px;
+            }
+            .logo-text .tunetek {
+                font-size: 1.3rem;
+            }
+            .logo-text .studio-design {
+                font-size: 0.75rem;
+            }
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            border-radius: 8px;
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--secondary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
+            transition: all var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 60%;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+        }
+
+        .header-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-color);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .header-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            border-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        [data-theme="dark"] .header-btn {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .header-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .language-btn {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 6px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            opacity: 0.5;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .language-btn.active {
+            opacity: 1;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .language-btn:hover {
+            opacity: 1;
+            color: var(--secondary-color);
+        }
+
+        .language-separator {
+            color: var(--text-color);
+            opacity: 0.2;
+            font-size: 0.7rem;
+        }
+
+        .hamburger {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--primary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all var(--transition);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hamburger:hover {
+            color: var(--secondary-color);
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] .hamburger {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .hamburger:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 992px) {
+            .nav-container {
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                width: 100%;
+                height: calc(100vh - var(--header-height));
+                background: var(--card-bg);
+                flex-direction: column;
+                padding: 30px 20px;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow-y: auto;
+                border-top: 1px solid var(--border-light);
+                gap: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            }
+
+            [data-theme="dark"] .nav-container {
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .nav-container.active {
+                transform: translateX(0);
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .nav-container.active .nav-links li {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            .nav-container.active .nav-links li:nth-child(1) { transition-delay: 0.05s; }
+            .nav-container.active .nav-links li:nth-child(2) { transition-delay: 0.1s; }
+            .nav-container.active .nav-links li:nth-child(3) { transition-delay: 0.15s; }
+            .nav-container.active .nav-links li:nth-child(4) { transition-delay: 0.2s; }
+            .nav-container.active .nav-links li:nth-child(5) { transition-delay: 0.25s; }
+            .nav-container.active .nav-links li:nth-child(6) { transition-delay: 0.3s; }
+            .nav-container.active .nav-links li:nth-child(7) { transition-delay: 0.35s; }
+
+            .nav-links a {
+                padding: 14px 20px;
+                font-size: 1rem;
+                text-align: center;
+                border-radius: 8px;
+                width: 100%;
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .nav-links a:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
+
+            [data-theme="dark"] .nav-links a:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-links li:last-child {
+                margin-top: 10px;
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .nav-links li:last-child .header-controls {
+                margin-left: 0;
+            }
+
+            .header-controls {
+                margin-left: 0;
+                justify-content: center;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        /* ===================== HERO SECTION ===================== */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: var(--header-height);
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .hero-video-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 40px 0;
+        }
+
+        .hero-actions-bottom {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-actions-bottom {
+                bottom: 20px;
+                left: 20px;
+                gap: 8px;
+            }
+            .hero-actions-bottom .btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-actions-bottom {
+                bottom: 16px;
+                left: 16px;
+                gap: 6px;
+                flex-direction: column;
+                width: calc(100% - 32px);
+            }
+            .hero-actions-bottom .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2;
+        }
+
+        .video-controls button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-controls button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        /* ===================== BUTTONS ===================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255, 107, 0, 0.4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        [data-theme="dark"] .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        [data-theme="dark"] .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* ===================== SERVICES ===================== */
+        #services {
+            background-color: var(--accent-color);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-light);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            font-family: var(--font-heading);
+        }
+
+        .service-desc {
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .service-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* ============================================================
+                   PORTFOLIO - SPLIT SCREEN WITH SEARCH
+                   ============================================================ */
+        #portfolio {
+            background-color: var(--accent-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Filter & Search Bar */
+        .split-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .split-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .split-filter-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--border-light);
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .split-filter-btn:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .split-filter-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.3);
+        }
+
+        .split-filter-btn .count {
+            background: rgba(0,0,0,0.08);
+            padding: 0 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        [data-theme="dark"] .split-filter-btn .count {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .split-filter-btn.active .count {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Search Bar */
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            max-width: 320px;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 10px 20px 10px 44px;
+            border: 2px solid var(--border-light);
+            border-radius: 50px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            transition: all var(--transition);
+            outline: none;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+        }
+
+        .search-wrapper input::placeholder {
+            color: var(--text-color);
+            opacity: 0.4;
+        }
+
+        .search-wrapper .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .search-wrapper .clear-search {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-color);
+            opacity: 0.3;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 4px;
+            display: none;
+            transition: opacity var(--transition);
+        }
+
+        .search-wrapper .clear-search.visible {
+            display: block;
+        }
+
+        .search-wrapper .clear-search:hover {
+            opacity: 0.8;
+        }
+
+        /* Split Container */
+        .split-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            min-height: 550px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Preview Panel - Left Side */
+        .split-preview {
+            position: relative;
+            background: var(--tertiary-color);
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Scrollbar for web zoom */
+        .split-preview::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .split-preview::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+
+        .split-preview::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        .split-preview::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-dark);
+        }
+
+        .split-preview .preview-media {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            max-height: 550px;
+        }
+
+        .split-preview .preview-media.web-zoom {
+            object-fit: cover;
+            cursor: zoom-out;
+        }
+
+        .split-preview .preview-media.web-scroll {
+            object-fit: contain;
+            cursor: grab;
+        }
+
+        .split-preview video.preview-media {
+            max-height: 550px;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .split-preview .preview-placeholder {
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.4;
+            padding: 40px;
+        }
+
+        .split-preview .preview-placeholder i {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .split-preview .preview-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 40px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.2s;
+        }
+
+        .split-preview:hover .preview-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .split-preview .preview-overlay h3 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .split-preview .preview-overlay .cat {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+
+        .split-preview .preview-overlay .year {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+
+        .split-preview .video-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .split-preview:hover .video-badge {
+            opacity: 1;
+        }
+
+        /* Preview Controls (for video and web) */
+        .preview-controls {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .split-preview:hover .preview-controls {
+            opacity: 1;
+        }
+
+        .preview-controls button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-controls button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .preview-controls .web-controls-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .preview-controls .web-controls-group .divider {
+            width: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 4px 4px;
+        }
+
+        /* Video specific controls */
+        .preview-controls .video-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 8px;
+        }
+
+        .preview-controls .video-progress .time {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+            font-family: monospace;
+            min-width: 36px;
+        }
+
+        .preview-controls .video-progress .progress-bar {
+            width: 100px;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .preview-controls .video-progress .progress-bar .fill {
+            height: 100%;
+            background: var(--secondary-color);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.05s linear;
+        }
+
+        /* List Panel - Right Side */
+        .split-list {
+            padding: 20px 24px;
+            overflow-y: auto;
+            max-height: 550px;
+            background: var(--card-bg);
+        }
+
+        .split-list .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 16px;
+        }
+
+        .split-list .list-header h4 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .split-list .list-header .count {
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+
+        .split-list .list-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid transparent;
+            margin-bottom: 6px;
+        }
+
+        .split-list .list-item:hover {
+            background: rgba(0,0,0,0.03);
+            transform: translateX(4px);
+        }
+
+        .split-list .list-item.active {
+            background: rgba(255, 107, 0, 0.08);
+            border-color: var(--secondary-color);
+            transform: translateX(6px);
+        }
+
+        [data-theme="dark"] .split-list .list-item:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        [data-theme="dark"] .split-list .list-item.active {
+            background: rgba(255, 107, 0, 0.12);
+        }
+
+        .split-list .list-item .thumb {
+            width: 56px;
+            height: 42px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #f0f0f0;
+        }
+
+        .split-list .list-item .thumb img,
+        .split-list .list-item .thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .split-list .list-item .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .split-list .list-item .info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .split-list .list-item .info .cat-tag {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .split-list .list-item .arrow {
+            color: var(--text-color);
+            opacity: 0.2;
+            transition: all 0.3s ease;
+        }
+
+        .split-list .list-item.active .arrow,
+        .split-list .list-item:hover .arrow {
+            opacity: 1;
+            color: var(--secondary-color);
+            transform: translateX(4px);
+        }
+
+        .split-list .list-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+
+        .split-list .list-loading i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .split-list .list-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+
+        .split-list .list-empty i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* Scrollbar for list */
+        .split-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .split-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .split-list::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 992px) {
+            .split-container {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            .split-preview {
+                min-height: 350px;
+            }
+            .split-list {
+                max-height: 400px;
+            }
+            .split-preview .preview-overlay {
+                padding: 20px 24px;
+            }
+            .split-preview .preview-overlay h3 {
+                font-size: 1.2rem;
+            }
+            .preview-controls {
+                bottom: 70px;
+                padding: 6px 12px;
+            }
+            .preview-controls button {
+                width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
+            }
+            .preview-controls .video-progress .progress-bar {
+                width: 60px;
+            }
+            .search-wrapper {
+                min-width: 150px;
+                max-width: 100%;
+            }
+            .split-controls {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .split-filters {
+                gap: 6px;
+            }
+            .split-filter-btn {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .split-preview {
+                min-height: 280px;
+            }
+            .split-list {
+                max-height: 350px;
+                padding: 12px 16px;
+            }
+            .split-list .list-item {
+                padding: 10px 12px;
+                gap: 12px;
+            }
+            .split-list .list-item .thumb {
+                width: 44px;
+                height: 34px;
+            }
+            .split-list .list-item .info h5 {
+                font-size: 0.8rem;
+            }
+            .search-wrapper input {
+                padding: 8px 16px 8px 36px;
+                font-size: 0.8rem;
+            }
+            .search-wrapper .search-icon {
+                left: 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .split-filter-btn {
+                padding: 6px 10px;
+                font-size: 0.65rem;
+            }
+            .split-filter-btn .count {
+                display: none;
+            }
+            .split-preview {
+                min-height: 220px;
+            }
+            .split-preview .preview-overlay {
+                padding: 14px 18px;
+            }
+            .split-preview .preview-overlay h3 {
+                font-size: 1rem;
+            }
+            .split-list {
+                max-height: 300px;
+                padding: 8px 12px;
+            }
+            .split-list .list-item {
+                padding: 8px 10px;
+                gap: 10px;
+            }
+            .split-list .list-item .thumb {
+                width: 36px;
+                height: 28px;
+            }
+            .split-list .list-item .info h5 {
+                font-size: 0.75rem;
+            }
+            .search-wrapper {
+                min-width: 120px;
+            }
+            .search-wrapper input {
+                padding: 6px 12px 6px 32px;
+                font-size: 0.7rem;
+            }
+            .search-wrapper .search-icon {
+                left: 10px;
+                font-size: 0.7rem;
+            }
+            .preview-controls {
+                bottom: 60px;
+                padding: 4px 10px;
+                gap: 6px;
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 90%;
+            }
+            .preview-controls button {
+                width: 26px;
+                height: 26px;
+                font-size: 0.65rem;
+            }
+            .preview-controls .video-progress .progress-bar {
+                width: 40px;
+            }
+            .preview-controls .video-progress .time {
+                font-size: 0.6rem;
+                min-width: 28px;
+            }
+        }
+
+        /* ===================== ABOUT ===================== */
+        #about {
+            background-color: var(--accent-color);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 50%;
+            border: 5px solid var(--secondary-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-content h3 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .about-content .role {
+            color: var(--text-color);
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .about-content p {
+            color: var(--text-color);
+            line-height: 1.8;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .about-image {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+            .about-content p {
+                text-align: center;
+            }
+            .about-content h3 {
+                text-align: center;
+            }
+            .about-content .role {
+                text-align: center;
+            }
+        }
+
+        /* ===================== CONTACT ===================== */
+        #contact {
+            text-align: center;
+            background: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+        }
+
+        [data-theme="dark"] #contact {
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .contact-info h3 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .contact-info p {
+            color: var(--text-color);
+            opacity: 0.8;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        .contact-item i {
+            width: 20px;
+            color: var(--secondary-color);
+        }
+
+        .contact-item a {
+            color: var(--text-color);
+            transition: color var(--transition);
+        }
+
+        .contact-item a:hover {
+            color: var(--secondary-color);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .contact-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .contact-form label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--label-color);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 12px 16px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: all var(--transition);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                text-align: center;
+            }
+            .contact-item {
+                justify-content: center;
+            }
+            .contact-form {
+                text-align: left;
+            }
+        }
+
+        /* ===================== FOOTER ===================== */
+        .site-footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 48px 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .footer-col h4 {
+            margin: 0 0 14px 0;
+            color: var(--secondary-color);
+            font-weight: 700;
+            line-height: 1.2;
+            font-family: var(--font-heading);
+            text-align: left;
+        }
+
+        .footer-col p,
+        .footer-col a,
+        .footer-col li {
+            color: #ccc;
+            font-size: 0.95rem;
+            text-decoration: none;
+            text-align: justify;
+        }
+
+        .footer-col a {
+            display: inline-block;
+            transition: color var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            transition: color var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .contact-item-footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .contact-item-footer i {
+            color: var(--secondary-color);
+            width: 20px;
+        }
+
+        .contact-item-footer a {
+            color: #ccc;
+            transition: color var(--transition);
+        }
+
+        .contact-item-footer a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-social {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-social a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        .footer-social a i {
+            width: 18px;
+        }
+
+        .footer-social a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 28px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+            font-size: 0.9rem;
+            color: #aaa;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 0 16px;
+            }
+            .footer-col h4 {
+                text-align: center;
+            }
+            .footer-col p,
+            .footer-col a,
+            .footer-col li {
+                text-align: center;
+            }
+            .contact-item-footer {
+                justify-content: center;
+            }
+            .footer-social a {
+                justify-content: center;
+            }
+            .footer-bottom {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .section-title::after {
+                width: 40%;
+            }
+            .section-title:hover::after {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ===================== ANIMATIONS ===================== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
+
+        /* ===================== SCROLLBAR ===================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-dark);
+        }
+
+        /* ===================== SELECTION ===================== */
+        ::selection {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* ===================== MODALS ===================== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close {
+            position: sticky;
+            top: 12px;
+            right: 12px;
+            float: right;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            z-index: 10;
+            margin: 12px;
+        }
+
+        .modal-close:hover {
+            background: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 0 32px 32px;
+        }
+
+        .graphic-gallery {
+            display: flex;
+            gap: 16px;
+            height: 60vh;
+            min-height: 400px;
+        }
+
+        .graphic-gallery .thumbnails {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .graphic-gallery .thumbnails img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all var(--transition);
+        }
+
+        .graphic-gallery .thumbnails img:hover {
+            border-color: rgba(0,0,0,0.2);
+        }
+
+        .graphic-gallery .thumbnails img.active {
+            border-color: var(--secondary-color);
+        }
+
+        .graphic-gallery .main-view {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .graphic-gallery .main-view img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .graphic-gallery .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition);
+            opacity: 0;
+        }
+
+        .graphic-gallery .main-view:hover .nav-btn {
+            opacity: 1;
+        }
+
+        .graphic-gallery .nav-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .graphic-gallery .prev-btn { left: 12px; }
+        .graphic-gallery .next-btn { right: 12px; }
+
+        @media (max-width: 768px) {
+            .graphic-gallery {
+                flex-direction: column;
+                height: auto;
+                min-height: 300px;
+            }
+            .graphic-gallery .thumbnails {
+                flex-direction: row;
+                width: 100%;
+                height: 80px;
+                overflow-x: auto;
+            }
+            .graphic-gallery .thumbnails img {
+                width: 80px;
+                height: 80px;
+                flex-shrink: 0;
+            }
+            .graphic-gallery .main-view {
+                min-height: 300px;
+            }
+            .modal-body {
+                padding: 0 16px 16px;
+            }
+        }
+
+        .motion-player {
+            width: 100%;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .motion-player video {
+            width: 100%;
+            display: block;
+        }
+
+        .motion-player .video-controls {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-light);
+            width: 100%;
+            border-radius: 0;
+        }
+
+        .motion-player .video-controls button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-color);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+
+        .motion-player .video-controls button:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: scale(1.1);
+        }
+
+        .motion-player .video-controls .progress {
+            flex: 1;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .motion-player .video-controls .progress .progress-bar {
+            height: 100%;
+            background: var(--secondary-color);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .motion-player .video-controls .time {
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: var(--text-color);
+            opacity: 0.6;
+            min-width: 40px;
+        }
+
+        .web-viewer {
+            position: relative;
+            height: 70vh;
+            min-height: 400px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .web-viewer img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .web-viewer .view-toggle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .web-viewer .view-toggle:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== BACKGROUND IMAGES ==================== -->
+    <div class="background-image bg-light"></div>
+    <div class="background-image bg-dark"></div>
+
+    <!-- ==================== LOADING OVERLAY ==================== -->
+    <div id="loading-overlay">
+        <div class="loading-content">
+            <img src="tunetek_loading.gif" alt="Loading animation" class="loading-gif">
+            <div class="loading-percentage" id="loading-percentage">0%</div>
+            <div class="loading-progress-container">
+                <div class="loading-progress-bar" id="loading-progress-bar"></div>
+            </div>
+            <div class="loading-text" id="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- ==================== HEADER ==================== -->
+    <header id="main-header" role="banner">
+        <div class="header-container">
+            <a href="#hero" class="logo" aria-label="Tunetek Studio Design Home">
+                <img src="logo_transparent.png" alt="Tunetek Studio Design Logo" width="40" height="40">
+                <div class="logo-text">
+                    <span class="tunetek">Tunetek</span>
+                    <span class="studio-design">Studio Design</span>
+                </div>
+            </a>
+
+            <nav class="nav-container" id="nav-container" role="navigation" aria-label="Main Navigation">
+                <ul class="nav-links">
+                    <li><a href="#hero" data-i18n="nav.home" class="active">Home</a></li>
+                    <li><a href="#services" data-i18n="nav.services">Services</a></li>
+                    <li><a href="#portfolio" data-i18n="nav.portfolio">Projects</a></li>
+                    <li><a href="#about" data-i18n="nav.about">About</a></li>
+                    <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+                    <li>
+                        <div class="header-controls">
+                            <button class="language-btn active" id="lang-en" aria-label="English">EN</button>
+                            <span class="language-separator">|</span>
+                            <button class="language-btn" id="lang-fr" aria-label="Français">FR</button>
+                            <span class="language-separator">|</span>
+                            <button class="header-btn" id="theme-toggle" aria-label="Toggle theme">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== HERO ==================== -->
+    <section id="hero" aria-label="Hero">
+        <div class="hero-video-container">
+            <video class="hero-video" autoplay loop muted playsinline preload="metadata">
+                <source src="https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/hero-video.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="video-controls">
+            <button id="mute-btn" aria-label="Toggle sound">
+                <i class="fas fa-volume-mute"></i>
+            </button>
+        </div>
+
+        <div class="container">
+            <div class="hero-content"></div>
+        </div>
+
+        <div class="hero-actions-bottom">
+            <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
+                <span>View Our Work</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#contact" class="btn btn-secondary" data-i18n="hero.cta.contact">
+                <span>Let's Talk</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ==================== SERVICES ==================== -->
+    <section id="services" aria-label="Our Services">
+        <div class="container section-padding">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="services.title">
+                    Our <span class="highlight">Services</span>
+                </h2>
+                <p class="section-subtitle" data-i18n="services.subtitle">
+                    From concept to execution, we deliver design solutions that make your brand stand out.
+                </p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3 class="service-title" data-i18n="services.graphic.title">Graphic Design</h3>
+                    <p class="service-desc" data-i18n="services.graphic.desc">
+                        We create visually stunning designs that communicate your brand's message effectively. From logos to complete brand identities.
+                    </p>
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop&crop=center" alt="Graphic Design" class="service-image" loading="lazy">
+                </div>
+
+                <div class="service-card fade-in fade-in-delay-1">
+                    <div class="service-icon"><i class="fas fa-film"></i></div>
+                    <h3 class="service-title" data-i18n="services.motion.title">Motion Design</h3>
+                    <p class="service-desc" data-i18n="services.motion.desc">
+                        Bring your ideas to life with captivating motion graphics and animations. Perfect for explainer videos and social media.
+                    </p>
+                    <img src="https://images.unsplash.com/photo-1579389083078-4e7018379f7e?w=600&h=400&fit=crop&crop=center" alt="Motion Design" class="service-image" loading="lazy">
+                </div>
+
+                <div class="service-card fade-in fade-in-delay-2">
+                    <div class="service-icon"><i class="fas fa-code"></i></div>
+                    <h3 class="service-title" data-i18n="services.web.title">Web Design</h3>
+                    <p class="service-desc" data-i18n="services.web.desc">
+                        We design responsive, user-friendly websites that not only look great but perform exceptionally across all devices.
+                    </p>
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=400&fit=crop&crop=center" alt="Web Design" class="service-image" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PORTFOLIO - SPLIT SCREEN WITH SEARCH ==================== -->
+    <section id="portfolio" aria-label="Our Portfolio">
+        <div class="container section-padding">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="portfolio.title">
+                    Our <span class="highlight">Projects</span>
+                </h2>
+                <p class="section-subtitle" data-i18n="portfolio.subtitle">
+                    Browse our work — click a project to preview it in detail.
+                </p>
+            </div>
+
+            <!-- Controls: Filters + Search -->
+            <div class="split-controls">
+                <div class="split-filters" id="splitFilters">
+                    <button class="split-filter-btn active" data-category="all">
+                        <span class="icon">🎯</span> <span data-i18n="portfolio.filter.all">All</span>
+                        <span class="count" id="countAll">0</span>
+                    </button>
+                    <button class="split-filter-btn" data-category="graphic">
+                        <span class="icon">🎨</span> <span data-i18n="portfolio.filter.graphic">Graphic</span>
+                        <span class="count" id="countGraphic">0</span>
+                    </button>
+                    <button class="split-filter-btn" data-category="motion">
+                        <span class="icon">🎬</span> <span data-i18n="portfolio.filter.motion">Motion</span>
+                        <span class="count" id="countMotion">0</span>
+                    </button>
+                    <button class="split-filter-btn" data-category="web">
+                        <span class="icon">🌐</span> <span data-i18n="portfolio.filter.web">Web</span>
+                        <span class="count" id="countWeb">0</span>
+                    </button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search projects..." data-i18n="portfolio.search">
+                    <button class="clear-search" id="clearSearch" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Split Container -->
+            <div class="split-container" id="splitContainer">
+                <!-- Preview Panel -->
+                <div class="split-preview" id="splitPreview">
+                    <div class="preview-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p data-i18n="portfolio.select">Select a project from the list</p>
+                    </div>
+                    <div class="preview-overlay" id="previewOverlay">
+                        <span class="cat" id="previewCat">Category</span>
+                        <h3 id="previewTitle">Project Title</h3>
+                        <div class="year" id="previewYear">2024</div>
+                    </div>
+                    <div class="video-badge" id="previewVideoBadge"><i class="fas fa-play"></i> video</div>
+                    
+                    <!-- Preview Controls (video + web) -->
+                    <div class="preview-controls" id="previewControls">
+                        <!-- Video controls -->
+                        <div class="video-controls-group" id="videoControlsGroup" style="display:none;">
+                            <button class="video-play-btn" id="videoPlayBtn" aria-label="Play/Pause">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="video-progress">
+                                <span class="time current-time">00:00</span>
+                                <div class="progress-bar">
+                                    <div class="fill" id="videoProgressFill"></div>
+                                </div>
+                                <span class="time duration">00:00</span>
+                            </div>
+                            <button class="video-mute-btn" id="videoMuteBtn" aria-label="Toggle mute">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                            <button class="video-fullscreen-btn" id="videoFullscreenBtn" aria-label="Fullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+
+                        <!-- Web controls -->
+                        <div class="web-controls-group" id="webControlsGroup" style="display:none;">
+                            <button class="web-zoom-btn" id="webZoomBtn" aria-label="Toggle zoom">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <div class="divider"></div>
+                            <button class="web-fullscreen-btn" id="webFullscreenBtn" aria-label="Fullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Panel -->
+                <div class="split-list" id="splitList">
+                    <div class="list-header">
+                        <h4 data-i18n="portfolio.projects">Projects</h4>
+                        <span class="count" id="listCount">0 projects</span>
+                    </div>
+                    <div class="list-loading" id="listLoading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p data-i18n="portfolio.loading">Loading projects...</p>
+                    </div>
+                    <div id="listContainer"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" aria-label="About the Founder">
+        <div class="container section-padding">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="about.title">
+                    About the <span class="highlight">Founder</span>
+                </h2>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-image fade-in">
+                    <img src="profil.jpg" alt="Wassef Ben Slimane - Founder of Tunetek Studio Design" loading="lazy">
+                </div>
+
+                <div class="about-content fade-in fade-in-delay-1">
+                    <h3 data-i18n="about.name">Wassef Ben Slimane</h3>
+                    <span class="role" data-i18n="about.role">Lead Designer & Creative Director</span>
+                    
+                    <p data-i18n="about.desc1">
+                        With over 10 years of experience in graphic, motion, and web design, Wassef Ben Slimane founded Tunetek Studio Design to blend artistic creativity with technical excellence.
+                    </p>
+                    <p data-i18n="about.desc2">
+                        After working with leading design agencies worldwide, he established the studio in 2016, which has since become known for innovative design solutions that are both visually appealing and functionally effective.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" aria-label="Contact Us">
+        <div class="container section-padding">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="contact.title">
+                    Get In <span class="highlight">Touch</span>
+                </h2>
+                <p class="section-subtitle" data-i18n="contact.subtitle">
+                    Have a project in mind? We'd love to hear about it.
+                </p>
+            </div>
+
+            <div class="contact-wrapper">
+                <div class="contact-info fade-in">
+                    <h3 data-i18n="contact.info.title">Contact Information</h3>
+                    <p data-i18n="contact.info.desc">
+                        Reach out to us for any inquiries about our services or to discuss your next project.
+                    </p>
+
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:contact@tunetek.studio">contact@tunetek.studio</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+21620682879">+216 20 682 879</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/21620682879" target="_blank" rel="noopener">+216 20 682 879</a>
+                    </div>
+                </div>
+
+                <form class="contact-form fade-in fade-in-delay-1" id="contact-form" action="https://formspree.io/f/mrblprpo" method="POST" novalidate>
+                    <div class="form-group">
+                        <label for="name" data-i18n="contact.name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" data-i18n="contact.email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject" data-i18n="contact.subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project idea">
+                    </div>
+                    <div class="form-group">
+                        <label for="message" data-i18n="contact.message">Message</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Tell us about your project..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-i18n="contact.submit">
+                        <span>Send Message</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4 data-i18n="footer.companyTitle">Tunetek Studio Design</h4>
+                <p data-i18n="footer.companyDesc">
+                    We craft modern branding, web design, and motion graphics that help businesses grow with clear visuals and smooth experiences.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4 data-i18n="footer.quickLinksTitle">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#hero" data-i18n="footer.linkHome">Home</a></li>
+                    <li><a href="#services" data-i18n="footer.linkServices">Services</a></li>
+                    <li><a href="#portfolio" data-i18n="footer.linkProjects">Projects</a></li>
+                    <li><a href="#about" data-i18n="footer.linkFounder">About</a></li>
+                    <li><a href="#contact" data-i18n="footer.linkContact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 data-i18n="footer.contactTitle">Contact</h4>
+                <div class="contact-item-footer">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:contact@tunetek.studio">contact@tunetek.studio</a>
+                </div>
+                <div class="contact-item-footer">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+21620682879">+216 20 682 879</a>
+                </div>
+                <div class="contact-item-footer">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/21620682879" target="_blank" rel="noopener">+216 20 682 879</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 data-i18n="footer.socialTitle">Follow Us</h4>
+                <div class="footer-social">
+                    <a href="https://www.behance.net/tunetekstudiodesign" target="_blank" rel="noopener" aria-label="Behance">
+                        <i class="fab fa-behance"></i> Behance
+                    </a>
+                    <a href="https://www.facebook.com/tunetekstudiodesign" target="_blank" rel="noopener" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                    <a href="https://www.instagram.com/tunetek_studio_design/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://www.linkedin.com/company/tunetekstudiodesign" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i> LinkedIn
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p data-i18n="footer.copyright">&copy; 2016 - 2026 Tunetek Studio Design. All rights reserved.</p>
+            <p style="margin-top:4px; opacity:0.6;" data-i18n="footer.credit">Created with ❤ by Wassef Ben Slimane</p>
+        </div>
+    </footer>
+
+    <!-- ==================== MODALS ==================== -->
+    <!-- Project Detail Modal (Graphic) -->
+    <div class="modal" id="graphic-project-modal" role="dialog" aria-modal="true" aria-label="Graphic Design Project Detail">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
+            <div class="modal-body">
+                <div class="graphic-gallery">
+                    <div class="thumbnails" id="graphic-thumbnails"></div>
+                    <div class="main-view" id="graphic-main-view">
+                        <img src="" alt="Project image" id="graphic-main-image">
+                        <button class="nav-btn prev-btn" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+                        <button class="nav-btn next-btn" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal (Motion) -->
+    <div class="modal" id="motion-project-modal" role="dialog" aria-modal="true" aria-label="Motion Design Project Detail">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
+            <div class="modal-body">
+                <div class="motion-player">
+                    <video id="motion-video" playsinline preload="metadata"></video>
+                    <div class="video-controls">
+                        <button class="play-btn" aria-label="Play"><i class="fas fa-play"></i></button>
+                        <button class="pause-btn" aria-label="Pause" style="display:none;"><i class="fas fa-pause"></i></button>
+                        <div class="progress">
+                            <div class="progress-bar" id="motion-progress-bar"></div>
+                        </div>
+                        <span class="time current-time">00:00</span>
+                        <span class="time duration">00:00</span>
+                        <button class="mute-btn" aria-label="Toggle mute"><i class="fas fa-volume-up"></i></button>
+                        <button class="fullscreen-btn" aria-label="Fullscreen"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal (Web) -->
+    <div class="modal" id="web-project-modal" role="dialog" aria-modal="true" aria-label="Web Design Project Detail">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
+            <div class="modal-body">
+                <div class="web-viewer">
+                    <img src="" alt="Web Design Project" id="web-project-image">
+                    <button class="view-toggle" aria-label="Toggle view mode"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // =====================================================================
+        // REAL PROGRESS TRACKING SYSTEM
+        // =====================================================================
+        
+        const loadingItems = {
+            total: 0,
+            loaded: 0,
+            progress: 0
+        };
+
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const progressBar = document.getElementById('loading-progress-bar');
+        const percentageDisplay = document.getElementById('loading-percentage');
+        const loadingText = document.getElementById('loading-text');
+
+        function updateLoadingProgress() {
+            const percent = Math.min(Math.round((loadingItems.loaded / loadingItems.total) * 100), 100);
+            loadingItems.progress = percent;
+            
+            progressBar.style.width = percent + '%';
+            percentageDisplay.textContent = percent + '%';
+            
+            if (percent < 30) {
+                loadingText.textContent = 'Initializing...';
+            } else if (percent < 60) {
+                loadingText.textContent = 'Loading resources...';
+            } else if (percent < 85) {
+                loadingText.textContent = 'Preparing content...';
+            } else if (percent < 100) {
+                loadingText.textContent = 'Almost ready...';
+            } else {
+                loadingText.textContent = 'Complete!';
+            }
+
+            if (percent >= 100) {
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                }, 400);
+            }
+        }
+
+        function trackLoadedItem() {
+            loadingItems.loaded++;
+            updateLoadingProgress();
+        }
+
+        // =====================================================================
+        // HEADER OPACITY
+        // =====================================================================
+        function handleHeaderOpacity() {
+            const header = document.getElementById('main-header');
+            const heroSection = document.getElementById('hero');
+            
+            if (!header || !heroSection) return;
+            
+            const heroHeight = heroSection.offsetHeight;
+            const scrollPosition = window.pageYOffset;
+            const scrollRatio = Math.min(scrollPosition / heroHeight, 1);
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            
+            const minOpacity = 0.5;
+            const maxOpacity = 1.0;
+            const opacity = maxOpacity - (scrollRatio * (maxOpacity - minOpacity));
+            
+            if (scrollPosition < 10) {
+                header.classList.add('at-top');
+                header.classList.remove('scrolled');
+                if (isDark) {
+                    header.style.background = `rgba(30, 30, 30, ${opacity})`;
+                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
+                } else {
+                    header.style.background = `rgba(255, 255, 255, ${opacity})`;
+                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
+                }
+            } else if (scrollPosition < heroHeight) {
+                header.classList.remove('at-top');
+                header.classList.remove('scrolled');
+                if (isDark) {
+                    header.style.background = `rgba(30, 30, 30, ${opacity})`;
+                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
+                } else {
+                    header.style.background = `rgba(255, 255, 255, ${opacity})`;
+                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
+                }
+            } else {
+                header.classList.remove('at-top');
+                header.classList.add('scrolled');
+                header.style.background = '';
+                header.style.backdropFilter = '';
+            }
+        }
+
+        // =====================================================================
+        // GITHUB PROJECT LOADER - DYNAMICALLY LOADS ALL PROJECTS
+        // =====================================================================
+        const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/projects/';
+        const GITHUB_API = 'https://api.github.com/repos/WBenz/Tunetek-Studio-Design/contents/projects/';
+
+        class ProjectLoader {
+            constructor() {
+                this.allProjects = { graphic: [], motion: [], web: [] };
+                this.isLoading = false;
+                this.categories = ['graphic', 'motion', 'web'];
+                this.categoryCounts = { graphic: 0, motion: 0, web: 0 };
+            }
+
+            async loadAllProjects() {
+                if (this.isLoading) return this.allProjects;
+                this.isLoading = true;
+
+                try {
+                    const promises = this.categories.map(cat => this.fetchCategory(cat));
+                    const results = await Promise.all(promises);
+                    
+                    this.categories.forEach((cat, index) => {
+                        const processed = this.processFiles(results[index], cat);
+                        this.allProjects[cat] = processed;
+                        this.categoryCounts[cat] = processed.length;
+                    });
+
+                    const total = this.categoryCounts.graphic + this.categoryCounts.motion + this.categoryCounts.web;
+                    console.log('📁 Projects loaded from GitHub:');
+                    console.log(`🖼️ Graphic: ${this.categoryCounts.graphic} projects`);
+                    console.log(`🎬 Motion: ${this.categoryCounts.motion} projects`);
+                    console.log(`🌐 Web: ${this.categoryCounts.web} projects`);
+                    console.log(`📊 Total: ${total} projects`);
+
+                    this.isLoading = false;
+                    return this.allProjects;
+                } catch (error) {
+                    console.error('Error loading projects from GitHub:', error);
+                    this.isLoading = false;
+                    return this.getFallbackData();
+                }
+            }
+
+            async fetchCategory(category) {
+                try {
+                    const url = `${GITHUB_API}${category}/`;
+                    const response = await fetch(url, {
+                        headers: { 
+                            'Accept': 'application/vnd.github.v3+json',
+                            'User-Agent': 'Tunetek-Studio-Design'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`GitHub API error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.filter(item => item.type === 'file');
+                } catch (error) {
+                    console.warn(`Failed to fetch ${category} from GitHub:`, error);
+                    return [];
+                }
+            }
+
+            processFiles(files, category) {
+                const projects = {};
+                const mediaExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.webm', '.mov'];
+
+                const mediaFiles = files.filter(item => 
+                    mediaExtensions.some(ext => item.name.toLowerCase().endsWith(ext))
+                );
+
+                mediaFiles.forEach(item => {
+                    let baseName = this.getBaseName(item.name);
+                    
+                    if (!projects[baseName]) {
+                        projects[baseName] = {
+                            id: baseName,
+                            title: this.generateTitle(baseName),
+                            category: category,
+                            files: [],
+                            isVideo: this.isVideoFile(item.name),
+                            year: this.extractYear(item.name)
+                        };
+                    }
+                    projects[baseName].files.push(item.name);
+                });
+
+                return Object.values(projects).sort((a, b) => {
+                    const yearA = parseInt(a.year) || 0;
+                    const yearB = parseInt(b.year) || 0;
+                    return yearB - yearA;
+                });
+            }
+
+            getBaseName(filename) {
+                let name = filename.replace(/\.[^.]+$/, '');
+                name = name.replace(/-\d+$/, '');
+                name = name.replace(/\s+\d+$/, '');
+                return name.trim();
+            }
+
+            generateTitle(baseName) {
+                return baseName
+                    .split(/[-_\s]+/)
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(' ');
+            }
+
+            isVideoFile(filename) {
+                const videoExt = ['.mp4', '.webm', '.mov'];
+                return videoExt.some(ext => filename.toLowerCase().endsWith(ext));
+            }
+
+            extractYear(filename) {
+                const match = filename.match(/(19|20)\d{2}/);
+                return match ? match[0] : '2024';
+            }
+
+            getFallbackData() {
+                return { graphic: [], motion: [], web: [] };
+            }
+        }
+
+        // =====================================================================
+        // TRANSLATIONS
+        // =====================================================================
+        const TRANSLATIONS = {
+            en: {
+                'nav.home': 'Home',
+                'nav.services': 'Services',
+                'nav.portfolio': 'Projects',
+                'nav.about': 'About',
+                'nav.contact': 'Contact',
+                'hero.cta.portfolio': 'View Our Work',
+                'hero.cta.contact': "Let's Talk",
+                'services.title': 'Our Services',
+                'services.subtitle': 'From concept to execution, we deliver design solutions that make your brand stand out.',
+                'services.graphic.title': 'Graphic Design',
+                'services.graphic.desc': 'We create visually stunning designs that communicate your brand\'s message effectively. From logos to complete brand identities.',
+                'services.motion.title': 'Motion Design',
+                'services.motion.desc': 'Bring your ideas to life with captivating motion graphics and animations. Perfect for explainer videos and social media.',
+                'services.web.title': 'Web Design',
+                'services.web.desc': 'We design responsive, user-friendly websites that not only look great but perform exceptionally across all devices.',
+                'portfolio.title': 'Our Projects',
+                'portfolio.subtitle': 'Browse our work — click a project to preview it in detail.',
+                'portfolio.filter.all': 'All',
+                'portfolio.filter.graphic': 'Graphic',
+                'portfolio.filter.motion': 'Motion',
+                'portfolio.filter.web': 'Web',
+                'portfolio.search': 'Search projects...',
+                'portfolio.select': 'Select a project from the list',
+                'portfolio.projects': 'Projects',
+                'portfolio.loading': 'Loading projects...',
+                'about.title': 'About the Founder',
+                'about.name': 'Wassef Ben Slimane',
+                'about.role': 'Lead Designer & Creative Director',
+                'about.desc1': 'With over 10 years of experience in graphic, motion, and web design, Wassef Ben Slimane founded Tunetek Studio Design to blend artistic creativity with technical excellence.',
+                'about.desc2': 'After working with leading design agencies worldwide, he established the studio in 2016, which has since become known for innovative design solutions that are both visually appealing and functionally effective.',
+                'contact.title': 'Get In Touch',
+                'contact.subtitle': 'Have a project in mind? We\'d love to hear about it.',
+                'contact.info.title': 'Contact Information',
+                'contact.info.desc': 'Reach out to us for any inquiries about our services or to discuss your next project.',
+                'contact.name': 'Name',
+                'contact.email': 'Email',
+                'contact.subject': 'Subject',
+                'contact.message': 'Message',
+                'contact.submit': 'Send Message',
+                'footer.companyTitle': 'Tunetek Studio Design',
+                'footer.companyDesc': 'We craft modern branding, web design, and motion graphics that help businesses grow with clear visuals and smooth experiences.',
+                'footer.quickLinksTitle': 'Quick Links',
+                'footer.linkHome': 'Home',
+                'footer.linkServices': 'Services',
+                'footer.linkProjects': 'Projects',
+                'footer.linkFounder': 'About',
+                'footer.linkContact': 'Contact',
+                'footer.contactTitle': 'Contact',
+                'footer.socialTitle': 'Follow Us',
+                'footer.copyright': '© 2016 - 2026 Tunetek Studio Design. All rights reserved.',
+                'footer.credit': 'Created with ❤ by Wassef Ben Slimane'
+            },
+            fr: {
+                'nav.home': 'Accueil',
+                'nav.services': 'Services',
+                'nav.portfolio': 'Projets',
+                'nav.about': 'À propos',
+                'nav.contact': 'Contact',
+                'hero.cta.portfolio': 'Voir nos travaux',
+                'hero.cta.contact': 'Contactez-nous',
+                'services.title': 'Nos Services',
+                'services.subtitle': 'Du concept à la réalisation, nous livrons des solutions de design qui font ressortir votre marque.',
+                'services.graphic.title': 'Design Graphique',
+                'services.graphic.desc': 'Nous créons des designs visuellement époustouflants qui communiquent efficacement le message de votre marque. Des logos aux identités complètes.',
+                'services.motion.title': 'Motion Design',
+                'services.motion.desc': 'Donnez vie à vos idées avec des animations et motion graphics captivantes. Parfaits pour les vidéos explicatives et les réseaux sociaux.',
+                'services.web.title': 'Design Web',
+                'services.web.desc': 'Nous concevons des sites web responsifs et conviviaux qui sont à la fois magnifiques et performants sur tous les appareils.',
+                'portfolio.title': 'Nos Projets',
+                'portfolio.subtitle': 'Parcourez notre travail — cliquez sur un projet pour le prévisualiser en détail.',
+                'portfolio.filter.all': 'Tous',
+                'portfolio.filter.graphic': 'Graphique',
+                'portfolio.filter.motion': 'Motion',
+                'portfolio.filter.web': 'Web',
+                'portfolio.search': 'Rechercher des projets...',
+                'portfolio.select': 'Sélectionnez un projet dans la liste',
+                'portfolio.projects': 'Projets',
+                'portfolio.loading': 'Chargement des projets...',
+                'about.title': 'À propos du Fondateur',
+                'about.name': 'Wassef Ben Slimane',
+                'about.role': 'Designer Principal & Directeur Créatif',
+                'about.desc1': 'Avec plus de 10 ans d\'expérience en design graphique, motion et web, Wassef Ben Slimane a fondé Tunetek Studio Design pour allier créativité artistique et excellence technique.',
+                'about.desc2': 'Après avoir travaillé avec des agences de design de premier plan dans le monde entier, il a créé le studio en 2016, qui est depuis devenu connu pour ses solutions de design innovantes à la fois visuellement attrayantes et fonctionnellement efficaces.',
+                'contact.title': 'Contactez-nous',
+                'contact.subtitle': 'Vous avez un projet en tête ? Nous serions ravis d\'en discuter.',
+                'contact.info.title': 'Informations de contact',
+                'contact.info.desc': 'Contactez-nous pour toute question sur nos services ou pour discuter de votre prochain projet.',
+                'contact.name': 'Nom',
+                'contact.email': 'Email',
+                'contact.subject': 'Sujet',
+                'contact.message': 'Message',
+                'contact.submit': 'Envoyer le message',
+                'footer.companyTitle': 'Tunetek Studio Design',
+                'footer.companyDesc': 'Nous créons des identités de marque, des sites web et des animations qui aident les entreprises à grandir grâce à des visuels clairs et des expériences fluides.',
+                'footer.quickLinksTitle': 'Liens rapides',
+                'footer.linkHome': 'Accueil',
+                'footer.linkServices': 'Services',
+                'footer.linkProjects': 'Projets',
+                'footer.linkFounder': 'À propos',
+                'footer.linkContact': 'Contact',
+                'footer.contactTitle': 'Contact',
+                'footer.socialTitle': 'Suivez-nous',
+                'footer.copyright': '© 2016 - 2026 Tunetek Studio Design. Tous droits réservés.',
+                'footer.credit': 'Créé avec ❤ par Wassef Ben Slimane'
+            }
+        };
+
+        // =====================================================================
+        // UTILITY FUNCTIONS
+        // =====================================================================
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '00:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // =====================================================================
+        // SPLIT SCREEN MANAGER WITH SEARCH
+        // =====================================================================
+        class SplitScreenManager {
+            constructor() {
+                this.projectLoader = new ProjectLoader();
+                this.allProjects = { graphic: [], motion: [], web: [] };
+                this.allItems = [];
+                this.filteredItems = [];
+                this.currentCategory = 'all';
+                this.currentProject = null;
+                this.currentSearch = '';
+                this.isLoading = false;
+                this.isVideoPlaying = false;
+                this.isWebZoomed = false;
+                
+                this.preview = document.getElementById('splitPreview');
+                this.previewTitle = document.getElementById('previewTitle');
+                this.previewCat = document.getElementById('previewCat');
+                this.previewYear = document.getElementById('previewYear');
+                this.previewOverlay = document.getElementById('previewOverlay');
+                this.previewVideoBadge = document.getElementById('previewVideoBadge');
+                this.listContainer = document.getElementById('listContainer');
+                this.listLoading = document.getElementById('listLoading');
+                this.listCount = document.getElementById('listCount');
+                this.filterButtons = document.querySelectorAll('.split-filter-btn');
+                this.searchInput = document.getElementById('searchInput');
+                this.clearSearch = document.getElementById('clearSearch');
+                this.countElements = {
+                    all: document.getElementById('countAll'),
+                    graphic: document.getElementById('countGraphic'),
+                    motion: document.getElementById('countMotion'),
+                    web: document.getElementById('countWeb')
+                };
+                
+                // Preview controls
+                this.videoControlsGroup = document.getElementById('videoControlsGroup');
+                this.webControlsGroup = document.getElementById('webControlsGroup');
+                this.videoPlayBtn = document.getElementById('videoPlayBtn');
+                this.videoProgressFill = document.getElementById('videoProgressFill');
+                this.videoMuteBtn = document.getElementById('videoMuteBtn');
+                this.videoFullscreenBtn = document.getElementById('videoFullscreenBtn');
+                this.webZoomBtn = document.getElementById('webZoomBtn');
+                this.webFullscreenBtn = document.getElementById('webFullscreenBtn');
+                this.previewControls = document.getElementById('previewControls');
+                
+                // Current video element reference
+                this.currentVideo = null;
+                this.currentVideoSource = '';
+                this.isVideoMuted = true;
+                
+                this.init();
+            }
+
+            async init() {
+                loadingItems.total = 3;
+                updateLoadingProgress();
+                
+                this.allProjects = await this.projectLoader.loadAllProjects();
+                
+                this.setupCounts();
+                this.setupFilters();
+                this.setupSearch();
+                this.buildList('all');
+                
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+            }
+
+            setupCounts() {
+                const counts = {
+                    all: 0,
+                    graphic: this.allProjects.graphic.length,
+                    motion: this.allProjects.motion.length,
+                    web: this.allProjects.web.length
+                };
+                counts.all = counts.graphic + counts.motion + counts.web;
+                
+                this.countElements.all.textContent = counts.all;
+                this.countElements.graphic.textContent = counts.graphic;
+                this.countElements.motion.textContent = counts.motion;
+                this.countElements.web.textContent = counts.web;
+            }
+
+            getProjectsForCategory(category) {
+                if (category === 'all') {
+                    let allItems = [];
+                    ['graphic', 'motion', 'web'].forEach(cat => {
+                        this.allProjects[cat].forEach(project => {
+                            allItems.push({
+                                ...project,
+                                file: project.files[0]
+                            });
+                        });
+                    });
+                    allItems.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+                    return allItems;
+                } else {
+                    const items = this.allProjects[category] || [];
+                    const result = items.map(project => ({
+                        ...project,
+                        file: project.files[0]
+                    }));
+                    result.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+                    return result;
+                }
+            }
+
+            setupFilters() {
+                this.filterButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (this.isLoading) return;
+                        
+                        this.filterButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        this.currentCategory = btn.dataset.category;
+                        this.buildList(this.currentCategory);
+                    });
+                });
+            }
+
+            setupSearch() {
+                const searchFn = debounce(() => {
+                    this.currentSearch = this.searchInput.value.toLowerCase().trim();
+                    this.filterList();
+                }, 300);
+
+                this.searchInput.addEventListener('input', searchFn);
+
+                this.clearSearch.addEventListener('click', () => {
+                    this.searchInput.value = '';
+                    this.currentSearch = '';
+                    this.clearSearch.classList.remove('visible');
+                    this.filterList();
+                    this.searchInput.focus();
+                });
+
+                this.searchInput.addEventListener('focus', () => {
+                    if (this.searchInput.value.length > 0) {
+                        this.clearSearch.classList.add('visible');
+                    }
+                });
+
+                this.searchInput.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        if (this.searchInput.value.length === 0) {
+                            this.clearSearch.classList.remove('visible');
+                        }
+                    }, 200);
+                });
+            }
+
+            filterList() {
+                const search = this.currentSearch;
+                if (!search) {
+                    this.filteredItems = this.allItems;
+                } else {
+                    this.filteredItems = this.allItems.filter(item => 
+                        item.title.toLowerCase().includes(search) ||
+                        item.category.toLowerCase().includes(search)
+                    );
+                }
+                
+                this.renderList();
+            }
+
+            buildList(category) {
+                if (this.isLoading) return;
+                this.isLoading = true;
+                
+                this.listLoading.style.display = 'block';
+                this.listContainer.innerHTML = '';
+                this.listCount.textContent = 'Loading...';
+                
+                // Clear preview
+                this.clearPreview();
+                
+                setTimeout(() => {
+                    this.allItems = this.getProjectsForCategory(category);
+                    this.filteredItems = this.allItems;
+                    
+                    this.listLoading.style.display = 'none';
+                    
+                    if (this.filteredItems.length === 0) {
+                        this.listContainer.innerHTML = `
+                            <div class="list-empty">
+                                <i class="fas fa-folder-open"></i>
+                                <p>${this.currentSearch ? 'No projects match your search.' : 'No projects found in this category.'}</p>
+                            </div>
+                        `;
+                        this.listCount.textContent = '0 projects';
+                        this.isLoading = false;
+                        return;
+                    }
+                    
+                    this.renderList();
+                    this.isLoading = false;
+                }, 300);
+            }
+
+            renderList() {
+                const items = this.filteredItems;
+                
+                if (items.length === 0) {
+                    this.listContainer.innerHTML = `
+                        <div class="list-empty">
+                            <i class="fas fa-search"></i>
+                            <p>No projects match your search.</p>
+                        </div>
+                    `;
+                    this.listCount.textContent = '0 projects';
+                    return;
+                }
+                
+                const fragment = document.createDocumentFragment();
+                
+                items.forEach((item, index) => {
+                    const listItem = this.createListItem(item, index);
+                    fragment.appendChild(listItem);
+                });
+                
+                this.listContainer.innerHTML = '';
+                this.listContainer.appendChild(fragment);
+                this.listCount.textContent = `${items.length} projects`;
+                
+                // Show clear search button if search is active
+                if (this.currentSearch) {
+                    this.clearSearch.classList.add('visible');
+                } else {
+                    this.clearSearch.classList.remove('visible');
+                }
+                
+                // Auto-select first project
+                if (items.length > 0 && !this.currentProject) {
+                    this.selectProject(items[0], 0);
+                } else if (this.currentProject) {
+                    // Check if current project is still in filtered list
+                    const stillExists = items.some(item => item.id === this.currentProject.id);
+                    if (!stillExists && items.length > 0) {
+                        this.selectProject(items[0], 0);
+                    } else if (stillExists) {
+                        // Update active state
+                        this.listContainer.querySelectorAll('.list-item').forEach(el => {
+                            el.classList.toggle('active', el.dataset.index === String(items.indexOf(this.currentProject)));
+                        });
+                    }
+                }
+            }
+
+            createListItem(item, index) {
+                const div = document.createElement('div');
+                div.className = 'list-item' + (index === 0 && !this.currentProject ? ' active' : '');
+                if (this.currentProject && item.id === this.currentProject.id) {
+                    div.classList.add('active');
+                }
+                div.dataset.index = index;
+                
+                const filePath = `${GITHUB_BASE}${item.category}/${encodeURIComponent(item.file)}`;
+                
+                // Thumbnail
+                const thumb = document.createElement('div');
+                thumb.className = 'thumb';
+                
+                if (item.isVideo) {
+                    const vid = document.createElement('video');
+                    vid.src = filePath;
+                    vid.muted = true;
+                    vid.playsInline = true;
+                    vid.preload = 'metadata';
+                    vid.addEventListener('mouseenter', () => { vid.play().catch(()=>{}); });
+                    vid.addEventListener('mouseleave', () => { vid.pause(); });
+                    thumb.appendChild(vid);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = filePath;
+                    img.alt = item.title;
+                    img.loading = 'lazy';
+                    thumb.appendChild(img);
+                }
+                
+                div.appendChild(thumb);
+                
+                // Info
+                const info = document.createElement('div');
+                info.className = 'info';
+                info.innerHTML = `
+                    <h5>${item.title}</h5>
+                    <span class="cat-tag">${item.category}</span>
+                `;
+                div.appendChild(info);
+                
+                // Arrow
+                const arrow = document.createElement('div');
+                arrow.className = 'arrow';
+                arrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                div.appendChild(arrow);
+                
+                // Click handler
+                div.addEventListener('click', () => {
+                    if (this.isLoading) return;
+                    
+                    // Update active state
+                    this.listContainer.querySelectorAll('.list-item').forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    div.classList.add('active');
+                    
+                    this.selectProject(item, index);
+                });
+                
+                return div;
+            }
+
+            selectProject(item, index) {
+                this.currentProject = item;
+                this.updatePreview(item);
+            }
+
+            // ===================== FIXED: updatePreview =====================
+            updatePreview(item) {
+                const filePath = `${GITHUB_BASE}${item.category}/${encodeURIComponent(item.file)}`;
+                
+                // Update overlay
+                this.previewTitle.textContent = item.title;
+                this.previewCat.textContent = item.category.charAt(0).toUpperCase() + item.category.slice(1);
+                this.previewYear.textContent = item.year;
+                
+                // Show/hide video badge
+                if (item.isVideo) {
+                    this.previewVideoBadge.style.display = 'flex';
+                } else {
+                    this.previewVideoBadge.style.display = 'none';
+                }
+                
+                // Show/hide controls based on category
+                this.videoControlsGroup.style.display = item.category === 'motion' ? 'flex' : 'none';
+                this.webControlsGroup.style.display = item.category === 'web' ? 'flex' : 'none';
+                
+                // Reset controls
+                this.isVideoPlaying = false;
+                this.isWebZoomed = false;
+                this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+                this.videoProgressFill.style.width = '0%';
+                this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
+                this.preview.style.overflow = 'hidden';
+                this.preview.scrollTop = 0;
+                this.preview.scrollLeft = 0;
+                
+                // Remove existing media
+                const existingMedia = this.preview.querySelector('.preview-media');
+                if (existingMedia) {
+                    existingMedia.remove();
+                }
+                
+                const placeholder = this.preview.querySelector('.preview-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+                
+                let mediaElement;
+                if (item.isVideo) {
+                    // === MOTION VIDEO WITH CONTROLS ===
+                    mediaElement = document.createElement('video');
+                    mediaElement.className = 'preview-media';
+                    mediaElement.src = filePath;
+                    mediaElement.muted = this.isVideoMuted;
+                    mediaElement.playsInline = true;
+                    mediaElement.loop = false;
+                    mediaElement.preload = 'metadata';
+                    mediaElement.setAttribute('playsinline', '');
+                    mediaElement.style.maxHeight = '550px';
+                    mediaElement.style.width = '100%';
+                    mediaElement.style.height = '100%';
+                    mediaElement.style.objectFit = 'contain';
+                    mediaElement.style.background = '#000';
+                    
+                    this.currentVideo = mediaElement;
+                    this.currentVideoSource = filePath;
+                    
+                    // Video event listeners
+                    mediaElement.addEventListener('loadedmetadata', () => {
+                        const durationEl = this.videoControlsGroup.querySelector('.duration');
+                        if (durationEl) durationEl.textContent = formatTime(mediaElement.duration);
+                    });
+                    
+                    mediaElement.addEventListener('timeupdate', () => {
+                        if (!isNaN(mediaElement.duration)) {
+                            const progress = (mediaElement.currentTime / mediaElement.duration) * 100;
+                            this.videoProgressFill.style.width = `${progress}%`;
+                            const currentEl = this.videoControlsGroup.querySelector('.current-time');
+                            if (currentEl) currentEl.textContent = formatTime(mediaElement.currentTime);
+                        }
+                    });
+                    
+                    mediaElement.addEventListener('play', () => {
+                        this.isVideoPlaying = true;
+                        this.videoPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    });
+                    
+                    mediaElement.addEventListener('pause', () => {
+                        this.isVideoPlaying = false;
+                        this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    });
+                    
+                    mediaElement.addEventListener('ended', () => {
+                        this.isVideoPlaying = false;
+                        this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        mediaElement.currentTime = 0;
+                        this.videoProgressFill.style.width = '0%';
+                    });
+                    
+                    // Auto-play on hover
+                    this.preview.addEventListener('mouseenter', () => {
+                        if (mediaElement && mediaElement.paused) {
+                            mediaElement.play().catch(() => {});
+                        }
+                    });
+                    
+                    this.preview.addEventListener('mouseleave', () => {
+                        if (mediaElement && !mediaElement.paused && this.isVideoPlaying === false) {
+                            mediaElement.pause();
+                        }
+                    });
+                    
+                    this.previewControls.style.opacity = '1';
+                    
+                } else if (item.category === 'web') {
+                    // === WEB IMAGE WITH ZOOM ===
+                    mediaElement = document.createElement('img');
+                    mediaElement.className = 'preview-media';
+                    mediaElement.src = filePath;
+                    mediaElement.alt = item.title;
+                    mediaElement.loading = 'lazy';
+                    mediaElement.style.objectFit = 'contain';
+                    mediaElement.style.width = '100%';
+                    mediaElement.style.height = '100%';
+                    mediaElement.style.maxHeight = '550px';
+                    mediaElement.style.maxWidth = '100%';
+                    
+                    this.previewControls.style.opacity = '1';
+                    
+                } else {
+                    // === GRAPHIC IMAGE ===
+                    mediaElement = document.createElement('img');
+                    mediaElement.className = 'preview-media';
+                    mediaElement.src = filePath;
+                    mediaElement.alt = item.title;
+                    mediaElement.loading = 'lazy';
+                    mediaElement.style.objectFit = 'contain';
+                    mediaElement.style.width = '100%';
+                    mediaElement.style.height = '100%';
+                    mediaElement.style.maxHeight = '550px';
+                    
+                    this.previewControls.style.opacity = '0';
+                }
+                
+                this.preview.insertBefore(mediaElement, this.previewOverlay);
+                
+                // Overlay animation
+                this.previewOverlay.style.opacity = '0';
+                this.previewOverlay.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    this.previewOverlay.style.opacity = '1';
+                    this.previewOverlay.style.transform = 'translateY(0)';
+                }, 100);
+                
+                this.setupVideoControls();
+                this.setupWebControls();
+            }
+
+            setupVideoControls() {
+                const video = this.currentVideo;
+                if (!video) return;
+                
+                // Play/Pause
+                this.videoPlayBtn.onclick = () => {
+                    if (video.paused) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                };
+                
+                // Click on video to toggle play/pause
+                video.onclick = () => {
+                    if (video.paused) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                };
+                
+                // Progress bar click
+                const progressBar = this.videoControlsGroup.querySelector('.progress-bar');
+                progressBar.onclick = (e) => {
+                    if (isNaN(video.duration)) return;
+                    const rect = progressBar.getBoundingClientRect();
+                    const pos = (e.clientX - rect.left) / rect.width;
+                    video.currentTime = pos * video.duration;
+                };
+                
+                // Mute
+                this.videoMuteBtn.onclick = () => {
+                    video.muted = !video.muted;
+                    this.isVideoMuted = video.muted;
+                    this.videoMuteBtn.innerHTML = video.muted ? 
+                        '<i class="fas fa-volume-mute"></i>' : 
+                        '<i class="fas fa-volume-up"></i>';
+                };
+                
+                // Fullscreen
+                this.videoFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(() => {});
+                    } else {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                };
+            }
+
+            // ===================== FIXED: setupWebControls =====================
+            setupWebControls() {
+                const img = this.preview.querySelector('.preview-media');
+                if (!img) return;
+                
+                // Zoom toggle - stays inside the preview box with scrollbars
+                this.webZoomBtn.onclick = () => {
+                    this.isWebZoomed = !this.isWebZoomed;
+                    if (this.isWebZoomed) {
+                        // Zoom in - image becomes larger, scrollbars appear inside box
+                        img.style.objectFit = 'contain';
+                        img.style.width = 'auto';
+                        img.style.height = 'auto';
+                        img.style.maxHeight = 'none';
+                        img.style.maxWidth = 'none';
+                        img.style.minWidth = '100%';
+                        img.style.minHeight = '100%';
+                        // Make the preview scrollable
+                        this.preview.style.overflow = 'auto';
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus"></i>';
+                        this.webZoomBtn.title = 'Zoom out';
+                    } else {
+                        // Zoom out - fit to box
+                        img.style.objectFit = 'contain';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.maxHeight = '550px';
+                        img.style.maxWidth = '100%';
+                        img.style.minWidth = 'auto';
+                        img.style.minHeight = 'auto';
+                        this.preview.style.overflow = 'hidden';
+                        this.preview.scrollTop = 0;
+                        this.preview.scrollLeft = 0;
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
+                        this.webZoomBtn.title = 'Zoom in';
+                    }
+                };
+                
+                // Fullscreen
+                this.webFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(() => {});
+                    } else {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                };
+            }
+
+            clearPreview() {
+                const existingMedia = this.preview.querySelector('.preview-media');
+                if (existingMedia) {
+                    existingMedia.remove();
+                }
+                
+                const placeholder = this.preview.querySelector('.preview-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'flex';
+                }
+                
+                this.previewTitle.textContent = 'Select a project';
+                this.previewCat.textContent = 'Category';
+                this.previewYear.textContent = '2024';
+                this.previewVideoBadge.style.display = 'none';
+                this.videoControlsGroup.style.display = 'none';
+                this.webControlsGroup.style.display = 'none';
+                this.previewControls.style.opacity = '0';
+                this.preview.style.overflow = 'hidden';
+                this.preview.scrollTop = 0;
+                this.preview.scrollLeft = 0;
+                this.currentVideo = null;
+                this.isWebZoomed = false;
+                this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
+            }
+
+            openProjectDetail(project) {
+                if (project.category === 'graphic') {
+                    this.openGraphicDetail(project);
+                } else if (project.category === 'motion') {
+                    this.openMotionDetail(project);
+                } else if (project.category === 'web') {
+                    this.openWebDetail(project);
+                }
+            }
+
+            openGraphicDetail(project) {
+                const modal = document.getElementById('graphic-project-modal');
+                const thumbnails = document.getElementById('graphic-thumbnails');
+                const mainImage = document.getElementById('graphic-main-image');
+                let currentIndex = 0;
+                
+                thumbnails.innerHTML = '';
+                project.files.forEach((file, i) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = `${GITHUB_BASE}graphic/${encodeURIComponent(file)}`;
+                    thumb.alt = `Thumbnail ${i + 1}`;
+                    thumb.loading = 'lazy';
+                    thumb.className = i === 0 ? 'active' : '';
+                    thumb.addEventListener('click', () => {
+                        currentIndex = i;
+                        mainImage.src = `${GITHUB_BASE}graphic/${encodeURIComponent(project.files[currentIndex])}`;
+                        thumbnails.querySelectorAll('img').forEach((t, idx) => {
+                            t.classList.toggle('active', idx === currentIndex);
+                        });
+                    });
+                    thumbnails.appendChild(thumb);
+                });
+                
+                mainImage.src = `${GITHUB_BASE}graphic/${encodeURIComponent(project.files[0])}`;
+                
+                const prevBtn = modal.querySelector('.prev-btn');
+                const nextBtn = modal.querySelector('.next-btn');
+                
+                const navGraphic = (dir) => {
+                    currentIndex = (currentIndex + dir + project.files.length) % project.files.length;
+                    mainImage.src = `${GITHUB_BASE}graphic/${encodeURIComponent(project.files[currentIndex])}`;
+                    thumbnails.querySelectorAll('img').forEach((t, idx) => {
+                        t.classList.toggle('active', idx === currentIndex);
+                    });
+                };
+                
+                prevBtn.onclick = () => navGraphic(-1);
+                nextBtn.onclick = () => navGraphic(1);
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                const closeModal = () => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+                modal.querySelector('.modal-close').onclick = closeModal;
+                modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+            }
+
+            openMotionDetail(project) {
+                const modal = document.getElementById('motion-project-modal');
+                const video = document.getElementById('motion-video');
+                const playBtn = modal.querySelector('.play-btn');
+                const pauseBtn = modal.querySelector('.pause-btn');
+                const progressBar = document.getElementById('motion-progress-bar');
+                const progressContainer = modal.querySelector('.progress');
+                const currentTime = modal.querySelector('.current-time');
+                const duration = modal.querySelector('.duration');
+                const muteBtn = modal.querySelector('.mute-btn');
+                const fullscreenBtn = modal.querySelector('.fullscreen-btn');
+                
+                video.src = `${GITHUB_BASE}motion/${encodeURIComponent(project.files[0])}`;
+                video.load();
+                
+                playBtn.style.display = 'inline-block';
+                pauseBtn.style.display = 'none';
+                progressBar.style.width = '0%';
+                currentTime.textContent = '00:00';
+                duration.textContent = '00:00';
+                
+                const updateControls = () => {
+                    if (!isNaN(video.duration)) {
+                        const progress = (video.currentTime / video.duration) * 100;
+                        progressBar.style.width = `${progress}%`;
+                        currentTime.textContent = formatTime(video.currentTime);
+                    }
+                };
+                
+                video.addEventListener('timeupdate', updateControls);
+                video.addEventListener('loadedmetadata', () => {
+                    duration.textContent = formatTime(video.duration);
+                });
+                video.addEventListener('ended', () => {
+                    pauseBtn.style.display = 'none';
+                    playBtn.style.display = 'inline-block';
+                });
+                
+                playBtn.onclick = () => {
+                    video.play().catch(() => {});
+                    playBtn.style.display = 'none';
+                    pauseBtn.style.display = 'inline-block';
+                };
+                pauseBtn.onclick = () => {
+                    video.pause();
+                    pauseBtn.style.display = 'none';
+                    playBtn.style.display = 'inline-block';
+                };
+                
+                progressContainer.onclick = (e) => {
+                    if (isNaN(video.duration)) return;
+                    const rect = progressContainer.getBoundingClientRect();
+                    const pos = (e.clientX - rect.left) / rect.width;
+                    video.currentTime = pos * video.duration;
+                };
+                
+                muteBtn.onclick = () => {
+                    video.muted = !video.muted;
+                    muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+                };
+                
+                fullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        modal.querySelector('.motion-player').requestFullscreen().catch(() => {});
+                    } else {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                };
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                const closeModal = () => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    video.pause();
+                    playBtn.style.display = 'inline-block';
+                    pauseBtn.style.display = 'none';
+                };
+                modal.querySelector('.modal-close').onclick = closeModal;
+                modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+            }
+
+            openWebDetail(project) {
+                const modal = document.getElementById('web-project-modal');
+                const image = document.getElementById('web-project-image');
+                const toggle = modal.querySelector('.view-toggle');
+                let isFullscreen = false;
+                
+                image.src = `${GITHUB_BASE}web/${encodeURIComponent(project.files[0])}`;
+                image.alt = project.title;
+                image.style.objectFit = 'contain';
+                toggle.innerHTML = '<i class="fas fa-expand"></i>';
+                
+                toggle.onclick = () => {
+                    isFullscreen = !isFullscreen;
+                    image.style.objectFit = isFullscreen ? 'cover' : 'contain';
+                    toggle.innerHTML = isFullscreen ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
+                };
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                const closeModal = () => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+                modal.querySelector('.modal-close').onclick = closeModal;
+                modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+            }
+        }
+
+        // =====================================================================
+        // LANGUAGE MANAGER
+        // =====================================================================
+        class LanguageManager {
+            constructor() {
+                this.currentLang = localStorage.getItem('language') || 'en';
+                this.translations = TRANSLATIONS;
+                this.elements = document.querySelectorAll('[data-i18n]');
+                
+                this.langEnBtn = document.getElementById('lang-en');
+                this.langFrBtn = document.getElementById('lang-fr');
+                
+                this.setupListeners();
+                this.applyLanguage(this.currentLang);
+            }
+
+            setupListeners() {
+                this.langEnBtn.addEventListener('click', () => this.setLanguage('en'));
+                this.langFrBtn.addEventListener('click', () => this.setLanguage('fr'));
+            }
+
+            setLanguage(lang) {
+                this.currentLang = lang;
+                localStorage.setItem('language', lang);
+                this.applyLanguage(lang);
+                
+                this.langEnBtn.classList.toggle('active', lang === 'en');
+                this.langFrBtn.classList.toggle('active', lang === 'fr');
+            }
+
+            applyLanguage(lang) {
+                this.elements.forEach(el => {
+                    const key = el.dataset.i18n;
+                    if (this.translations[lang] && this.translations[lang][key]) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                            el.placeholder = this.translations[lang][key];
+                        } else {
+                            el.innerHTML = this.translations[lang][key];
+                        }
+                    }
+                });
+            }
+        }
+
+        // =====================================================================
+        // THEME MANAGER
+        // =====================================================================
+        class ThemeManager {
+            constructor() {
+                this.btn = document.getElementById('theme-toggle');
+                this.currentTheme = localStorage.getItem('theme') || 'light';
+                
+                this.applyTheme(this.currentTheme);
+                this.btn.addEventListener('click', () => this.toggleTheme());
+                
+                document.addEventListener('themeChanged', () => {
+                    handleHeaderOpacity();
+                });
+            }
+
+            toggleTheme() {
+                const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                this.applyTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
+                this.currentTheme = newTheme;
+                
+                document.dispatchEvent(new Event('themeChanged'));
+            }
+
+            applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    this.btn.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    this.btn.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            }
+        }
+
+        // =====================================================================
+        // MAIN APPLICATION
+        // =====================================================================
+        class App {
+            constructor() {
+                this.theme = new ThemeManager();
+                this.language = new LanguageManager();
+                this.manager = null;
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    this.manager = new SplitScreenManager();
+                    
+                    this.setupScrollAnimations();
+                    this.setupHeaderScroll();
+                    this.setupSmoothNavigation();
+                    this.setupContactForm();
+                    this.setupHeroMute();
+                    this.setupHamburgerMenu();
+                } catch (error) {
+                    console.error('Failed to initialize app:', error);
+                    loadingOverlay.classList.add('hidden');
+                }
+            }
+
+            setupScrollAnimations() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+
+                document.querySelectorAll('.fade-in, .service-card, .about-grid .fade-in, .contact-info, .contact-form').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+
+            setupHeaderScroll() {
+                const header = document.getElementById('main-header');
+                setTimeout(handleHeaderOpacity, 100);
+
+                window.addEventListener('scroll', debounce(() => {
+                    handleHeaderOpacity();
+                    if (window.pageYOffset > 50) {
+                        header.classList.add('scrolled');
+                    } else if (window.pageYOffset < 10) {
+                        header.classList.remove('scrolled');
+                    }
+                }, 10));
+
+                window.addEventListener('resize', debounce(() => {
+                    handleHeaderOpacity();
+                }, 100));
+            }
+
+            setupSmoothNavigation() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+                        
+                        const target = document.querySelector(targetId);
+                        if (target) {
+                            e.preventDefault();
+                            const headerHeight = document.getElementById('main-header').offsetHeight;
+                            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            document.getElementById('nav-container').classList.remove('active');
+                            document.getElementById('hamburger').innerHTML = '<i class="fas fa-bars"></i>';
+                        }
+                    });
+                });
+            }
+
+            setupContactForm() {
+                const form = document.getElementById('contact-form');
+                if (!form) return;
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = form.querySelector('button[type="submit"]');
+                    const originalText = btn.innerHTML;
+                    
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    btn.disabled = true;
+
+                    try {
+                        const formData = new FormData(form);
+                        const response = await fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'Accept': 'application/json' }
+                        });
+
+                        if (response.ok) {
+                            btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                            form.reset();
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                                btn.disabled = false;
+                            }, 3000);
+                        } else {
+                            throw new Error('Form submission failed');
+                        }
+                    } catch (error) {
+                        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                        }, 3000);
+                    }
+                });
+            }
+
+            setupHeroMute() {
+                const muteBtn = document.getElementById('mute-btn');
+                const video = document.querySelector('.hero-video');
+                
+                if (muteBtn && video) {
+                    video.muted = true;
+                    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    
+                    muteBtn.addEventListener('click', () => {
+                        video.muted = !video.muted;
+                        muteBtn.innerHTML = video.muted ? 
+                            '<i class="fas fa-volume-mute"></i>' : 
+                            '<i class="fas fa-volume-up"></i>';
+                    });
+                }
+            }
+
+            setupHamburgerMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const navContainer = document.getElementById('nav-container');
+
+                if (hamburger && navContainer) {
+                    hamburger.addEventListener('click', () => {
+                        navContainer.classList.toggle('active');
+                        hamburger.innerHTML = navContainer.classList.contains('active') ?
+                            '<i class="fas fa-times"></i>' :
+                            '<i class="fas fa-bars"></i>';
+                    });
+                }
+            }
+        }
+
+        // =====================================================================
+        // INITIALIZE APP
+        // =====================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new App();
+            window.app = app;
+        });
+    </script>
+</body>
+</html>
