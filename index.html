@@ -1022,24 +1022,6 @@
             background: var(--secondary-dark);
         }
 
-        /* WEB FIT WIDTH MODE - SCROLLBAR INSIDE PREVIEW */
-        .split-preview.web-fit-mode {
-            overflow: auto !important;
-            align-items: flex-start !important;
-            justify-content: flex-start !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        .split-preview.web-fit-mode .preview-media {
-            width: 100% !important;
-            height: auto !important;
-            max-height: none !important;
-            min-height: 100% !important;
-            object-fit: contain !important;
-            flex-shrink: 0 !important;
-        }
-
         .split-preview .preview-media {
             width: 100%;
             height: 100%;
@@ -1489,7 +1471,7 @@
             }
         }
 
-        /* ===================== FULLSCREEN CONTROLS - STAY PINNED ===================== */
+        /* ===================== FULLSCREEN CONTROLS ===================== */
         .split-preview:fullscreen .preview-controls {
             position: fixed !important;
             bottom: 40px !important;
@@ -1522,6 +1504,35 @@
 
         .split-preview:fullscreen .preview-placeholder {
             display: none !important;
+        }
+
+        /* ===================== WEB FIT WIDTH MODE ===================== */
+        .split-preview.web-fit-mode {
+            overflow: auto !important;
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .split-preview.web-fit-mode .preview-media {
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            min-height: 100% !important;
+            object-fit: contain !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* ===================== WEB ZOOM IN FULLSCREEN ===================== */
+        .split-preview:fullscreen .preview-media.web-zoomed {
+            object-fit: cover !important;
+            cursor: zoom-out !important;
+        }
+
+        .split-preview:fullscreen .preview-media:not(.web-zoomed) {
+            object-fit: contain !important;
+            cursor: zoom-in !important;
         }
 
         /* ===================== ABOUT ===================== */
@@ -2344,6 +2355,30 @@
             background: var(--secondary-color);
         }
 
+        .web-zoom-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .web-zoom-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .web-zoom-btn.active {
+            background: var(--secondary-color);
+        }
+
         .preview-controls .web-controls-group {
             display: flex;
             gap: 6px;
@@ -2562,10 +2597,13 @@
                             </button>
                         </div>
 
-                        <!-- Web controls (Fit Width + Fullscreen) -->
+                        <!-- Web controls -->
                         <div class="web-controls-group" id="webControlsGroup" style="display:none;">
-                            <button class="web-fit-btn" id="webFitBtn" aria-label="Fit width">
+                            <button class="web-fit-btn" id="webFitBtn" aria-label="Fit width" style="display:none;">
                                 <i class="fas fa-arrows-alt-h"></i>
+                            </button>
+                            <button class="web-zoom-btn" id="webZoomBtn" aria-label="Zoom" style="display:none;">
+                                <i class="fas fa-search-plus"></i>
                             </button>
                             <div class="divider"></div>
                             <button class="web-fullscreen-btn" id="webFullscreenBtn" aria-label="Fullscreen">
@@ -3287,6 +3325,7 @@
                 this.isLoading = false;
                 this.isVideoPlaying = false;
                 this.isWebFit = false;
+                this.isWebZoomed = false;
                 this.currentVideo = null;
                 this.isVideoMuted = true;
                 this.graphicCurrentIndex = 0;
@@ -3319,6 +3358,7 @@
                 this.videoMuteBtn = document.getElementById('videoMuteBtn');
                 this.videoFullscreenBtn = document.getElementById('videoFullscreenBtn');
                 this.webFitBtn = document.getElementById('webFitBtn');
+                this.webZoomBtn = document.getElementById('webZoomBtn');
                 this.webFullscreenBtn = document.getElementById('webFullscreenBtn');
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
@@ -3524,9 +3564,14 @@
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = item.files || [];
                 this.isWebFit = false;
+                this.isWebZoomed = false;
                 if (this.webFitBtn) {
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                }
+                if (this.webZoomBtn) {
+                    this.webZoomBtn.classList.remove('active');
+                    this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                 }
                 // Remove web-fit class from preview
                 this.preview.classList.remove('web-fit-mode');
@@ -3633,9 +3678,16 @@
                     
                     // Reset fit state
                     this.isWebFit = false;
+                    this.isWebZoomed = false;
                     if (this.webFitBtn) {
                         this.webFitBtn.classList.remove('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        this.webFitBtn.style.display = 'inline-flex';
+                    }
+                    if (this.webZoomBtn) {
+                        this.webZoomBtn.classList.remove('active');
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                        this.webZoomBtn.style.display = 'none';
                     }
                     this.preview.classList.remove('web-fit-mode');
                 } else {
@@ -3941,33 +3993,80 @@
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
                 
-                // FIT WIDTH - image fills width, scrollbar appears inside preview
+                // Check if we're in fullscreen or preview mode
+                const updateWebButtons = () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    if (isFullscreen) {
+                        // Fullscreen mode: show Zoom button, hide Fit Width button
+                        this.webFitBtn.style.display = 'none';
+                        this.webZoomBtn.style.display = 'inline-flex';
+                        // Reset fit state when entering fullscreen
+                        if (this.isWebFit) {
+                            this.isWebFit = false;
+                            this.preview.classList.remove('web-fit-mode');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '100vh';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                            this.webFitBtn.classList.remove('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        }
+                        // Set initial zoom state
+                        if (!this.isWebZoomed) {
+                            img.classList.remove('web-zoomed');
+                            img.style.objectFit = 'contain';
+                            this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                            this.webZoomBtn.title = 'Zoom in';
+                        }
+                    } else {
+                        // Preview mode: show Fit Width button, hide Zoom button
+                        this.webFitBtn.style.display = 'inline-flex';
+                        this.webZoomBtn.style.display = 'none';
+                        // Reset zoom state when exiting fullscreen
+                        if (this.isWebZoomed) {
+                            this.isWebZoomed = false;
+                            img.classList.remove('web-zoomed');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                            this.webZoomBtn.classList.remove('active');
+                            this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                        }
+                    }
+                };
+                
+                // Call initially and on fullscreen change
+                updateWebButtons();
+                document.addEventListener('fullscreenchange', updateWebButtons);
+                
+                // FIT WIDTH button (preview mode only) - image fills width, scrollbar appears
                 this.webFitBtn.onclick = () => {
+                    if (document.fullscreenElement) return; // Don't work in fullscreen
                     this.isWebFit = !this.isWebFit;
                     if (this.isWebFit) {
-                        // Fit to width - image expands to full width, height auto, scrollbar appears inside preview
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = 'auto';
                         img.style.maxHeight = 'none';
                         img.style.maxWidth = '100%';
                         img.style.minHeight = '100%';
-                        // Add class for CSS styling
                         this.preview.classList.add('web-fit-mode');
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
-                        // Scroll to top
                         this.preview.scrollTop = 0;
                     } else {
-                        // Reset to fit view - image fits inside preview
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = '100%';
                         img.style.maxHeight = '550px';
                         img.style.maxWidth = '100%';
                         img.style.minHeight = 'auto';
-                        // Remove class
                         this.preview.classList.remove('web-fit-mode');
                         this.preview.scrollTop = 0;
                         this.preview.scrollLeft = 0;
@@ -3977,7 +4076,34 @@
                     }
                 };
                 
-                // Fullscreen
+                // ZOOM button (fullscreen mode only)
+                this.webZoomBtn.onclick = () => {
+                    if (!document.fullscreenElement) return; // Only work in fullscreen
+                    this.isWebZoomed = !this.isWebZoomed;
+                    if (this.isWebZoomed) {
+                        img.classList.add('web-zoomed');
+                        img.style.objectFit = 'cover';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.maxHeight = '100vh';
+                        img.style.maxWidth = '100vw';
+                        this.webZoomBtn.classList.add('active');
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus</i>';
+                        this.webZoomBtn.title = 'Zoom out';
+                    } else {
+                        img.classList.remove('web-zoomed');
+                        img.style.objectFit = 'contain';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.maxHeight = '100vh';
+                        img.style.maxWidth = '100vw';
+                        this.webZoomBtn.classList.remove('active');
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                        this.webZoomBtn.title = 'Zoom in';
+                    }
+                };
+                
+                // Fullscreen button
                 this.webFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         this.preview.requestFullscreen().catch(()=>{});
@@ -4029,9 +4155,16 @@
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
                 this.isWebFit = false;
+                this.isWebZoomed = false;
                 if (this.webFitBtn) {
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                    this.webFitBtn.style.display = 'inline-flex';
+                }
+                if (this.webZoomBtn) {
+                    this.webZoomBtn.classList.remove('active');
+                    this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                    this.webZoomBtn.style.display = 'none';
                 }
             }
 
