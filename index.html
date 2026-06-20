@@ -3091,9 +3091,12 @@
             };
         }
 
+        // FIXED: Properly encode the file path
         function getFileUrl(category, filename) {
-            const encoded = filename.split('/').map(part => encodeURIComponent(part)).join('/');
-            return GITHUB_BASE + encoded;
+            // Split the filename into parts and encode each part separately
+            const parts = filename.split('/');
+            const encodedParts = parts.map(part => encodeURIComponent(part));
+            return GITHUB_BASE + encodedParts.join('/');
         }
 
         // =====================================================================
@@ -3490,7 +3493,6 @@
                 this.updatePreview(item);
             }
 
-            // ===================== updatePreview with video controls =====================
             updatePreview(item) {
                 const filePath = getFileUrl(item.category, item.file);
                 
@@ -3528,7 +3530,6 @@
                 
                 let mediaElement;
                 if (item.isVideo) {
-                    // === MOTION VIDEO WITH CONTROLS ===
                     mediaElement = document.createElement('video');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3544,7 +3545,6 @@
                     mediaElement.style.background = '#000';
                     
                     this.currentVideo = mediaElement;
-                    this.currentVideoSource = filePath;
                     
                     mediaElement.addEventListener('loadedmetadata', () => {
                         const durationEl = this.videoControlsGroup.querySelector('.duration');
@@ -3592,7 +3592,6 @@
                     this.previewControls.style.opacity = '1';
                     
                 } else if (item.category === 'web') {
-                    // === WEB IMAGE WITH ZOOM ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3610,7 +3609,6 @@
                     this.previewControls.style.opacity = '1';
                     
                 } else {
-                    // === GRAPHIC IMAGE ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3685,7 +3683,6 @@
                 };
             }
 
-            // ===================== setupWebControls with zoom that stays inside =====================
             setupWebControls() {
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
