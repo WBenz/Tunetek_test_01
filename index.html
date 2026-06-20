@@ -1,3 +1,10 @@
+Here is the complete, clean HTML file with all requested changes:
+
+1. Web projects: Scrollbar when NOT in fullscreen, no scrollbar in fullscreen (zoom toggle removed)
+2. Graphic projects: Fullscreen toggle with slideshow buttons (works in both fullscreen and normal mode)
+3. Removed BG and BG2 images (background images no longer needed)
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,40 +72,6 @@
             --accent-color: #1e1e1e;
             --label-color: #e0e0e0;
             --border-light: rgba(255,255,255,0.06);
-        }
-
-        /* ===================== BACKGROUND IMAGES ===================== */
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background-repeat: repeat;
-            background-attachment: fixed;
-            background-size: 300px auto;
-            background-position: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .bg-light {
-            background-image: url('BG2.jpg');
-            opacity: 1;
-        }
-
-        .bg-dark {
-            background-image: url('BG.jpg');
-            opacity: 0;
-            z-index: -1;
-        }
-
-        [data-theme="dark"] .bg-light {
-            opacity: 0;
-        }
-
-        [data-theme="dark"] .bg-dark {
-            opacity: 0.7;
         }
 
         /* ===================== RESET & BASE ===================== */
@@ -2149,10 +2122,6 @@
     </style>
 </head>
 <body>
-    <!-- ==================== BACKGROUND IMAGES ==================== -->
-    <div class="background-image bg-light"></div>
-    <div class="background-image bg-dark"></div>
-
     <!-- ==================== LOADING OVERLAY ==================== -->
     <div id="loading-overlay">
         <div class="loading-content">
@@ -2330,6 +2299,7 @@
                     <div class="video-badge" id="previewVideoBadge"><i class="fas fa-play"></i> video</div>
                     
                     <div class="preview-controls" id="previewControls">
+                        <!-- Video controls (for motion) -->
                         <div class="video-controls-group" id="videoControlsGroup" style="display:none;">
                             <button class="video-play-btn" id="videoPlayBtn" aria-label="Play/Pause">
                                 <i class="fas fa-play"></i>
@@ -2349,16 +2319,14 @@
                             </button>
                         </div>
 
+                        <!-- Web controls (fullscreen only - scrollbar auto appears when not fullscreen) -->
                         <div class="web-controls-group" id="webControlsGroup" style="display:none;">
-                            <button class="web-zoom-btn" id="webZoomBtn" aria-label="Toggle zoom">
-                                <i class="fas fa-search-plus"></i>
-                            </button>
-                            <div class="divider"></div>
                             <button class="web-fullscreen-btn" id="webFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
                             </button>
                         </div>
 
+                        <!-- Graphic controls (fullscreen + slideshow) -->
                         <div class="graphic-controls-group" id="graphicControlsGroup" style="display:none;">
                             <button class="graphic-fullscreen-btn" id="graphicFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
@@ -3006,7 +2974,6 @@
             };
         }
 
-        // FIXED: Proper URL construction - GITHUB_BASE already ends with main/
         function getFileUrl(filename) {
             const parts = filename.split('/');
             const encodedParts = parts.map(part => encodeURIComponent(part));
@@ -3030,7 +2997,6 @@
                         this.allProjects[cat] = processed;
                         this.categoryCounts[cat] = processed.length;
                     });
-
                     console.log('📁 Projects loaded from manifest');
                     return this.allProjects;
                 } catch (error) {
@@ -3073,9 +3039,11 @@
                 this.currentSearch = '';
                 this.isLoading = false;
                 this.isVideoPlaying = false;
-                this.isWebZoomed = false;
+                this.isWebFullscreen = false;
                 this.currentVideo = null;
                 this.isVideoMuted = true;
+                this.graphicCurrentIndex = 0;
+                this.graphicProjectFiles = [];
                 
                 this.preview = document.getElementById('splitPreview');
                 this.previewTitle = document.getElementById('previewTitle');
@@ -3103,7 +3071,6 @@
                 this.videoProgressFill = document.getElementById('videoProgressFill');
                 this.videoMuteBtn = document.getElementById('videoMuteBtn');
                 this.videoFullscreenBtn = document.getElementById('videoFullscreenBtn');
-                this.webZoomBtn = document.getElementById('webZoomBtn');
                 this.webFullscreenBtn = document.getElementById('webFullscreenBtn');
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
@@ -3306,6 +3273,8 @@
 
             selectProject(item, index) {
                 this.currentProject = item;
+                this.graphicCurrentIndex = 0;
+                this.graphicProjectFiles = item.files || [];
                 this.updatePreview(item);
             }
 
@@ -3317,15 +3286,16 @@
                 this.previewYear.textContent = item.year;
                 this.previewVideoBadge.style.display = item.isVideo ? 'flex' : 'none';
                 
+                // Show correct controls
                 this.videoControlsGroup.style.display = item.category === 'motion' ? 'flex' : 'none';
                 this.webControlsGroup.style.display = item.category === 'web' ? 'flex' : 'none';
                 this.graphicControlsGroup.style.display = item.category === 'graphic' ? 'flex' : 'none';
                 
+                // Reset states
                 this.isVideoPlaying = false;
-                this.isWebZoomed = false;
+                this.isWebFullscreen = false;
                 this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
                 this.videoProgressFill.style.width = '0%';
-                this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
@@ -3337,6 +3307,7 @@
                 
                 let mediaElement;
                 if (item.isVideo) {
+                    // === MOTION VIDEO ===
                     mediaElement = document.createElement('video');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3379,6 +3350,7 @@
                     });
                     this.previewControls.style.opacity = '1';
                 } else if (item.category === 'web') {
+                    // === WEB IMAGE - scrollable when NOT in fullscreen ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3394,6 +3366,7 @@
                     };
                     this.previewControls.style.opacity = '1';
                 } else {
+                    // === GRAPHIC IMAGE - slideshow support ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3406,7 +3379,74 @@
                     mediaElement.onerror = function() {
                         this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🎨%3C/text%3E%3C/svg%3E';
                     };
-                    this.previewControls.style.opacity = '0';
+                    this.previewControls.style.opacity = '1';
+                    
+                    // Add slideshow navigation for graphic projects with multiple images
+                    if (this.graphicProjectFiles.length > 1) {
+                        // Show slide indicators - we'll use keyboard and overlay buttons
+                        this.graphicCurrentIndex = 0;
+                        // Add navigation overlay
+                        const navOverlay = document.createElement('div');
+                        navOverlay.className = 'graphic-slide-nav';
+                        navOverlay.style.cssText = `
+                            position: absolute;
+                            bottom: 120px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            display: flex;
+                            gap: 8px;
+                            z-index: 6;
+                            background: rgba(0,0,0,0.5);
+                            padding: 6px 12px;
+                            border-radius: 20px;
+                            backdrop-filter: blur(4px);
+                        `;
+                        const totalSlides = this.graphicProjectFiles.length;
+                        for (let i = 0; i < totalSlides; i++) {
+                            const dot = document.createElement('button');
+                            dot.className = 'slide-dot';
+                            dot.dataset.index = i;
+                            dot.style.cssText = `
+                                width: 10px;
+                                height: 10px;
+                                border-radius: 50%;
+                                border: none;
+                                background: ${i === 0 ? 'var(--secondary-color)' : 'rgba(255,255,255,0.3)'};
+                                cursor: pointer;
+                                transition: background 0.3s ease;
+                                padding: 0;
+                            `;
+                            dot.addEventListener('click', () => {
+                                this.graphicCurrentIndex = i;
+                                this.updateGraphicSlide();
+                                this.updateSlideDots();
+                            });
+                            navOverlay.appendChild(dot);
+                        }
+                        // Remove old nav if exists
+                        const oldNav = this.preview.querySelector('.graphic-slide-nav');
+                        if (oldNav) oldNav.remove();
+                        this.preview.appendChild(navOverlay);
+                        
+                        // Keyboard navigation for graphic slides
+                        const keyHandler = (e) => {
+                            if (!this.currentProject || this.currentProject.category !== 'graphic') return;
+                            if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                this.graphicCurrentIndex = (this.graphicCurrentIndex - 1 + this.graphicProjectFiles.length) % this.graphicProjectFiles.length;
+                                this.updateGraphicSlide();
+                                this.updateSlideDots();
+                            } else if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                this.graphicCurrentIndex = (this.graphicCurrentIndex + 1) % this.graphicProjectFiles.length;
+                                this.updateGraphicSlide();
+                                this.updateSlideDots();
+                            }
+                        };
+                        document.addEventListener('keydown', keyHandler);
+                        // Store cleanup
+                        this._graphicKeyHandler = keyHandler;
+                    }
                 }
                 this.preview.insertBefore(mediaElement, this.previewOverlay);
                 
@@ -3420,6 +3460,23 @@
                 this.setupVideoControls();
                 this.setupWebControls();
                 this.setupGraphicControls();
+            }
+
+            updateGraphicSlide() {
+                const img = this.preview.querySelector('.preview-media');
+                if (!img || !this.graphicProjectFiles.length) return;
+                const filePath = getFileUrl(this.graphicProjectFiles[this.graphicCurrentIndex]);
+                img.src = filePath;
+                // Update title with slide indicator
+                const title = this.previewTitle.textContent.split(' (')[0];
+                this.previewTitle.textContent = `${title} (${this.graphicCurrentIndex + 1}/${this.graphicProjectFiles.length})`;
+            }
+
+            updateSlideDots() {
+                const dots = this.preview.querySelectorAll('.slide-dot');
+                dots.forEach((dot, i) => {
+                    dot.style.background = i === this.graphicCurrentIndex ? 'var(--secondary-color)' : 'rgba(255,255,255,0.3)';
+                });
             }
 
             setupVideoControls() {
@@ -3449,49 +3506,57 @@
             }
 
             setupWebControls() {
-                const img = this.preview.querySelector('.preview-media');
-                if (!img) return;
-                
-                this.webZoomBtn.onclick = () => {
-                    this.isWebZoomed = !this.isWebZoomed;
-                    if (this.isWebZoomed) {
-                        img.style.objectFit = 'contain';
-                        img.style.width = 'auto';
-                        img.style.height = 'auto';
-                        img.style.maxHeight = 'none';
-                        img.style.maxWidth = 'none';
-                        img.style.minWidth = '100%';
-                        img.style.minHeight = '100%';
-                        this.preview.style.overflow = 'auto';
-                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus"></i>';
-                        this.webZoomBtn.title = 'Zoom out';
+                // Web: fullscreen toggle only
+                this.webFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(()=>{});
                     } else {
-                        img.style.objectFit = 'contain';
-                        img.style.width = '100%';
-                        img.style.height = '100%';
-                        img.style.maxHeight = '550px';
-                        img.style.maxWidth = '100%';
-                        img.style.minWidth = 'auto';
-                        img.style.minHeight = 'auto';
-                        this.preview.style.overflow = 'hidden';
-                        this.preview.scrollTop = 0;
-                        this.preview.scrollLeft = 0;
-                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
-                        this.webZoomBtn.title = 'Zoom in';
+                        document.exitFullscreen().catch(()=>{});
                     }
                 };
                 
-                this.webFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
-                    else document.exitFullscreen().catch(()=>{});
-                };
+                // Track fullscreen state for web - scrollbar behavior
+                document.addEventListener('fullscreenchange', () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    const img = this.preview.querySelector('.preview-media');
+                    if (img && this.currentProject && this.currentProject.category === 'web') {
+                        if (isFullscreen) {
+                            // Fullscreen - no scrollbar, image fills screen
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '100vh';
+                            img.style.maxWidth = '100vw';
+                            this.preview.style.overflow = 'hidden';
+                        } else {
+                            // Not fullscreen - scrollbar available if image is tall
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            this.preview.style.overflow = 'auto';
+                        }
+                    }
+                });
             }
 
             setupGraphicControls() {
+                // Graphic: fullscreen toggle
                 this.graphicFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
-                    else document.exitFullscreen().catch(()=>{});
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(()=>{});
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
+                    }
                 };
+                
+                // Update slide dots when fullscreen changes
+                document.addEventListener('fullscreenchange', () => {
+                    if (this.currentProject && this.currentProject.category === 'graphic') {
+                        this.updateSlideDots();
+                    }
+                });
             }
 
             clearPreview() {
@@ -3499,6 +3564,13 @@
                 if (existingMedia) existingMedia.remove();
                 const placeholder = this.preview.querySelector('.preview-placeholder');
                 if (placeholder) placeholder.style.display = 'flex';
+                const navOverlay = this.preview.querySelector('.graphic-slide-nav');
+                if (navOverlay) navOverlay.remove();
+                if (this._graphicKeyHandler) {
+                    document.removeEventListener('keydown', this._graphicKeyHandler);
+                    this._graphicKeyHandler = null;
+                }
+                
                 this.previewTitle.textContent = 'Select a project';
                 this.previewCat.textContent = 'Category';
                 this.previewYear.textContent = '2024';
@@ -3511,8 +3583,8 @@
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
                 this.currentVideo = null;
-                this.isWebZoomed = false;
-                this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
+                this.graphicCurrentIndex = 0;
+                this.graphicProjectFiles = [];
             }
 
             openGraphicDetail(project) {
@@ -3816,3 +3888,4 @@
     </script>
 </body>
 </html>
+```
