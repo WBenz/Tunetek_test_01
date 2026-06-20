@@ -1,10 +1,3 @@
-Here is the complete, clean HTML file with all requested changes:
-
-1. Web projects: Scrollbar when NOT in fullscreen, no scrollbar in fullscreen (zoom toggle removed)
-2. Graphic projects: Fullscreen toggle with slideshow buttons (works in both fullscreen and normal mode)
-3. Removed BG and BG2 images (background images no longer needed)
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2119,6 +2112,120 @@ Here is the complete, clean HTML file with all requested changes:
         .web-viewer .view-toggle:hover {
             background: var(--secondary-color);
         }
+
+        /* ===================== GRAPHIC SLIDESHOW NAVIGATION ===================== */
+        .graphic-slide-nav {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 12px;
+            z-index: 6;
+            pointer-events: none;
+        }
+
+        .graphic-slide-nav button {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .graphic-slide-nav button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .graphic-slide-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .graphic-slide-nav button:disabled:hover {
+            background: rgba(0,0,0,0.6);
+            transform: none;
+        }
+
+        .graphic-slide-counter {
+            position: absolute;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            font-family: var(--font-body);
+        }
+
+        @media (max-width: 768px) {
+            .graphic-slide-nav button {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
+            .graphic-slide-counter {
+                bottom: 120px;
+                font-size: 0.7rem;
+                padding: 2px 10px;
+            }
+        }
+
+        /* ===================== WEB FIT WIDTH BUTTON ===================== */
+        .web-fit-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .web-fit-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .web-fit-btn.active {
+            background: var(--secondary-color);
+        }
+
+        .preview-controls .web-controls-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .preview-controls .web-controls-group .divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 2px;
+        }
     </style>
 </head>
 <body>
@@ -2319,14 +2426,18 @@ Here is the complete, clean HTML file with all requested changes:
                             </button>
                         </div>
 
-                        <!-- Web controls (fullscreen only - scrollbar auto appears when not fullscreen) -->
+                        <!-- Web controls (Fit Width + Fullscreen) -->
                         <div class="web-controls-group" id="webControlsGroup" style="display:none;">
+                            <button class="web-fit-btn" id="webFitBtn" aria-label="Fit width">
+                                <i class="fas fa-arrows-alt-h"></i>
+                            </button>
+                            <div class="divider"></div>
                             <button class="web-fullscreen-btn" id="webFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
                             </button>
                         </div>
 
-                        <!-- Graphic controls (fullscreen + slideshow) -->
+                        <!-- Graphic controls (Fullscreen only - navigation is on image sides) -->
                         <div class="graphic-controls-group" id="graphicControlsGroup" style="display:none;">
                             <button class="graphic-fullscreen-btn" id="graphicFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
@@ -3039,11 +3150,12 @@ Here is the complete, clean HTML file with all requested changes:
                 this.currentSearch = '';
                 this.isLoading = false;
                 this.isVideoPlaying = false;
-                this.isWebFullscreen = false;
+                this.isWebFit = false;
                 this.currentVideo = null;
                 this.isVideoMuted = true;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
+                this.isFullscreen = false;
                 
                 this.preview = document.getElementById('splitPreview');
                 this.previewTitle = document.getElementById('previewTitle');
@@ -3071,9 +3183,18 @@ Here is the complete, clean HTML file with all requested changes:
                 this.videoProgressFill = document.getElementById('videoProgressFill');
                 this.videoMuteBtn = document.getElementById('videoMuteBtn');
                 this.videoFullscreenBtn = document.getElementById('videoFullscreenBtn');
+                this.webFitBtn = document.getElementById('webFitBtn');
                 this.webFullscreenBtn = document.getElementById('webFullscreenBtn');
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
+                
+                // Fullscreen change listener
+                document.addEventListener('fullscreenchange', () => {
+                    this.isFullscreen = !!document.fullscreenElement;
+                    if (this.currentProject) {
+                        this.updatePreview(this.currentProject);
+                    }
+                });
                 
                 this.init();
             }
@@ -3275,6 +3396,11 @@ Here is the complete, clean HTML file with all requested changes:
                 this.currentProject = item;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = item.files || [];
+                this.isWebFit = false;
+                if (this.webFitBtn) {
+                    this.webFitBtn.classList.remove('active');
+                    this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                }
                 this.updatePreview(item);
             }
 
@@ -3293,12 +3419,17 @@ Here is the complete, clean HTML file with all requested changes:
                 
                 // Reset states
                 this.isVideoPlaying = false;
-                this.isWebFullscreen = false;
                 this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
                 this.videoProgressFill.style.width = '0%';
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
+                
+                // Remove old navigation
+                const oldNav = this.preview.querySelector('.graphic-slide-nav');
+                if (oldNav) oldNav.remove();
+                const oldCounter = this.preview.querySelector('.graphic-slide-counter');
+                if (oldCounter) oldCounter.remove();
                 
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) existingMedia.remove();
@@ -3350,7 +3481,7 @@ Here is the complete, clean HTML file with all requested changes:
                     });
                     this.previewControls.style.opacity = '1';
                 } else if (item.category === 'web') {
-                    // === WEB IMAGE - scrollable when NOT in fullscreen ===
+                    // === WEB IMAGE ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3366,7 +3497,7 @@ Here is the complete, clean HTML file with all requested changes:
                     };
                     this.previewControls.style.opacity = '1';
                 } else {
-                    // === GRAPHIC IMAGE - slideshow support ===
+                    // === GRAPHIC IMAGE ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3381,71 +3512,71 @@ Here is the complete, clean HTML file with all requested changes:
                     };
                     this.previewControls.style.opacity = '1';
                     
-                    // Add slideshow navigation for graphic projects with multiple images
+                    // === GRAPHIC SLIDESHOW NAVIGATION ===
                     if (this.graphicProjectFiles.length > 1) {
-                        // Show slide indicators - we'll use keyboard and overlay buttons
-                        this.graphicCurrentIndex = 0;
-                        // Add navigation overlay
-                        const navOverlay = document.createElement('div');
-                        navOverlay.className = 'graphic-slide-nav';
-                        navOverlay.style.cssText = `
-                            position: absolute;
-                            bottom: 120px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            display: flex;
-                            gap: 8px;
-                            z-index: 6;
-                            background: rgba(0,0,0,0.5);
-                            padding: 6px 12px;
-                            border-radius: 20px;
-                            backdrop-filter: blur(4px);
-                        `;
-                        const totalSlides = this.graphicProjectFiles.length;
-                        for (let i = 0; i < totalSlides; i++) {
-                            const dot = document.createElement('button');
-                            dot.className = 'slide-dot';
-                            dot.dataset.index = i;
-                            dot.style.cssText = `
-                                width: 10px;
-                                height: 10px;
-                                border-radius: 50%;
-                                border: none;
-                                background: ${i === 0 ? 'var(--secondary-color)' : 'rgba(255,255,255,0.3)'};
-                                cursor: pointer;
-                                transition: background 0.3s ease;
-                                padding: 0;
-                            `;
-                            dot.addEventListener('click', () => {
-                                this.graphicCurrentIndex = i;
-                                this.updateGraphicSlide();
-                                this.updateSlideDots();
-                            });
-                            navOverlay.appendChild(dot);
-                        }
-                        // Remove old nav if exists
-                        const oldNav = this.preview.querySelector('.graphic-slide-nav');
-                        if (oldNav) oldNav.remove();
-                        this.preview.appendChild(navOverlay);
+                        // Navigation buttons (Previous/Next on sides)
+                        const navContainer = document.createElement('div');
+                        navContainer.className = 'graphic-slide-nav';
                         
-                        // Keyboard navigation for graphic slides
+                        const prevBtn = document.createElement('button');
+                        prevBtn.className = 'graphic-prev-btn';
+                        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                        prevBtn.title = 'Previous image';
+                        prevBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.graphicCurrentIndex = (this.graphicCurrentIndex - 1 + this.graphicProjectFiles.length) % this.graphicProjectFiles.length;
+                            this.updateGraphicSlide();
+                            this.updateGraphicCounter();
+                            this.updateGraphicButtons(prevBtn, nextBtn);
+                        });
+                        
+                        const nextBtn = document.createElement('button');
+                        nextBtn.className = 'graphic-next-btn';
+                        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                        nextBtn.title = 'Next image';
+                        nextBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.graphicCurrentIndex = (this.graphicCurrentIndex + 1) % this.graphicProjectFiles.length;
+                            this.updateGraphicSlide();
+                            this.updateGraphicCounter();
+                            this.updateGraphicButtons(prevBtn, nextBtn);
+                        });
+                        
+                        navContainer.appendChild(prevBtn);
+                        navContainer.appendChild(nextBtn);
+                        this.preview.appendChild(navContainer);
+                        
+                        // Counter
+                        const counter = document.createElement('div');
+                        counter.className = 'graphic-slide-counter';
+                        counter.textContent = `${this.graphicCurrentIndex + 1} / ${this.graphicProjectFiles.length}`;
+                        this.preview.appendChild(counter);
+                        
+                        // Keyboard navigation
                         const keyHandler = (e) => {
                             if (!this.currentProject || this.currentProject.category !== 'graphic') return;
                             if (e.key === 'ArrowLeft') {
                                 e.preventDefault();
                                 this.graphicCurrentIndex = (this.graphicCurrentIndex - 1 + this.graphicProjectFiles.length) % this.graphicProjectFiles.length;
                                 this.updateGraphicSlide();
-                                this.updateSlideDots();
+                                this.updateGraphicCounter();
+                                this.updateGraphicButtons(prevBtn, nextBtn);
                             } else if (e.key === 'ArrowRight') {
                                 e.preventDefault();
                                 this.graphicCurrentIndex = (this.graphicCurrentIndex + 1) % this.graphicProjectFiles.length;
                                 this.updateGraphicSlide();
-                                this.updateSlideDots();
+                                this.updateGraphicCounter();
+                                this.updateGraphicButtons(prevBtn, nextBtn);
                             }
                         };
                         document.addEventListener('keydown', keyHandler);
-                        // Store cleanup
                         this._graphicKeyHandler = keyHandler;
+                        
+                        // Store refs for cleanup
+                        this._graphicNav = navContainer;
+                        this._graphicCounter = counter;
+                        this._graphicPrevBtn = prevBtn;
+                        this._graphicNextBtn = nextBtn;
                     }
                 }
                 this.preview.insertBefore(mediaElement, this.previewOverlay);
@@ -3472,11 +3603,20 @@ Here is the complete, clean HTML file with all requested changes:
                 this.previewTitle.textContent = `${title} (${this.graphicCurrentIndex + 1}/${this.graphicProjectFiles.length})`;
             }
 
-            updateSlideDots() {
-                const dots = this.preview.querySelectorAll('.slide-dot');
-                dots.forEach((dot, i) => {
-                    dot.style.background = i === this.graphicCurrentIndex ? 'var(--secondary-color)' : 'rgba(255,255,255,0.3)';
-                });
+            updateGraphicCounter() {
+                const counter = this.preview.querySelector('.graphic-slide-counter');
+                if (counter) {
+                    counter.textContent = `${this.graphicCurrentIndex + 1} / ${this.graphicProjectFiles.length}`;
+                }
+            }
+
+            updateGraphicButtons(prevBtn, nextBtn) {
+                if (prevBtn) {
+                    prevBtn.disabled = this.graphicProjectFiles.length <= 1;
+                }
+                if (nextBtn) {
+                    nextBtn.disabled = this.graphicProjectFiles.length <= 1;
+                }
             }
 
             setupVideoControls() {
@@ -3506,36 +3646,56 @@ Here is the complete, clean HTML file with all requested changes:
             }
 
             setupWebControls() {
-                // Web: fullscreen toggle only
-                this.webFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(()=>{});
+                const img = this.preview.querySelector('.preview-media');
+                if (!img) return;
+                
+                // Fit Width button
+                this.webFitBtn.onclick = () => {
+                    this.isWebFit = !this.isWebFit;
+                    if (this.isWebFit) {
+                        // Fit to width - image expands to full width, scrollbar appears
+                        img.style.objectFit = 'contain';
+                        img.style.width = '100%';
+                        img.style.height = 'auto';
+                        img.style.maxHeight = 'none';
+                        img.style.maxWidth = '100%';
+                        img.style.minHeight = 'auto';
+                        this.preview.style.overflow = 'auto';
+                        this.preview.style.alignItems = 'flex-start';
+                        this.webFitBtn.classList.add('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                        this.webFitBtn.title = 'Reset view';
                     } else {
-                        document.exitFullscreen().catch(()=>{});
+                        // Reset to fit view
+                        img.style.objectFit = 'contain';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.maxHeight = '550px';
+                        img.style.maxWidth = '100%';
+                        img.style.minHeight = 'auto';
+                        this.preview.style.overflow = 'hidden';
+                        this.preview.style.alignItems = 'center';
+                        this.preview.scrollTop = 0;
+                        this.preview.scrollLeft = 0;
+                        this.webFitBtn.classList.remove('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        this.webFitBtn.title = 'Fit width';
                     }
                 };
                 
-                // Track fullscreen state for web - scrollbar behavior
+                // Fullscreen
+                this.webFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
+                    else document.exitFullscreen().catch(()=>{});
+                };
+                
+                // Handle fullscreen for web - reset fit state
                 document.addEventListener('fullscreenchange', () => {
-                    const isFullscreen = !!document.fullscreenElement;
-                    const img = this.preview.querySelector('.preview-media');
-                    if (img && this.currentProject && this.currentProject.category === 'web') {
-                        if (isFullscreen) {
-                            // Fullscreen - no scrollbar, image fills screen
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.maxHeight = '100vh';
-                            img.style.maxWidth = '100vw';
-                            this.preview.style.overflow = 'hidden';
-                        } else {
-                            // Not fullscreen - scrollbar available if image is tall
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.maxHeight = '550px';
-                            img.style.maxWidth = '100%';
-                            this.preview.style.overflow = 'auto';
+                    if (this.currentProject && this.currentProject.category === 'web') {
+                        if (!document.fullscreenElement && this.isWebFit) {
+                            // Reapply fit when exiting fullscreen
+                            this.isWebFit = false;
+                            this.webFitBtn.click();
                         }
                     }
                 });
@@ -3544,19 +3704,9 @@ Here is the complete, clean HTML file with all requested changes:
             setupGraphicControls() {
                 // Graphic: fullscreen toggle
                 this.graphicFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(()=>{});
-                    } else {
-                        document.exitFullscreen().catch(()=>{});
-                    }
+                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
+                    else document.exitFullscreen().catch(()=>{});
                 };
-                
-                // Update slide dots when fullscreen changes
-                document.addEventListener('fullscreenchange', () => {
-                    if (this.currentProject && this.currentProject.category === 'graphic') {
-                        this.updateSlideDots();
-                    }
-                });
             }
 
             clearPreview() {
@@ -3566,6 +3716,8 @@ Here is the complete, clean HTML file with all requested changes:
                 if (placeholder) placeholder.style.display = 'flex';
                 const navOverlay = this.preview.querySelector('.graphic-slide-nav');
                 if (navOverlay) navOverlay.remove();
+                const counter = this.preview.querySelector('.graphic-slide-counter');
+                if (counter) counter.remove();
                 if (this._graphicKeyHandler) {
                     document.removeEventListener('keydown', this._graphicKeyHandler);
                     this._graphicKeyHandler = null;
@@ -3585,6 +3737,11 @@ Here is the complete, clean HTML file with all requested changes:
                 this.currentVideo = null;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
+                this.isWebFit = false;
+                if (this.webFitBtn) {
+                    this.webFitBtn.classList.remove('active');
+                    this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                }
             }
 
             openGraphicDetail(project) {
@@ -3888,4 +4045,3 @@ Here is the complete, clean HTML file with all requested changes:
     </script>
 </body>
 </html>
-```
