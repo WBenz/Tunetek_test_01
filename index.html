@@ -1070,6 +1070,11 @@
             transform: translateY(0);
         }
 
+        /* REMOVE overlay in fullscreen */
+        .split-preview:fullscreen .preview-overlay {
+            display: none !important;
+        }
+
         .split-preview .preview-overlay h3 {
             font-family: var(--font-heading);
             font-size: 1.4rem;
@@ -1479,16 +1484,6 @@
             transform: translateX(-50%) !important;
             z-index: 99999 !important;
             opacity: 1 !important;
-        }
-
-        .split-preview:fullscreen .preview-overlay {
-            position: fixed !important;
-            bottom: 100px !important;
-            left: 0 !important;
-            right: 0 !important;
-            z-index: 9999 !important;
-            opacity: 1 !important;
-            transform: translateY(0) !important;
         }
 
         .split-preview:fullscreen .preview-media {
@@ -3686,7 +3681,7 @@
                     }
                     if (this.webZoomBtn) {
                         this.webZoomBtn.classList.remove('active');
-                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                         this.webZoomBtn.style.display = 'none';
                     }
                     this.preview.classList.remove('web-fit-mode');
@@ -4017,7 +4012,7 @@
                         if (!this.isWebZoomed) {
                             img.classList.remove('web-zoomed');
                             img.style.objectFit = 'contain';
-                            this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                            this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                             this.webZoomBtn.title = 'Zoom in';
                         }
                     } else {
@@ -4035,7 +4030,7 @@
                             img.style.maxWidth = '100%';
                             img.style.minHeight = 'auto';
                             this.webZoomBtn.classList.remove('active');
-                            this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                            this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                         }
                     }
                 };
@@ -4088,7 +4083,7 @@
                         img.style.maxHeight = '100vh';
                         img.style.maxWidth = '100vw';
                         this.webZoomBtn.classList.add('active');
-                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus</i>';
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus"></i>';
                         this.webZoomBtn.title = 'Zoom out';
                     } else {
                         img.classList.remove('web-zoomed');
@@ -4098,7 +4093,7 @@
                         img.style.maxHeight = '100vh';
                         img.style.maxWidth = '100vw';
                         this.webZoomBtn.classList.remove('active');
-                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                        this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                         this.webZoomBtn.title = 'Zoom in';
                     }
                 };
@@ -4163,7 +4158,7 @@
                 }
                 if (this.webZoomBtn) {
                     this.webZoomBtn.classList.remove('active');
-                    this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus</i>';
+                    this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                     this.webZoomBtn.style.display = 'none';
                 }
             }
