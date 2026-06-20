@@ -1185,6 +1185,19 @@
             transition: width 0.05s linear;
         }
 
+        .preview-controls .web-controls-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .preview-controls .web-controls-group .divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 2px;
+        }
+
         .split-list {
             padding: 20px 24px;
             overflow-y: auto;
@@ -2437,7 +2450,7 @@
                             </button>
                         </div>
 
-                        <!-- Graphic controls (Fullscreen only - navigation is on image sides) -->
+                        <!-- Graphic controls (Fullscreen only) -->
                         <div class="graphic-controls-group" id="graphicControlsGroup" style="display:none;">
                             <button class="graphic-fullscreen-btn" id="graphicFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
@@ -3496,6 +3509,13 @@
                         this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
                     };
                     this.previewControls.style.opacity = '1';
+                    
+                    // Reset fit state
+                    this.isWebFit = false;
+                    if (this.webFitBtn) {
+                        this.webFitBtn.classList.remove('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                    }
                 } else {
                     // === GRAPHIC IMAGE ===
                     mediaElement = document.createElement('img');
@@ -3514,7 +3534,7 @@
                     
                     // === GRAPHIC SLIDESHOW NAVIGATION ===
                     if (this.graphicProjectFiles.length > 1) {
-                        // Navigation buttons (Previous/Next on sides)
+                        // Navigation container with Prev/Next buttons on sides
                         const navContainer = document.createElement('div');
                         navContainer.className = 'graphic-slide-nav';
                         
@@ -3527,7 +3547,6 @@
                             this.graphicCurrentIndex = (this.graphicCurrentIndex - 1 + this.graphicProjectFiles.length) % this.graphicProjectFiles.length;
                             this.updateGraphicSlide();
                             this.updateGraphicCounter();
-                            this.updateGraphicButtons(prevBtn, nextBtn);
                         });
                         
                         const nextBtn = document.createElement('button');
@@ -3539,18 +3558,20 @@
                             this.graphicCurrentIndex = (this.graphicCurrentIndex + 1) % this.graphicProjectFiles.length;
                             this.updateGraphicSlide();
                             this.updateGraphicCounter();
-                            this.updateGraphicButtons(prevBtn, nextBtn);
                         });
                         
                         navContainer.appendChild(prevBtn);
                         navContainer.appendChild(nextBtn);
                         this.preview.appendChild(navContainer);
                         
-                        // Counter
+                        // Counter at bottom center
                         const counter = document.createElement('div');
                         counter.className = 'graphic-slide-counter';
                         counter.textContent = `${this.graphicCurrentIndex + 1} / ${this.graphicProjectFiles.length}`;
                         this.preview.appendChild(counter);
+                        
+                        // Update title with slide indicator
+                        this.previewTitle.textContent = `${item.title} (${this.graphicCurrentIndex + 1}/${this.graphicProjectFiles.length})`;
                         
                         // Keyboard navigation
                         const keyHandler = (e) => {
@@ -3560,19 +3581,15 @@
                                 this.graphicCurrentIndex = (this.graphicCurrentIndex - 1 + this.graphicProjectFiles.length) % this.graphicProjectFiles.length;
                                 this.updateGraphicSlide();
                                 this.updateGraphicCounter();
-                                this.updateGraphicButtons(prevBtn, nextBtn);
                             } else if (e.key === 'ArrowRight') {
                                 e.preventDefault();
                                 this.graphicCurrentIndex = (this.graphicCurrentIndex + 1) % this.graphicProjectFiles.length;
                                 this.updateGraphicSlide();
                                 this.updateGraphicCounter();
-                                this.updateGraphicButtons(prevBtn, nextBtn);
                             }
                         };
                         document.addEventListener('keydown', keyHandler);
                         this._graphicKeyHandler = keyHandler;
-                        
-                        // Store refs for cleanup
                         this._graphicNav = navContainer;
                         this._graphicCounter = counter;
                         this._graphicPrevBtn = prevBtn;
@@ -3599,7 +3616,7 @@
                 const filePath = getFileUrl(this.graphicProjectFiles[this.graphicCurrentIndex]);
                 img.src = filePath;
                 // Update title with slide indicator
-                const title = this.previewTitle.textContent.split(' (')[0];
+                const title = this.currentProject ? this.currentProject.title : '';
                 this.previewTitle.textContent = `${title} (${this.graphicCurrentIndex + 1}/${this.graphicProjectFiles.length})`;
             }
 
@@ -3607,15 +3624,6 @@
                 const counter = this.preview.querySelector('.graphic-slide-counter');
                 if (counter) {
                     counter.textContent = `${this.graphicCurrentIndex + 1} / ${this.graphicProjectFiles.length}`;
-                }
-            }
-
-            updateGraphicButtons(prevBtn, nextBtn) {
-                if (prevBtn) {
-                    prevBtn.disabled = this.graphicProjectFiles.length <= 1;
-                }
-                if (nextBtn) {
-                    nextBtn.disabled = this.graphicProjectFiles.length <= 1;
                 }
             }
 
@@ -3685,27 +3693,22 @@
                 
                 // Fullscreen
                 this.webFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
-                    else document.exitFullscreen().catch(()=>{});
-                };
-                
-                // Handle fullscreen for web - reset fit state
-                document.addEventListener('fullscreenchange', () => {
-                    if (this.currentProject && this.currentProject.category === 'web') {
-                        if (!document.fullscreenElement && this.isWebFit) {
-                            // Reapply fit when exiting fullscreen
-                            this.isWebFit = false;
-                            this.webFitBtn.click();
-                        }
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(()=>{});
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
                     }
-                });
+                };
             }
 
             setupGraphicControls() {
                 // Graphic: fullscreen toggle
                 this.graphicFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
-                    else document.exitFullscreen().catch(()=>{});
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(()=>{});
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
+                    }
                 };
             }
 
