@@ -3521,7 +3521,6 @@
                     mediaElement.loop = false;
                     mediaElement.preload = 'metadata';
                     mediaElement.setAttribute('playsinline', '');
-                    // FIXED: Proper video sizing for fullscreen
                     mediaElement.style.maxHeight = '550px';
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
@@ -3563,11 +3562,13 @@
                     mediaElement.src = filePath;
                     mediaElement.alt = item.title;
                     mediaElement.loading = 'lazy';
+                    // FIX: Proper styling for web images - stays inside preview
                     mediaElement.style.objectFit = 'contain';
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
                     mediaElement.style.maxHeight = '550px';
                     mediaElement.style.maxWidth = '100%';
+                    mediaElement.style.minHeight = 'auto';
                     mediaElement.onerror = function() {
                         this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
                     };
@@ -3838,19 +3839,11 @@
                     this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
                 };
                 
-                // FIXED: Fullscreen - properly handle video fullscreen
+                // Fullscreen - properly handle video fullscreen
                 this.videoFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
-                        // Try to fullscreen the preview container
                         const container = this.preview;
                         if (container) {
-                            // Store current video styles to restore later
-                            const currentMaxHeight = video.style.maxHeight;
-                            const currentWidth = video.style.width;
-                            const currentHeight = video.style.height;
-                            const currentObjectFit = video.style.objectFit;
-                            
-                            // Set video to fill the container
                             video.style.maxHeight = '100vh';
                             video.style.width = '100%';
                             video.style.height = '100%';
@@ -3858,7 +3851,6 @@
                             
                             container.requestFullscreen()
                                 .then(() => {
-                                    // When fullscreen is entered, make video fill the screen
                                     setTimeout(() => {
                                         video.style.maxHeight = '100vh';
                                         video.style.width = '100%';
@@ -3871,7 +3863,6 @@
                                     }, 50);
                                 })
                                 .catch(() => {
-                                    // Fallback: try to fullscreen the video element directly
                                     if (video.requestFullscreen) {
                                         video.requestFullscreen().catch(() => {});
                                     }
@@ -3885,14 +3876,12 @@
                 // Listen for fullscreen change to reset video styles when exiting fullscreen
                 const fullscreenChangeHandler = () => {
                     if (!document.fullscreenElement) {
-                        // Reset video styles when exiting fullscreen
                         if (video) {
                             video.style.maxHeight = '550px';
                             video.style.width = '100%';
                             video.style.height = '100%';
                             video.style.objectFit = 'contain';
                         }
-                        // Reset preview container styles
                         if (this.preview) {
                             this.preview.style.display = 'flex';
                             this.preview.style.alignItems = 'center';
@@ -3902,7 +3891,6 @@
                     }
                 };
                 
-                // Remove previous listener if exists
                 if (this._fullscreenChangeHandler) {
                     document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
                 }
@@ -3914,32 +3902,36 @@
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
                 
-                // Fit Width button
+                // FIXED: Fit Width button - properly keeps image inside preview with scrollbar
                 this.webFitBtn.onclick = () => {
                     this.isWebFit = !this.isWebFit;
                     if (this.isWebFit) {
-                        // Fit to width - image expands to full width, scrollbar appears
+                        // Fit to width - image expands to full width, height auto, scrollbar appears inside preview
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = 'auto';
                         img.style.maxHeight = 'none';
                         img.style.maxWidth = '100%';
                         img.style.minHeight = 'auto';
+                        // Make the preview scrollable
                         this.preview.style.overflow = 'auto';
                         this.preview.style.alignItems = 'flex-start';
+                        this.preview.style.justifyContent = 'flex-start';
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
                     } else {
-                        // Reset to fit view
+                        // Reset to fit view - image fits inside preview
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = '100%';
                         img.style.maxHeight = '550px';
                         img.style.maxWidth = '100%';
                         img.style.minHeight = 'auto';
+                        // Hide scrollbars
                         this.preview.style.overflow = 'hidden';
                         this.preview.style.alignItems = 'center';
+                        this.preview.style.justifyContent = 'center';
                         this.preview.scrollTop = 0;
                         this.preview.scrollLeft = 0;
                         this.webFitBtn.classList.remove('active');
