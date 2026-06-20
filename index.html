@@ -1054,23 +1054,32 @@
             justify-content: center;
         }
 
+        .split-preview::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .split-preview::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+
+        .split-preview::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        .split-preview::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-dark);
+        }
+
         .split-preview .preview-media {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: opacity 0.5s ease;
             max-height: 550px;
-        }
-
-        .split-preview .preview-media.web-zoom {
-            object-fit: cover;
-            cursor: zoom-out;
-        }
-
-        .split-preview .preview-media.web-scroll {
-            object-fit: contain;
-            cursor: grab;
         }
 
         .split-preview video.preview-media {
@@ -1156,7 +1165,7 @@
             opacity: 1;
         }
 
-        /* Preview Controls (for video and web) */
+        /* Preview Controls */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1241,7 +1250,7 @@
             transition: width 0.05s linear;
         }
 
-        /* List Panel - Right Side */
+        /* List Panel */
         .split-list {
             padding: 20px 24px;
             overflow-y: auto;
@@ -1379,7 +1388,6 @@
             margin-bottom: 12px;
         }
 
-        /* Scrollbar for list */
         .split-list::-webkit-scrollbar {
             width: 4px;
         }
@@ -1406,9 +1414,6 @@
             }
             .split-preview .preview-overlay {
                 padding: 20px 24px;
-            }
-            .split-preview .preview-overlay h3 {
-                font-size: 1.2rem;
             }
             .preview-controls {
                 bottom: 70px;
@@ -1455,15 +1460,8 @@
                 width: 44px;
                 height: 34px;
             }
-            .split-list .list-item .info h5 {
-                font-size: 0.8rem;
-            }
             .search-wrapper input {
                 padding: 8px 16px 8px 36px;
-                font-size: 0.8rem;
-            }
-            .search-wrapper .search-icon {
-                left: 12px;
                 font-size: 0.8rem;
             }
         }
@@ -1497,18 +1495,11 @@
                 width: 36px;
                 height: 28px;
             }
-            .split-list .list-item .info h5 {
-                font-size: 0.75rem;
-            }
             .search-wrapper {
                 min-width: 120px;
             }
             .search-wrapper input {
                 padding: 6px 12px 6px 32px;
-                font-size: 0.7rem;
-            }
-            .search-wrapper .search-icon {
-                left: 10px;
                 font-size: 0.7rem;
             }
             .preview-controls {
@@ -1527,10 +1518,6 @@
             .preview-controls .video-progress .progress-bar {
                 width: 40px;
             }
-            .preview-controls .video-progress .time {
-                font-size: 0.6rem;
-                min-width: 28px;
-            }
         }
 
         /* ===================== ABOUT ===================== */
@@ -1543,10 +1530,6 @@
             grid-template-columns: 280px 1fr;
             gap: 48px;
             align-items: start;
-        }
-
-        .about-image {
-            position: relative;
         }
 
         .about-image img {
@@ -1744,11 +1727,6 @@
             text-align: justify;
         }
 
-        .footer-col a {
-            display: inline-block;
-            transition: color var(--transition);
-        }
-
         .footer-col a:hover {
             color: var(--secondary-color);
         }
@@ -1902,7 +1880,6 @@
         .fade-in-delay-3 { transition-delay: 0.3s; }
         .fade-in-delay-4 { transition-delay: 0.4s; }
 
-        /* ===================== SCROLLBAR ===================== */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -1921,7 +1898,6 @@
             background: var(--secondary-dark);
         }
 
-        /* ===================== SELECTION ===================== */
         ::selection {
             background: var(--secondary-color);
             color: white;
@@ -2389,9 +2365,9 @@
                     </div>
                     <div class="video-badge" id="previewVideoBadge"><i class="fas fa-play"></i> video</div>
                     
-                    <!-- Preview Controls (video + web) -->
+                    <!-- Preview Controls -->
                     <div class="preview-controls" id="previewControls">
-                        <!-- Video controls -->
+                        <!-- Video controls (for motion) -->
                         <div class="video-controls-group" id="videoControlsGroup" style="display:none;">
                             <button class="video-play-btn" id="videoPlayBtn" aria-label="Play/Pause">
                                 <i class="fas fa-play"></i>
@@ -2411,13 +2387,20 @@
                             </button>
                         </div>
 
-                        <!-- Web controls -->
+                        <!-- Web controls (zoom + fullscreen) -->
                         <div class="web-controls-group" id="webControlsGroup" style="display:none;">
                             <button class="web-zoom-btn" id="webZoomBtn" aria-label="Toggle zoom">
                                 <i class="fas fa-search-plus"></i>
                             </button>
                             <div class="divider"></div>
                             <button class="web-fullscreen-btn" id="webFullscreenBtn" aria-label="Fullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+
+                        <!-- Graphic controls (fullscreen only) -->
+                        <div class="graphic-controls-group" id="graphicControlsGroup" style="display:none;">
+                            <button class="graphic-fullscreen-btn" id="graphicFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
                             </button>
                         </div>
@@ -2739,130 +2722,252 @@
         }
 
         // =====================================================================
-        // GITHUB PROJECT LOADER - DYNAMICALLY LOADS ALL PROJECTS
+        // FILE MANIFEST - DIRECT FILE LIST (NO API CALLS!)
         // =====================================================================
         const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/projects/';
-        const GITHUB_API = 'https://api.github.com/repos/WBenz/Tunetek-Studio-Design/contents/projects/';
 
-        class ProjectLoader {
-            constructor() {
-                this.allProjects = { graphic: [], motion: [], web: [] };
-                this.isLoading = false;
-                this.categories = ['graphic', 'motion', 'web'];
-                this.categoryCounts = { graphic: 0, motion: 0, web: 0 };
-            }
-
-            async loadAllProjects() {
-                if (this.isLoading) return this.allProjects;
-                this.isLoading = true;
-
-                try {
-                    const promises = this.categories.map(cat => this.fetchCategory(cat));
-                    const results = await Promise.all(promises);
-                    
-                    this.categories.forEach((cat, index) => {
-                        const processed = this.processFiles(results[index], cat);
-                        this.allProjects[cat] = processed;
-                        this.categoryCounts[cat] = processed.length;
-                    });
-
-                    const total = this.categoryCounts.graphic + this.categoryCounts.motion + this.categoryCounts.web;
-                    console.log('📁 Projects loaded from GitHub:');
-                    console.log(`🖼️ Graphic: ${this.categoryCounts.graphic} projects`);
-                    console.log(`🎬 Motion: ${this.categoryCounts.motion} projects`);
-                    console.log(`🌐 Web: ${this.categoryCounts.web} projects`);
-                    console.log(`📊 Total: ${total} projects`);
-
-                    this.isLoading = false;
-                    return this.allProjects;
-                } catch (error) {
-                    console.error('Error loading projects from GitHub:', error);
-                    this.isLoading = false;
-                    return this.getFallbackData();
-                }
-            }
-
-            async fetchCategory(category) {
-                try {
-                    const url = `${GITHUB_API}${category}/`;
-                    const response = await fetch(url, {
-                        headers: { 
-                            'Accept': 'application/vnd.github.v3+json',
-                            'User-Agent': 'Tunetek-Studio-Design'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`GitHub API error: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    return data.filter(item => item.type === 'file');
-                } catch (error) {
-                    console.warn(`Failed to fetch ${category} from GitHub:`, error);
-                    return [];
-                }
-            }
-
-            processFiles(files, category) {
-                const projects = {};
-                const mediaExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.webm', '.mov'];
-
-                const mediaFiles = files.filter(item => 
-                    mediaExtensions.some(ext => item.name.toLowerCase().endsWith(ext))
-                );
-
-                mediaFiles.forEach(item => {
-                    let baseName = this.getBaseName(item.name);
-                    
-                    if (!projects[baseName]) {
-                        projects[baseName] = {
-                            id: baseName,
-                            title: this.generateTitle(baseName),
-                            category: category,
-                            files: [],
-                            isVideo: this.isVideoFile(item.name),
-                            year: this.extractYear(item.name)
-                        };
-                    }
-                    projects[baseName].files.push(item.name);
-                });
-
-                return Object.values(projects).sort((a, b) => {
-                    const yearA = parseInt(a.year) || 0;
-                    const yearB = parseInt(b.year) || 0;
-                    return yearB - yearA;
-                });
-            }
-
-            getBaseName(filename) {
-                let name = filename.replace(/\.[^.]+$/, '');
-                name = name.replace(/-\d+$/, '');
-                name = name.replace(/\s+\d+$/, '');
-                return name.trim();
-            }
-
-            generateTitle(baseName) {
-                return baseName
-                    .split(/[-_\s]+/)
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                    .join(' ');
-            }
-
-            isVideoFile(filename) {
-                const videoExt = ['.mp4', '.webm', '.mov'];
-                return videoExt.some(ext => filename.toLowerCase().endsWith(ext));
-            }
-
-            extractYear(filename) {
-                const match = filename.match(/(19|20)\d{2}/);
-                return match ? match[0] : '2024';
-            }
-
-            getFallbackData() {
-                return { graphic: [], motion: [], web: [] };
-            }
-        }
+        const PROJECT_MANIFEST = {
+            graphic: [
+                'projects/graphic/Resident Evil Book of Lore Design-1.jpg',
+                'projects/graphic/Resident Evil Book of Lore Design-2.jpg',
+                'projects/graphic/Resident Evil Book of Lore Design-3.jpg',
+                'projects/graphic/London Flow Poster Design-3.jpg',
+                'projects/graphic/London Flow Poster Design-2.jpg',
+                'projects/graphic/London Flow Poster Design-1.jpg',
+                'projects/graphic/Jazz Festival Poster Design.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-10.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-9.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-8.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-7.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-6.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-5.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-4.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-3.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-2.jpg',
+                'projects/graphic/RE Requiem Tshirt Design-1.jpg',
+                'projects/graphic/Christmas Family Party Invitation Card Design.jpg',
+                'projects/graphic/Belgium Shad Store Logo Design.jpg',
+                'projects/graphic/Happy Core Sign.jpg',
+                'projects/graphic/Karting Poster Design.jpg',
+                'projects/graphic/Old but Gold Store Logo Design.jpg',
+                'projects/graphic/Next Departure Vacation Agency Planner Branding.jpg',
+                'projects/graphic/Evening Sun Logo Design-1.jpg',
+                'projects/graphic/Apex Reparasjon Branding Design-1.jpg',
+                'projects/graphic/Haven-Craft-Furnishings-Company-Poster-Design-01.jpg',
+                'projects/graphic/Spanich-Folkloric-Dancing-Party-Poster-Design-01.jpg',
+                'projects/graphic/Back-To-School-Party-Poster-Design-01.jpg',
+                'projects/graphic/Summer-Soccer-Training-Session-Poster-Design-01.jpg',
+                'projects/graphic/Solis-Branding-Sheet-01.jpg',
+                'projects/graphic/Pearls&Probes-Accessories-Flyer-Design-04.jpg',
+                'projects/graphic/Pearls&Probes-Accessories-Flyer-Design-03.jpg',
+                'projects/graphic/Pearls&Probes-Accessories-Flyer-Design-02.jpg',
+                'projects/graphic/Pearls&Probes-Accessories-Flyer-Design-01.jpg',
+                'projects/graphic/OAK&FORM-Business-Card-01.jpg',
+                'projects/graphic/Flawless-Cosmetic-Product-Packaging-Design-01.jpg',
+                'projects/graphic/Elite-Car-Repair-Shop-Banner-Design-01.jpg',
+                'projects/graphic/Netherland-Cycling-Event-Poster-Design-01.jpg',
+                'projects/graphic/Resiway-Poster-Design-01.jpg',
+                'projects/graphic/Meridian-Trading-Company-Poster-Design-01.jpg',
+                'projects/graphic/Rewise-Recycling-Company-Poster-01.jpg',
+                'projects/graphic/Angela-s-Clothing-Branding-04.jpg',
+                'projects/graphic/Angela-s-Clothing-Branding-03.jpg',
+                'projects/graphic/Angela-s-Clothing-Branding-02.jpg',
+                'projects/graphic/Angela-s-Clothing-Branding-01.jpg',
+                'projects/graphic/ParcelFlow-Shipping-Company-Branding-01.jpg',
+                'projects/graphic/Golden-Prime-Branding-Sheet-04.jpg',
+                'projects/graphic/Golden-Prime-Branding-Sheet-03.jpg',
+                'projects/graphic/Golden-Prime-Branding-Sheet-02.jpg',
+                'projects/graphic/Golden-Prime-Branding-Sheet-01.jpg',
+                'projects/graphic/Humanitarian-Charity-Poster-Design-01.jpg',
+                'projects/graphic/Neat-Nest-Company Poster-Design-02.jpg',
+                'projects/graphic/Neat-Nest-Company Poster-Design-01.jpg',
+                'projects/graphic/Tiny-Trend-Branding-07.jpg',
+                'projects/graphic/Tiny-Trend-Branding-06.jpg',
+                'projects/graphic/Tiny-Trend-Branding-05.jpg',
+                'projects/graphic/Tiny-Trend-Branding-04.jpg',
+                'projects/graphic/Tiny-Trend-Branding-03.jpg',
+                'projects/graphic/Tiny-Trend-Branding-02.jpg',
+                'projects/graphic/Tiny-Trend-Branding-01.jpg',
+                'projects/graphic/Pitter-Patter-03-Branding.jpg',
+                'projects/graphic/Pitter-Patter-02-Branding.jpg',
+                'projects/graphic/Pitter-Patter-01-Branding.jpg',
+                'projects/graphic/Podrink-Energy Drink-Poster Design-1.jpg',
+                'projects/graphic/Podrink-Energy Drink-Poster Design-2.jpg',
+                'projects/graphic/Nut-Shop-Poster Design-1.jpg',
+                'projects/graphic/Nut-Shop-Poster Design-2.jpg',
+                'projects/graphic/Free-CheckUp-Poster Design.jpg',
+                'projects/graphic/Rythm-Nation Dancing-Club Poster Design.jpg',
+                'projects/graphic/Nick Tech-Store Poster Design.jpg',
+                'projects/graphic/Petty-Care-Association Poster Design.jpg',
+                'projects/graphic/Children-Garden-Freely Poster Design.jpg',
+                'projects/graphic/RoadToBe-Car-Rental-Company Poster Design.jpg',
+                'projects/graphic/Flash-Trade Poster Design-1.jpg',
+                'projects/graphic/Flash-Trade Poster Design-2.jpg',
+                'projects/graphic/GamIN-Store Poster Design.jpg',
+                'projects/graphic/OnlyCare Poster Design-1.jpg',
+                'projects/graphic/OnlyCare Poster Design-2.jpg',
+                'projects/graphic/OnlyCare Poster Design-3.jpg',
+                'projects/graphic/SquareTech Poster Design-1.jpg',
+                'projects/graphic/SquareTech Poster Design-2.jpg',
+                'projects/graphic/Stratedge-Consulting-Company Poster Design.jpg',
+                'projects/graphic/Ophtalmologiste Business Card Design.jpg',
+                'projects/graphic/Affiche-Saida-1.jpg',
+                'projects/graphic/Affiche-Saida-2.jpg',
+                'projects/graphic/Affiche-Webofly-1.jpg',
+                'projects/graphic/Affiche-Webofly-2.jpg',
+                'projects/graphic/Webofly-Flyer-1.jpg',
+                'projects/graphic/Webofly-Flyer-2.jpg',
+                'projects/graphic/Webofly-Prestation-1.jpg',
+                'projects/graphic/Webofly-Prestation-2.jpg',
+                'projects/graphic/Webofly-Prestation-3.jpg',
+                'projects/graphic/Webofly-Prestation-4.jpg',
+                'projects/graphic/Webofly-Prestation-5.jpg',
+                'projects/graphic/Banderole-President-1.jpg',
+                'projects/graphic/Banderole-President-2.jpg',
+                'projects/graphic/Banderole-President-3.jpg',
+                'projects/graphic/Banderole-President-4.jpg',
+                'projects/graphic/Stand-President-1.jpg',
+                'projects/graphic/Stand-President-2.jpg',
+                'projects/graphic/Banderole-Resicover-1.jpg',
+                'projects/graphic/Banderole-Resicover-2.jpg',
+                'projects/graphic/Banderole-Resicover-3.jpg',
+                'projects/graphic/Panneau-Resicover-1.jpg',
+                'projects/graphic/Panneau-Resicover-2.jpg',
+                'projects/graphic/Plaquette-Resicover-1.jpg',
+                'projects/graphic/Plaquette-Resicover-2.jpg',
+                'projects/graphic/Packshot-Golden Chips-1.jpg',
+                'projects/graphic/Packshot-Golden Chips-2.jpg',
+                'projects/graphic/Logo-Resicover-1.jpg',
+                'projects/graphic/Logo-Resicover-2.jpg',
+                'projects/graphic/Calendrier-Personalisé-1.jpg',
+                'projects/graphic/Calendrier-Personalisé-2.jpg',
+                'projects/graphic/Social Media-Posts-1.jpg',
+                'projects/graphic/Social Media-Posts-2.jpg',
+                'projects/graphic/Business Card-1.jpg',
+                'projects/graphic/Business Card-2.jpg',
+                'projects/graphic/Logo-Click to Doctor-1.jpg',
+                'projects/graphic/Logo-Click to Doctor-2.jpg',
+                'projects/graphic/Brochure-Anxiomag-1.jpg',
+                'projects/graphic/Packging-Anxiomag-1.jpg',
+                'projects/graphic/Brochure-Givexil-1.jpg',
+                'projects/graphic/Packaging-Givexil-1.jpg',
+                'projects/graphic/Packaging-Gasactiv-1.jpg',
+                'projects/graphic/Brochure-Gasactiv-1.jpg',
+                'projects/graphic/Brochure-Gasactiv-2.jpg',
+                'projects/graphic/Brochure-Gasactiv-3.jpg',
+                'projects/graphic/Brochure-Gasactiv-4.jpg',
+                'projects/graphic/Brochure-Gasactiv-5.jpg',
+                'projects/graphic/Brochure-Dolgine-1.jpg',
+                'projects/graphic/Brochure-Dolgine-2.jpg',
+                'projects/graphic/Brochure-Dolgine-3.jpg',
+                'projects/graphic/Brochure-Dolgine-4.jpg',
+                'projects/graphic/Poster-Enfant-1.jpg',
+                'projects/graphic/Poster-Enfant-2.jpg',
+                'projects/graphic/Poster-Enfant-3.jpg',
+                'projects/graphic/Poster-Enfant-4.jpg',
+                'projects/graphic/Poster-Enfant-5.jpg',
+                'projects/graphic/Poster-Enfant-6.jpg',
+                'projects/graphic/Poster-Enfant-7.jpg',
+                'projects/graphic/Poster-Enfant-8.jpg',
+                'projects/graphic/Poster-Enfant-9.jpg',
+                'projects/graphic/Poster-Enfant-10.jpg',
+                'projects/graphic/Poster-Enfant-11.jpg',
+                'projects/graphic/Poster-Enfant-12.jpg',
+                'projects/graphic/Logo-Benzi-1.jpg',
+                'projects/graphic/Logo-Benzi-2.jpg',
+                'projects/graphic/Branding-Zeyna-1.jpg',
+                'projects/graphic/Branding-Zeyna-2.jpg'
+            ],
+            motion: [
+                'projects/motion/Happy Core Store Sign Design.mp4',
+                'projects/motion/Happy Core Store Poster Design.mp4',
+                'projects/motion/Next Departure Agency Branding.mp4',
+                'projects/motion/London Flow Poster Design.mp4',
+                'projects/motion/Belgium Shad Logo Design.mp4',
+                'projects/motion/RE Reqiuem Tshirt Design-2.mp4',
+                'projects/motion/RE Requiem Tshirt Design-1.mp4',
+                'projects/motion/Christmas Family Party Card-3.mp4',
+                'projects/motion/Christmas Family Party Card-2.mp4',
+                'projects/motion/Christmas Family Party Card-1.mp4',
+                'projects/motion/Karting Poster Design.mp4',
+                'projects/motion/Old but Gold Store.mp4',
+                'projects/motion/Evening Sun Restaurant Logo.mp4',
+                'projects/motion/Apex Repair Shop.mp4',
+                'projects/motion/Flawless Packaging Design.mp4',
+                'projects/motion/Meridian Trading Company Poster Design.mp4',
+                'projects/motion/Angelas Clothing.mp4',
+                'projects/motion/Parcel Flow Motion Design.mp4',
+                'projects/motion/Golden Prime Company.mp4',
+                'projects/motion/Palestine Donation Event.mp4',
+                'projects/motion/Neat Nest Poster Design.mp4',
+                'projects/motion/Netherland Cycling Event Poster Design.mp4',
+                'projects/motion/Elite Car Repair Shop Banner Design.mp4',
+                'projects/motion/OAK and FORM Business Card.mp4',
+                'projects/motion/Pearls and Probes Accessories Flyer Design.mp4',
+                'projects/motion/Summer Soccer Club Poster Design.mp4',
+                'projects/motion/School Party Poster Design.mp4',
+                'projects/motion/Flower Delivery Company Motion Design.mp4',
+                'projects/motion/Solidarity Event Motion Design.mp4',
+                'projects/motion/Baby Website Motion Design.mp4',
+                'projects/motion/Camping Website Motion Design.mp4',
+                'projects/motion/WashTop Garage Website Motion Design.mp4',
+                'projects/motion/Car Care Website Motion Design.mp4',
+                'projects/motion/Harmonica Website Motion Design.mp4',
+                'projects/motion/Techno Studio Website Motion Design.mp4',
+                'projects/motion/Multiple Web Site Motion Design.mp4',
+                'projects/motion/Elegance Website Motion Design.mp4',
+                'projects/motion/Trading Website Motion Design.mp4',
+                'projects/motion/Golden Chips Commercial.mp4',
+                'projects/motion/Pack Oriental Commercial.mp4',
+                'projects/motion/Panomedia Motion Design.mp4',
+                'projects/motion/Brains Spark-Motion Design-1.mp4',
+                'projects/motion/Brains Spark-Motion Design-2.mp4',
+                'projects/motion/Brains Spark-Motion Design-3.mp4',
+                'projects/motion/Brains Spark-Motion Design-4.mp4',
+                'projects/motion/Brains Spark-Motion Design-5.mp4',
+                'projects/motion/Brains Spark-Motion Design-6.mp4',
+                'projects/motion/Brains Spark-Motion Design-7.mp4',
+                'projects/motion/Brains Spark-Motion Design-8.mp4',
+                'projects/motion/Brains Spark-Motion Design-9.mp4',
+                'projects/motion/Brains Spark-Motion Design-10.mp4',
+                'projects/motion/Brains Spark-Motion Design-11.mp4',
+                'projects/motion/Brains Spark-Motion Design-12.mp4',
+                'projects/motion/Brains Spark-Motion Design-13.mp4',
+                'projects/motion/Brains Spark-Motion Design-14.mp4',
+                'projects/motion/Brains Spark-Motion Design-15.mp4'
+            ],
+            web: [
+                'projects/web/Car-Care-Website.jpg',
+                'projects/web/Trail-Art-Website.jpg',
+                'projects/web/Flower-Delivery-Company Website.jpg',
+                'projects/web/ConsolX-Game-Parts-Company Website.jpg',
+                'projects/web/Tapi-Toy-Company Website.jpg',
+                'projects/web/WashTop-Garage Website.jpg',
+                'projects/web/PrinIN-Company Website.jpg',
+                'projects/web/ElectroParts-Hub-Company Website.jpg',
+                'projects/web/Elegant-Bridal-Store Website.jpg',
+                'projects/web/AquaBlast-Event Website.jpg',
+                'projects/web/Tour-de-Montagne-Event Website.jpg',
+                'projects/web/Dried-Delights-Store Website.jpg',
+                'projects/web/SoleStride-Store Website.jpg',
+                'projects/web/STE Gloulou-Les Vosges-Landing Page Design-1.jpg',
+                'projects/web/Elegance-Fashion-Website.jpg',
+                'projects/web/Resicover-Tiling-Website.jpg',
+                'projects/web/HarmoniCore-Instrument-Website.jpg',
+                'projects/web/Solidarity-Event-Landing-Page.jpg',
+                'projects/web/Prom-Academy-Website.jpg',
+                'projects/web/Camping-Event-Website.jpg',
+                'projects/web/Trading-Website.jpg',
+                'projects/web/Cloud-Solution-Website.jpg',
+                'projects/web/AI-Computing-Website.jpg',
+                'projects/web/Goodies-Like-Website.jpg',
+                'projects/web/Garage-Pro-Website.jpg',
+                'projects/web/ShopiShop-Candyshop-Website.jpg',
+                'projects/web/Floating-Tech-Website.jpg',
+                'projects/web/Käfig-Vogel-Dancing-Club-Website.jpg',
+                'projects/web/LIGNACOMP-Carpentering-Company-Website.jpg'
+            ]
+        };
 
         // =====================================================================
         // TRANSLATIONS
@@ -2994,12 +3099,101 @@
             };
         }
 
+        function getFileUrl(category, filename) {
+            const parts = filename.split('/');
+            const encodedParts = parts.map(part => encodeURIComponent(part));
+            return GITHUB_BASE + encodedParts.join('/');
+        }
+
+        // =====================================================================
+        // PROJECT MANAGER - Uses manifest (NO API calls!)
+        // =====================================================================
+        class ProjectManager {
+            constructor() {
+                this.allProjects = { graphic: [], motion: [], web: [] };
+                this.categoryCounts = { graphic: 0, motion: 0, web: 0 };
+            }
+
+            loadAllProjects() {
+                try {
+                    ['graphic', 'motion', 'web'].forEach(cat => {
+                        const files = PROJECT_MANIFEST[cat] || [];
+                        const processed = this.processFiles(files, cat);
+                        this.allProjects[cat] = processed;
+                        this.categoryCounts[cat] = processed.length;
+                    });
+
+                    const total = this.categoryCounts.graphic + this.categoryCounts.motion + this.categoryCounts.web;
+                    console.log('📁 Projects loaded from manifest:');
+                    console.log(`🖼️ Graphic: ${this.categoryCounts.graphic} projects`);
+                    console.log(`🎬 Motion: ${this.categoryCounts.motion} projects`);
+                    console.log(`🌐 Web: ${this.categoryCounts.web} projects`);
+                    console.log(`📊 Total: ${total} projects`);
+
+                    return this.allProjects;
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                    return this.allProjects;
+                }
+            }
+
+            processFiles(files, category) {
+                const projects = {};
+
+                files.forEach(file => {
+                    let baseName = this.getBaseName(file);
+                    
+                    if (!projects[baseName]) {
+                        projects[baseName] = {
+                            id: baseName,
+                            title: this.generateTitle(baseName),
+                            category: category,
+                            files: [],
+                            isVideo: this.isVideoFile(file),
+                            year: this.extractYear(file)
+                        };
+                    }
+                    projects[baseName].files.push(file);
+                });
+
+                return Object.values(projects).sort((a, b) => {
+                    const yearA = parseInt(a.year) || 0;
+                    const yearB = parseInt(b.year) || 0;
+                    return yearB - yearA;
+                });
+            }
+
+            getBaseName(filename) {
+                let name = filename.replace(/\.[^.]+$/, '');
+                name = name.replace(/-\d+$/, '');
+                name = name.replace(/\s+\d+$/, '');
+                return name.trim();
+            }
+
+            generateTitle(baseName) {
+                return baseName
+                    .split(/[-_\s]+/)
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(' ');
+            }
+
+            isVideoFile(filename) {
+                const videoExt = ['.mp4', '.webm', '.mov'];
+                return videoExt.some(ext => filename.toLowerCase().endsWith(ext));
+            }
+
+            extractYear(filename) {
+                const match = filename.match(/(19|20)\d{2}/);
+                return match ? match[0] : '2024';
+            }
+        }
+
         // =====================================================================
         // SPLIT SCREEN MANAGER WITH SEARCH
         // =====================================================================
         class SplitScreenManager {
             constructor() {
-                this.projectLoader = new ProjectLoader();
+                this.projectManager = new ProjectManager();
                 this.allProjects = { graphic: [], motion: [], web: [] };
                 this.allItems = [];
                 this.filteredItems = [];
@@ -3032,17 +3226,17 @@
                 // Preview controls
                 this.videoControlsGroup = document.getElementById('videoControlsGroup');
                 this.webControlsGroup = document.getElementById('webControlsGroup');
+                this.graphicControlsGroup = document.getElementById('graphicControlsGroup');
                 this.videoPlayBtn = document.getElementById('videoPlayBtn');
                 this.videoProgressFill = document.getElementById('videoProgressFill');
                 this.videoMuteBtn = document.getElementById('videoMuteBtn');
                 this.videoFullscreenBtn = document.getElementById('videoFullscreenBtn');
                 this.webZoomBtn = document.getElementById('webZoomBtn');
                 this.webFullscreenBtn = document.getElementById('webFullscreenBtn');
+                this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
-                // Current video element reference
                 this.currentVideo = null;
-                this.currentVideoSource = '';
                 this.isVideoMuted = true;
                 
                 this.init();
@@ -3052,7 +3246,7 @@
                 loadingItems.total = 3;
                 updateLoadingProgress();
                 
-                this.allProjects = await this.projectLoader.loadAllProjects();
+                this.allProjects = this.projectManager.loadAllProjects();
                 
                 this.setupCounts();
                 this.setupFilters();
@@ -3170,7 +3364,6 @@
                 this.listContainer.innerHTML = '';
                 this.listCount.textContent = 'Loading...';
                 
-                // Clear preview
                 this.clearPreview();
                 
                 setTimeout(() => {
@@ -3221,23 +3414,19 @@
                 this.listContainer.appendChild(fragment);
                 this.listCount.textContent = `${items.length} projects`;
                 
-                // Show clear search button if search is active
                 if (this.currentSearch) {
                     this.clearSearch.classList.add('visible');
                 } else {
                     this.clearSearch.classList.remove('visible');
                 }
                 
-                // Auto-select first project
                 if (items.length > 0 && !this.currentProject) {
                     this.selectProject(items[0], 0);
                 } else if (this.currentProject) {
-                    // Check if current project is still in filtered list
                     const stillExists = items.some(item => item.id === this.currentProject.id);
                     if (!stillExists && items.length > 0) {
                         this.selectProject(items[0], 0);
                     } else if (stillExists) {
-                        // Update active state
                         this.listContainer.querySelectorAll('.list-item').forEach(el => {
                             el.classList.toggle('active', el.dataset.index === String(items.indexOf(this.currentProject)));
                         });
@@ -3253,9 +3442,8 @@
                 }
                 div.dataset.index = index;
                 
-                const filePath = `${GITHUB_BASE}${item.category}/${encodeURIComponent(item.file)}`;
+                const filePath = getFileUrl(item.category, item.file);
                 
-                // Thumbnail
                 const thumb = document.createElement('div');
                 thumb.className = 'thumb';
                 
@@ -3273,12 +3461,14 @@
                     img.src = filePath;
                     img.alt = item.title;
                     img.loading = 'lazy';
+                    img.onerror = function() {
+                        this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"%3E%3Crect fill="%23333" width="200" height="150"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="16" dy=".35em" text-anchor="middle" x="100" y="75"%3E🖼️%3C/text%3E%3C/svg%3E';
+                    };
                     thumb.appendChild(img);
                 }
                 
                 div.appendChild(thumb);
                 
-                // Info
                 const info = document.createElement('div');
                 info.className = 'info';
                 info.innerHTML = `
@@ -3287,17 +3477,14 @@
                 `;
                 div.appendChild(info);
                 
-                // Arrow
                 const arrow = document.createElement('div');
                 arrow.className = 'arrow';
                 arrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
                 div.appendChild(arrow);
                 
-                // Click handler
                 div.addEventListener('click', () => {
                     if (this.isLoading) return;
                     
-                    // Update active state
                     this.listContainer.querySelectorAll('.list-item').forEach(el => {
                         el.classList.remove('active');
                     });
@@ -3315,9 +3502,8 @@
             }
 
             updatePreview(item) {
-                const filePath = `${GITHUB_BASE}${item.category}/${encodeURIComponent(item.file)}`;
+                const filePath = getFileUrl(item.category, item.file);
                 
-                // Update overlay
                 this.previewTitle.textContent = item.title;
                 this.previewCat.textContent = item.category.charAt(0).toUpperCase() + item.category.slice(1);
                 this.previewYear.textContent = item.year;
@@ -3329,9 +3515,10 @@
                     this.previewVideoBadge.style.display = 'none';
                 }
                 
-                // Show/hide controls based on category - MOTION gets video controls, WEB gets zoom controls
+                // Show correct controls based on category
                 this.videoControlsGroup.style.display = item.category === 'motion' ? 'flex' : 'none';
                 this.webControlsGroup.style.display = item.category === 'web' ? 'flex' : 'none';
+                this.graphicControlsGroup.style.display = item.category === 'graphic' ? 'flex' : 'none';
                 
                 // Reset controls
                 this.isVideoPlaying = false;
@@ -3340,8 +3527,10 @@
                 this.videoProgressFill.style.width = '0%';
                 this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
                 this.preview.style.overflow = 'hidden';
+                this.preview.scrollTop = 0;
+                this.preview.scrollLeft = 0;
                 
-                // Remove previous media
+                // Remove existing media
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) {
                     existingMedia.remove();
@@ -3367,9 +3556,9 @@
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
                     mediaElement.style.objectFit = 'contain';
+                    mediaElement.style.background = '#000';
                     
                     this.currentVideo = mediaElement;
-                    this.currentVideoSource = filePath;
                     
                     // Video event listeners
                     mediaElement.addEventListener('loadedmetadata', () => {
@@ -3429,6 +3618,10 @@
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
                     mediaElement.style.maxHeight = '550px';
+                    mediaElement.style.maxWidth = '100%';
+                    mediaElement.onerror = function() {
+                        this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
+                    };
                     
                     this.previewControls.style.opacity = '1';
                     
@@ -3443,7 +3636,11 @@
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
                     mediaElement.style.maxHeight = '550px';
+                    mediaElement.onerror = function() {
+                        this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🎨%3C/text%3E%3C/svg%3E';
+                    };
                     
+                    // Graphic preview - hide controls overlay, only show on hover
                     this.previewControls.style.opacity = '0';
                 }
                 
@@ -3460,6 +3657,7 @@
                 // Setup controls
                 this.setupVideoControls();
                 this.setupWebControls();
+                this.setupGraphicControls();
             }
 
             setupVideoControls() {
@@ -3520,7 +3718,7 @@
                 this.webZoomBtn.onclick = () => {
                     this.isWebZoomed = !this.isWebZoomed;
                     if (this.isWebZoomed) {
-                        // Zoom in - allow scrolling inside the box
+                        // Zoom in - show scrollbars
                         img.style.objectFit = 'contain';
                         img.style.width = 'auto';
                         img.style.height = 'auto';
@@ -3528,9 +3726,9 @@
                         img.style.maxWidth = 'none';
                         img.style.minWidth = '100%';
                         img.style.minHeight = '100%';
-                        // Make the preview scrollable
                         this.preview.style.overflow = 'auto';
                         this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus"></i>';
+                        this.webZoomBtn.title = 'Zoom out';
                     } else {
                         // Zoom out - fit to box
                         img.style.objectFit = 'contain';
@@ -3544,11 +3742,23 @@
                         this.preview.scrollTop = 0;
                         this.preview.scrollLeft = 0;
                         this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
+                        this.webZoomBtn.title = 'Zoom in';
                     }
                 };
                 
                 // Fullscreen
                 this.webFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(() => {});
+                    } else {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                };
+            }
+
+            setupGraphicControls() {
+                // Fullscreen for graphic
+                this.graphicFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         this.preview.requestFullscreen().catch(() => {});
                     } else {
@@ -3574,6 +3784,7 @@
                 this.previewVideoBadge.style.display = 'none';
                 this.videoControlsGroup.style.display = 'none';
                 this.webControlsGroup.style.display = 'none';
+                this.graphicControlsGroup.style.display = 'none';
                 this.previewControls.style.opacity = '0';
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
@@ -3581,16 +3792,6 @@
                 this.currentVideo = null;
                 this.isWebZoomed = false;
                 this.webZoomBtn.innerHTML = '<i class="fas fa-search-plus"></i>';
-            }
-
-            openProjectDetail(project) {
-                if (project.category === 'graphic') {
-                    this.openGraphicDetail(project);
-                } else if (project.category === 'motion') {
-                    this.openMotionDetail(project);
-                } else if (project.category === 'web') {
-                    this.openWebDetail(project);
-                }
             }
 
             openGraphicDetail(project) {
@@ -3602,13 +3803,16 @@
                 thumbnails.innerHTML = '';
                 project.files.forEach((file, i) => {
                     const thumb = document.createElement('img');
-                    thumb.src = `${GITHUB_BASE}graphic/${encodeURIComponent(file)}`;
+                    thumb.src = getFileUrl('graphic', file);
                     thumb.alt = `Thumbnail ${i + 1}`;
                     thumb.loading = 'lazy';
                     thumb.className = i === 0 ? 'active' : '';
+                    thumb.onerror = function() {
+                        this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%23333" width="100" height="100"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="20" dy=".35em" text-anchor="middle" x="50" y="55"%3E🖼️%3C/text%3E%3C/svg%3E';
+                    };
                     thumb.addEventListener('click', () => {
                         currentIndex = i;
-                        mainImage.src = `${GITHUB_BASE}graphic/${encodeURIComponent(project.files[currentIndex])}`;
+                        mainImage.src = getFileUrl('graphic', project.files[currentIndex]);
                         thumbnails.querySelectorAll('img').forEach((t, idx) => {
                             t.classList.toggle('active', idx === currentIndex);
                         });
@@ -3616,14 +3820,17 @@
                     thumbnails.appendChild(thumb);
                 });
                 
-                mainImage.src = `${GITHUB_BASE}graphic/${encodeURIComponent(project.files[0])}`;
+                mainImage.src = getFileUrl('graphic', project.files[0]);
+                mainImage.onerror = function() {
+                    this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🎨%3C/text%3E%3C/svg%3E';
+                };
                 
                 const prevBtn = modal.querySelector('.prev-btn');
                 const nextBtn = modal.querySelector('.next-btn');
                 
                 const navGraphic = (dir) => {
                     currentIndex = (currentIndex + dir + project.files.length) % project.files.length;
-                    mainImage.src = `${GITHUB_BASE}graphic/${encodeURIComponent(project.files[currentIndex])}`;
+                    mainImage.src = getFileUrl('graphic', project.files[currentIndex]);
                     thumbnails.querySelectorAll('img').forEach((t, idx) => {
                         t.classList.toggle('active', idx === currentIndex);
                     });
@@ -3655,7 +3862,7 @@
                 const muteBtn = modal.querySelector('.mute-btn');
                 const fullscreenBtn = modal.querySelector('.fullscreen-btn');
                 
-                video.src = `${GITHUB_BASE}motion/${encodeURIComponent(project.files[0])}`;
+                video.src = getFileUrl('motion', project.files[0]);
                 video.load();
                 
                 playBtn.style.display = 'inline-block';
@@ -3732,9 +3939,12 @@
                 const toggle = modal.querySelector('.view-toggle');
                 let isFullscreen = false;
                 
-                image.src = `${GITHUB_BASE}web/${encodeURIComponent(project.files[0])}`;
+                image.src = getFileUrl('web', project.files[0]);
                 image.alt = project.title;
                 image.style.objectFit = 'contain';
+                image.onerror = function() {
+                    this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
+                };
                 toggle.innerHTML = '<i class="fas fa-expand"></i>';
                 
                 toggle.onclick = () => {
