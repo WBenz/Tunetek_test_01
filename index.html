@@ -3934,7 +3934,36 @@
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
                 
-                // FIT WIDTH button - only visible in preview mode, hides in fullscreen
+                // Handle fullscreen state changes - hide Fit Width button in fullscreen
+                const updateWebButtons = () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    if (isFullscreen) {
+                        // In fullscreen: hide Fit Width button
+                        this.webFitBtn.style.display = 'none';
+                    } else {
+                        // In preview: show Fit Width button
+                        this.webFitBtn.style.display = 'inline-flex';
+                        // Reset fit state when exiting fullscreen
+                        if (this.isWebFit) {
+                            this.isWebFit = false;
+                            this.preview.classList.remove('web-fit-mode');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                            this.webFitBtn.classList.remove('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        }
+                    }
+                };
+                
+                // Call initially and on fullscreen change
+                updateWebButtons();
+                document.addEventListener('fullscreenchange', updateWebButtons);
+                
+                // FIT WIDTH button - only works in preview mode
                 this.webFitBtn.onclick = () => {
                     if (document.fullscreenElement) return; // Don't work in fullscreen
                     this.isWebFit = !this.isWebFit;
