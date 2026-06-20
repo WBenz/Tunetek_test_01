@@ -1214,6 +1214,19 @@
             display: inline-block;
         }
 
+        /* ===================== HIDE DIVIDER IN FULLSCREEN ===================== */
+        .split-preview:fullscreen .preview-controls .divider {
+            display: none !important;
+        }
+
+        .split-preview:-webkit-full-screen .preview-controls .divider {
+            display: none !important;
+        }
+
+        .split-preview:-moz-full-screen .preview-controls .divider {
+            display: none !important;
+        }
+
         .split-list {
             padding: 20px 24px;
             overflow-y: auto;
