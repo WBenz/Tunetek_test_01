@@ -3268,14 +3268,6 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
-                // Fullscreen change listener
-                document.addEventListener('fullscreenchange', () => {
-                    this.isFullscreen = !!document.fullscreenElement;
-                    if (this.currentProject) {
-                        this.updatePreview(this.currentProject);
-                    }
-                });
-                
                 this.init();
             }
 
@@ -3529,11 +3521,13 @@
                     mediaElement.loop = false;
                     mediaElement.preload = 'metadata';
                     mediaElement.setAttribute('playsinline', '');
+                    // FIXED: Proper video sizing for fullscreen
                     mediaElement.style.maxHeight = '550px';
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
                     mediaElement.style.objectFit = 'contain';
                     mediaElement.style.background = '#000';
+                    
                     this.currentVideo = mediaElement;
                     
                     mediaElement.addEventListener('loadedmetadata', () => {
@@ -3825,9 +3819,11 @@
                 const video = this.currentVideo;
                 if (!video) return;
                 
+                // Play/Pause
                 this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 
+                // Progress bar click
                 const progressBar = this.videoControlsGroup.querySelector('.progress-bar');
                 progressBar.onclick = (e) => {
                     if (isNaN(video.duration)) return;
@@ -3835,16 +3831,83 @@
                     video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
                 };
                 
+                // Mute
                 this.videoMuteBtn.onclick = () => {
                     video.muted = !video.muted;
                     this.isVideoMuted = video.muted;
                     this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
                 };
                 
+                // FIXED: Fullscreen - properly handle video fullscreen
                 this.videoFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
-                    else document.exitFullscreen().catch(()=>{});
+                    if (!document.fullscreenElement) {
+                        // Try to fullscreen the preview container
+                        const container = this.preview;
+                        if (container) {
+                            // Store current video styles to restore later
+                            const currentMaxHeight = video.style.maxHeight;
+                            const currentWidth = video.style.width;
+                            const currentHeight = video.style.height;
+                            const currentObjectFit = video.style.objectFit;
+                            
+                            // Set video to fill the container
+                            video.style.maxHeight = '100vh';
+                            video.style.width = '100%';
+                            video.style.height = '100%';
+                            video.style.objectFit = 'contain';
+                            
+                            container.requestFullscreen()
+                                .then(() => {
+                                    // When fullscreen is entered, make video fill the screen
+                                    setTimeout(() => {
+                                        video.style.maxHeight = '100vh';
+                                        video.style.width = '100%';
+                                        video.style.height = '100%';
+                                        video.style.objectFit = 'contain';
+                                        container.style.display = 'flex';
+                                        container.style.alignItems = 'center';
+                                        container.style.justifyContent = 'center';
+                                        container.style.background = '#000';
+                                    }, 50);
+                                })
+                                .catch(() => {
+                                    // Fallback: try to fullscreen the video element directly
+                                    if (video.requestFullscreen) {
+                                        video.requestFullscreen().catch(() => {});
+                                    }
+                                });
+                        }
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
+                    }
                 };
+                
+                // Listen for fullscreen change to reset video styles when exiting fullscreen
+                const fullscreenChangeHandler = () => {
+                    if (!document.fullscreenElement) {
+                        // Reset video styles when exiting fullscreen
+                        if (video) {
+                            video.style.maxHeight = '550px';
+                            video.style.width = '100%';
+                            video.style.height = '100%';
+                            video.style.objectFit = 'contain';
+                        }
+                        // Reset preview container styles
+                        if (this.preview) {
+                            this.preview.style.display = 'flex';
+                            this.preview.style.alignItems = 'center';
+                            this.preview.style.justifyContent = 'center';
+                            this.preview.style.background = '';
+                        }
+                    }
+                };
+                
+                // Remove previous listener if exists
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
+                }
+                this._fullscreenChangeHandler = fullscreenChangeHandler;
+                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
             }
 
             setupWebControls() {
