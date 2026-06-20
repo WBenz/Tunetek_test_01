@@ -1196,8 +1196,17 @@
             align-items: center;
         }
 
-        .preview-controls .web-controls-group .divider {
-            display: none;
+        /* ===================== DIVIDER STYLES ===================== */
+        .preview-controls .divider {
+            width: 1px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 8px;
+            flex-shrink: 0;
+        }
+
+        [data-theme="dark"] .preview-controls .divider {
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .split-list {
@@ -1415,6 +1424,10 @@
                 padding: 8px 16px 8px 36px;
                 font-size: 0.8rem;
             }
+            .preview-controls .divider {
+                height: 20px;
+                margin: 0 4px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1469,6 +1482,10 @@
             }
             .preview-controls .video-progress .progress-bar {
                 width: 40px;
+            }
+            .preview-controls .divider {
+                height: 16px;
+                margin: 0 2px;
             }
         }
 
@@ -2594,6 +2611,7 @@
                             <button class="web-fit-btn" id="webFitBtn" aria-label="Fit width">
                                 <i class="fas fa-arrows-alt-h"></i>
                             </button>
+                            <span class="divider"></span>
                             <button class="web-fullscreen-btn" id="webFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
                             </button>
@@ -3612,10 +3630,78 @@
                     
                     this.currentVideo = mediaElement;
                     
+                    // === LOADING OVERLAY FOR MOTION ===
+                    const loadingOverlay = document.createElement('div');
+                    loadingOverlay.className = 'graphic-loading-overlay active';
+                    loadingOverlay.innerHTML = `
+                        <div class="graphic-loading-spinner"></div>
+                        <div class="graphic-loading-progress">0%</div>
+                    `;
+                    this.preview.appendChild(loadingOverlay);
+                    
+                    // Track video loading progress
+                    let progressInterval = null;
+                    let loadingComplete = false;
+                    
+                    const updateVideoProgress = () => {
+                        if (mediaElement.readyState >= 3 || loadingComplete) {
+                            if (progressInterval) {
+                                clearInterval(progressInterval);
+                                progressInterval = null;
+                            }
+                            const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                            if (progressText) progressText.textContent = '100%';
+                            setTimeout(() => {
+                                loadingOverlay.classList.remove('active');
+                            }, 300);
+                            return true;
+                        }
+                        return false;
+                    };
+                    
                     mediaElement.addEventListener('loadedmetadata', () => {
                         const durationEl = this.videoControlsGroup.querySelector('.duration');
                         if (durationEl) durationEl.textContent = formatTime(mediaElement.duration);
+                        updateVideoProgress();
                     });
+                    
+                    mediaElement.addEventListener('canplay', () => {
+                        loadingComplete = true;
+                        updateVideoProgress();
+                    });
+                    
+                    mediaElement.addEventListener('canplaythrough', () => {
+                        loadingComplete = true;
+                        updateVideoProgress();
+                    });
+                    
+                    // Progress simulation while loading
+                    let progress = 0;
+                    progressInterval = setInterval(() => {
+                        if (mediaElement.readyState >= 3 || loadingComplete) {
+                            if (progressInterval) {
+                                clearInterval(progressInterval);
+                                progressInterval = null;
+                            }
+                            return;
+                        }
+                        progress += Math.random() * 3 + 1;
+                        if (progress > 90) progress = 90;
+                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                        if (progressText) progressText.textContent = Math.min(Math.round(progress), 90) + '%';
+                    }, 200);
+                    
+                    // Clean up interval when done
+                    mediaElement.addEventListener('loadeddata', () => {
+                        setTimeout(() => {
+                            if (progressInterval) {
+                                clearInterval(progressInterval);
+                                progressInterval = null;
+                            }
+                            updateVideoProgress();
+                        }, 500);
+                    });
+                    
                     mediaElement.addEventListener('timeupdate', () => {
                         if (!isNaN(mediaElement.duration)) {
                             this.videoProgressFill.style.width = `${(mediaElement.currentTime / mediaElement.duration) * 100}%`;
@@ -3651,7 +3737,54 @@
                     mediaElement.style.maxHeight = '550px';
                     mediaElement.style.maxWidth = '100%';
                     mediaElement.style.minHeight = 'auto';
+                    
+                    // === LOADING OVERLAY FOR WEB ===
+                    const loadingOverlay = document.createElement('div');
+                    loadingOverlay.className = 'graphic-loading-overlay active';
+                    loadingOverlay.innerHTML = `
+                        <div class="graphic-loading-spinner"></div>
+                        <div class="graphic-loading-progress">0%</div>
+                    `;
+                    this.preview.appendChild(loadingOverlay);
+                    
+                    // Track image loading progress
+                    let progressInterval = null;
+                    
+                    const updateImageProgress = (percent) => {
+                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                        if (progressText) progressText.textContent = Math.min(Math.round(percent), 100) + '%';
+                        if (percent >= 100) {
+                            if (progressInterval) {
+                                clearInterval(progressInterval);
+                                progressInterval = null;
+                            }
+                            setTimeout(() => {
+                                loadingOverlay.classList.remove('active');
+                            }, 300);
+                        }
+                    };
+                    
+                    // Simulate progress while image loads
+                    let progress = 0;
+                    progressInterval = setInterval(() => {
+                        progress += Math.random() * 4 + 2;
+                        if (progress > 85) progress = 85;
+                        updateImageProgress(progress);
+                    }, 150);
+                    
+                    mediaElement.onload = () => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        updateImageProgress(100);
+                    };
                     mediaElement.onerror = function() {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        updateImageProgress(100);
                         this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
                     };
                     this.previewControls.style.opacity = '1';
