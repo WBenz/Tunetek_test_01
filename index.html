@@ -2306,6 +2306,51 @@
             gap: 8px;
             align-items: center;
         }
+
+        /* Fullscreen controls stay pinned */
+        .split-preview:fullscreen .preview-controls {
+            position: fixed !important;
+            bottom: 40px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 99999 !important;
+            opacity: 1 !important;
+        }
+
+        .split-preview:fullscreen .preview-overlay {
+            position: fixed !important;
+            bottom: 100px !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 9999 !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .split-preview:fullscreen .preview-media {
+            max-height: 100vh !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+        }
+
+        .split-preview:fullscreen video.preview-media {
+            max-height: 100vh !important;
+        }
+
+        /* Web fit width - scrollbar inside preview */
+        .split-preview.web-fit-mode {
+            overflow: auto !important;
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+        }
+
+        .split-preview.web-fit-mode .preview-media {
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            object-fit: contain !important;
+        }
     </style>
 </head>
 <body>
@@ -3235,7 +3280,6 @@
                 this.isVideoMuted = true;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
-                this.isFullscreen = false;
                 
                 this.preview = document.getElementById('splitPreview');
                 this.previewTitle = document.getElementById('previewTitle');
@@ -3473,6 +3517,8 @@
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                 }
+                // Remove web-fit class from preview
+                this.preview.classList.remove('web-fit-mode');
                 this.updatePreview(item);
             }
 
@@ -3496,6 +3542,7 @@
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
+                this.preview.classList.remove('web-fit-mode');
                 
                 // Remove old navigation and loading overlay
                 const oldNav = this.preview.querySelector('.graphic-slide-nav');
@@ -3562,7 +3609,7 @@
                     mediaElement.src = filePath;
                     mediaElement.alt = item.title;
                     mediaElement.loading = 'lazy';
-                    // FIX: Proper styling for web images - stays inside preview
+                    // FIX: Proper styling for web images
                     mediaElement.style.objectFit = 'contain';
                     mediaElement.style.width = '100%';
                     mediaElement.style.height = '100%';
@@ -3580,6 +3627,7 @@
                         this.webFitBtn.classList.remove('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                     }
+                    this.preview.classList.remove('web-fit-mode');
                 } else {
                     // === GRAPHIC IMAGE ===
                     mediaElement = document.createElement('img');
@@ -3607,7 +3655,6 @@
                     
                     // === GRAPHIC SLIDESHOW NAVIGATION ===
                     if (this.graphicProjectFiles.length > 1) {
-                        // Navigation container with Prev/Next buttons on sides
                         const navContainer = document.createElement('div');
                         navContainer.className = 'graphic-slide-nav';
                         
@@ -3637,16 +3684,13 @@
                         navContainer.appendChild(nextBtn);
                         this.preview.appendChild(navContainer);
                         
-                        // Counter at bottom center
                         const counter = document.createElement('div');
                         counter.className = 'graphic-slide-counter';
                         counter.textContent = `${this.graphicCurrentIndex + 1} / ${this.graphicProjectFiles.length}`;
                         this.preview.appendChild(counter);
                         
-                        // Update title with slide indicator
                         this.previewTitle.textContent = `${item.title} (${this.graphicCurrentIndex + 1}/${this.graphicProjectFiles.length})`;
                         
-                        // Keyboard navigation
                         const keyHandler = (e) => {
                             if (!this.currentProject || this.currentProject.category !== 'graphic') return;
                             if (e.key === 'ArrowLeft') {
@@ -3687,7 +3731,6 @@
                 const img = this.preview.querySelector('.preview-media');
                 if (!img || !this.graphicProjectFiles.length) return;
                 
-                // Show loading overlay
                 const loadingOverlay = this.preview.querySelector('.graphic-loading-overlay');
                 if (loadingOverlay) {
                     loadingOverlay.classList.add('active');
@@ -3697,11 +3740,6 @@
                 
                 const filePath = getFileUrl(this.graphicProjectFiles[this.graphicCurrentIndex]);
                 
-                // Create a new image to preload with progress tracking
-                const preloader = new Image();
-                preloader.crossOrigin = 'anonymous';
-                
-                // Track loading progress using fetch
                 let progressInterval = null;
                 
                 fetch(filePath)
@@ -3726,7 +3764,6 @@
                                         const progressText = loadingOverlay ? loadingOverlay.querySelector('.graphic-loading-progress') : null;
                                         if (progressText) progressText.textContent = percent + '%';
                                     } else {
-                                        // Fallback: simulate progress
                                         if (!progressInterval) {
                                             let p = 0;
                                             progressInterval = setInterval(() => {
@@ -3765,7 +3802,6 @@
                         });
                     })
                     .catch(() => {
-                        // Fallback: just set the src directly
                         img.src = filePath;
                         if (progressInterval) {
                             clearInterval(progressInterval);
@@ -3783,7 +3819,6 @@
                         }, 50);
                     })
                     .finally(() => {
-                        // Hide loading overlay when image is loaded
                         const checkLoaded = () => {
                             if (img.complete && img.naturalWidth > 0) {
                                 if (progressInterval) {
@@ -3804,7 +3839,6 @@
                         setTimeout(checkLoaded, 200);
                     });
                 
-                // Update title with slide indicator
                 const title = this.currentProject ? this.currentProject.title : '';
                 this.previewTitle.textContent = `${title} (${this.graphicCurrentIndex + 1}/${this.graphicProjectFiles.length})`;
             }
@@ -3820,11 +3854,9 @@
                 const video = this.currentVideo;
                 if (!video) return;
                 
-                // Play/Pause
                 this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 
-                // Progress bar click
                 const progressBar = this.videoControlsGroup.querySelector('.progress-bar');
                 progressBar.onclick = (e) => {
                     if (isNaN(video.duration)) return;
@@ -3832,14 +3864,12 @@
                     video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
                 };
                 
-                // Mute
                 this.videoMuteBtn.onclick = () => {
                     video.muted = !video.muted;
                     this.isVideoMuted = video.muted;
                     this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
                 };
                 
-                // Fullscreen - properly handle video fullscreen
                 this.videoFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         const container = this.preview;
@@ -3873,7 +3903,6 @@
                     }
                 };
                 
-                // Listen for fullscreen change to reset video styles when exiting fullscreen
                 const fullscreenChangeHandler = () => {
                     if (!document.fullscreenElement) {
                         if (video) {
@@ -3913,10 +3942,8 @@
                         img.style.maxHeight = 'none';
                         img.style.maxWidth = '100%';
                         img.style.minHeight = 'auto';
-                        // Make the preview scrollable
-                        this.preview.style.overflow = 'auto';
-                        this.preview.style.alignItems = 'flex-start';
-                        this.preview.style.justifyContent = 'flex-start';
+                        // Add class for CSS styling
+                        this.preview.classList.add('web-fit-mode');
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
@@ -3928,10 +3955,8 @@
                         img.style.maxHeight = '550px';
                         img.style.maxWidth = '100%';
                         img.style.minHeight = 'auto';
-                        // Hide scrollbars
-                        this.preview.style.overflow = 'hidden';
-                        this.preview.style.alignItems = 'center';
-                        this.preview.style.justifyContent = 'center';
+                        // Remove class
+                        this.preview.classList.remove('web-fit-mode');
                         this.preview.scrollTop = 0;
                         this.preview.scrollLeft = 0;
                         this.webFitBtn.classList.remove('active');
@@ -3951,7 +3976,6 @@
             }
 
             setupGraphicControls() {
-                // Graphic: fullscreen toggle
                 this.graphicFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         this.preview.requestFullscreen().catch(()=>{});
@@ -3988,6 +4012,7 @@
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
+                this.preview.classList.remove('web-fit-mode');
                 this.currentVideo = null;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
