@@ -43,8 +43,6 @@
             --secondary-dark: #e05d00;
             
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            
             --header-height: 72px;
             --max-width: 1200px;
             
@@ -340,27 +338,15 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        header.at-top {
-            background: rgba(255, 255, 255, 1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        [data-theme="dark"] header.at-top {
-            background: rgba(30, 30, 30, 1);
-        }
-
         header.scrolled {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 0.5rem 0;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] header.scrolled {
-            background: rgba(30, 30, 30, 0.5);
+            background: rgba(30, 30, 30, 0.8);
         }
 
         .header-container {
@@ -903,7 +889,6 @@
             position: relative;
         }
 
-        /* Filter & Search Bar */
         .split-controls {
             display: flex;
             flex-wrap: wrap;
@@ -965,7 +950,6 @@
             background: rgba(255,255,255,0.2);
         }
 
-        /* Search Bar */
         .search-wrapper {
             position: relative;
             flex: 1;
@@ -1030,7 +1014,6 @@
             opacity: 0.8;
         }
 
-        /* Split Container */
         .split-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1043,7 +1026,6 @@
             border: 1px solid var(--border-light);
         }
 
-        /* Preview Panel - Left Side */
         .split-preview {
             position: relative;
             background: var(--tertiary-color);
@@ -1165,7 +1147,6 @@
             opacity: 1;
         }
 
-        /* Preview Controls */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1207,18 +1188,6 @@
             transform: scale(1.05);
         }
 
-        .preview-controls .web-controls-group {
-            display: flex;
-            gap: 6px;
-        }
-
-        .preview-controls .web-controls-group .divider {
-            width: 1px;
-            background: rgba(255,255,255,0.2);
-            margin: 4px 4px;
-        }
-
-        /* Video specific controls */
         .preview-controls .video-progress {
             display: flex;
             align-items: center;
@@ -1250,7 +1219,6 @@
             transition: width 0.05s linear;
         }
 
-        /* List Panel */
         .split-list {
             padding: 20px 24px;
             overflow-y: auto;
@@ -2307,7 +2275,7 @@
         </div>
     </section>
 
-    <!-- ==================== PORTFOLIO - SPLIT SCREEN WITH SEARCH ==================== -->
+    <!-- ==================== PORTFOLIO ==================== -->
     <section id="portfolio" aria-label="Our Portfolio">
         <div class="container section-padding">
             <div class="section-header">
@@ -2319,7 +2287,6 @@
                 </p>
             </div>
 
-            <!-- Controls: Filters + Search -->
             <div class="split-controls">
                 <div class="split-filters" id="splitFilters">
                     <button class="split-filter-btn active" data-category="all">
@@ -2340,7 +2307,6 @@
                     </button>
                 </div>
 
-                <!-- Search Bar -->
                 <div class="search-wrapper">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="searchInput" placeholder="Search projects..." data-i18n="portfolio.search">
@@ -2350,9 +2316,7 @@
                 </div>
             </div>
 
-            <!-- Split Container -->
             <div class="split-container" id="splitContainer">
-                <!-- Preview Panel -->
                 <div class="split-preview" id="splitPreview">
                     <div class="preview-placeholder">
                         <i class="fas fa-image"></i>
@@ -2365,9 +2329,7 @@
                     </div>
                     <div class="video-badge" id="previewVideoBadge"><i class="fas fa-play"></i> video</div>
                     
-                    <!-- Preview Controls -->
                     <div class="preview-controls" id="previewControls">
-                        <!-- Video controls (for motion) -->
                         <div class="video-controls-group" id="videoControlsGroup" style="display:none;">
                             <button class="video-play-btn" id="videoPlayBtn" aria-label="Play/Pause">
                                 <i class="fas fa-play"></i>
@@ -2387,7 +2349,6 @@
                             </button>
                         </div>
 
-                        <!-- Web controls (zoom + fullscreen) -->
                         <div class="web-controls-group" id="webControlsGroup" style="display:none;">
                             <button class="web-zoom-btn" id="webZoomBtn" aria-label="Toggle zoom">
                                 <i class="fas fa-search-plus"></i>
@@ -2398,7 +2359,6 @@
                             </button>
                         </div>
 
-                        <!-- Graphic controls (fullscreen only) -->
                         <div class="graphic-controls-group" id="graphicControlsGroup" style="display:none;">
                             <button class="graphic-fullscreen-btn" id="graphicFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
@@ -2407,7 +2367,6 @@
                     </div>
                 </div>
 
-                <!-- List Panel -->
                 <div class="split-list" id="splitList">
                     <div class="list-header">
                         <h4 data-i18n="portfolio.projects">Projects</h4>
@@ -2574,7 +2533,6 @@
     </footer>
 
     <!-- ==================== MODALS ==================== -->
-    <!-- Project Detail Modal (Graphic) -->
     <div class="modal" id="graphic-project-modal" role="dialog" aria-modal="true" aria-label="Graphic Design Project Detail">
         <div class="modal-content">
             <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
@@ -2591,7 +2549,6 @@
         </div>
     </div>
 
-    <!-- Project Detail Modal (Motion) -->
     <div class="modal" id="motion-project-modal" role="dialog" aria-modal="true" aria-label="Motion Design Project Detail">
         <div class="modal-content">
             <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
@@ -2614,7 +2571,6 @@
         </div>
     </div>
 
-    <!-- Project Detail Modal (Web) -->
     <div class="modal" id="web-project-modal" role="dialog" aria-modal="true" aria-label="Web Design Project Detail">
         <div class="modal-content">
             <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
@@ -2630,15 +2586,9 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script>
         // =====================================================================
-        // REAL PROGRESS TRACKING SYSTEM
+        // PROGRESS TRACKING
         // =====================================================================
-        
-        const loadingItems = {
-            total: 0,
-            loaded: 0,
-            progress: 0
-        };
-
+        const loadingItems = { total: 0, loaded: 0, progress: 0 };
         const loadingOverlay = document.getElementById('loading-overlay');
         const progressBar = document.getElementById('loading-progress-bar');
         const percentageDisplay = document.getElementById('loading-percentage');
@@ -2647,26 +2597,17 @@
         function updateLoadingProgress() {
             const percent = Math.min(Math.round((loadingItems.loaded / loadingItems.total) * 100), 100);
             loadingItems.progress = percent;
-            
             progressBar.style.width = percent + '%';
             percentageDisplay.textContent = percent + '%';
             
-            if (percent < 30) {
-                loadingText.textContent = 'Initializing...';
-            } else if (percent < 60) {
-                loadingText.textContent = 'Loading resources...';
-            } else if (percent < 85) {
-                loadingText.textContent = 'Preparing content...';
-            } else if (percent < 100) {
-                loadingText.textContent = 'Almost ready...';
-            } else {
-                loadingText.textContent = 'Complete!';
-            }
+            if (percent < 30) loadingText.textContent = 'Initializing...';
+            else if (percent < 60) loadingText.textContent = 'Loading resources...';
+            else if (percent < 85) loadingText.textContent = 'Preparing content...';
+            else if (percent < 100) loadingText.textContent = 'Almost ready...';
+            else loadingText.textContent = 'Complete!';
 
             if (percent >= 100) {
-                setTimeout(() => {
-                    loadingOverlay.classList.add('hidden');
-                }, 400);
+                setTimeout(() => loadingOverlay.classList.add('hidden'), 400);
             }
         }
 
@@ -2676,55 +2617,21 @@
         }
 
         // =====================================================================
-        // HEADER OPACITY
+        // HEADER SCROLL
         // =====================================================================
-        function handleHeaderOpacity() {
+        function handleHeaderScroll() {
             const header = document.getElementById('main-header');
-            const heroSection = document.getElementById('hero');
-            
-            if (!header || !heroSection) return;
-            
-            const heroHeight = heroSection.offsetHeight;
-            const scrollPosition = window.pageYOffset;
-            const scrollRatio = Math.min(scrollPosition / heroHeight, 1);
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            
-            const minOpacity = 0.5;
-            const maxOpacity = 1.0;
-            const opacity = maxOpacity - (scrollRatio * (maxOpacity - minOpacity));
-            
-            if (scrollPosition < 10) {
-                header.classList.add('at-top');
-                header.classList.remove('scrolled');
-                if (isDark) {
-                    header.style.background = `rgba(30, 30, 30, ${opacity})`;
-                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
-                } else {
-                    header.style.background = `rgba(255, 255, 255, ${opacity})`;
-                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
-                }
-            } else if (scrollPosition < heroHeight) {
-                header.classList.remove('at-top');
-                header.classList.remove('scrolled');
-                if (isDark) {
-                    header.style.background = `rgba(30, 30, 30, ${opacity})`;
-                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
-                } else {
-                    header.style.background = `rgba(255, 255, 255, ${opacity})`;
-                    header.style.backdropFilter = `blur(${10 + (1 - opacity) * 10}px)`;
-                }
-            } else {
-                header.classList.remove('at-top');
+            if (window.pageYOffset > 50) {
                 header.classList.add('scrolled');
-                header.style.background = '';
-                header.style.backdropFilter = '';
+            } else {
+                header.classList.remove('scrolled');
             }
         }
 
         // =====================================================================
         // FILE MANIFEST - DIRECT FILE LIST (NO API CALLS!)
         // =====================================================================
-        const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/projects/';
+        const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/';
 
         const PROJECT_MANIFEST = {
             graphic: [
@@ -3099,14 +3006,15 @@
             };
         }
 
-        function getFileUrl(category, filename) {
+        // FIXED: Proper URL construction - GITHUB_BASE already ends with main/
+        function getFileUrl(filename) {
             const parts = filename.split('/');
             const encodedParts = parts.map(part => encodeURIComponent(part));
             return GITHUB_BASE + encodedParts.join('/');
         }
 
         // =====================================================================
-        // PROJECT MANAGER - Uses manifest (NO API calls!)
+        // PROJECT MANAGER
         // =====================================================================
         class ProjectManager {
             constructor() {
@@ -3123,13 +3031,7 @@
                         this.categoryCounts[cat] = processed.length;
                     });
 
-                    const total = this.categoryCounts.graphic + this.categoryCounts.motion + this.categoryCounts.web;
-                    console.log('📁 Projects loaded from manifest:');
-                    console.log(`🖼️ Graphic: ${this.categoryCounts.graphic} projects`);
-                    console.log(`🎬 Motion: ${this.categoryCounts.motion} projects`);
-                    console.log(`🌐 Web: ${this.categoryCounts.web} projects`);
-                    console.log(`📊 Total: ${total} projects`);
-
+                    console.log('📁 Projects loaded from manifest');
                     return this.allProjects;
                 } catch (error) {
                     console.error('Error loading projects:', error);
@@ -3139,57 +3041,26 @@
 
             processFiles(files, category) {
                 const projects = {};
-
                 files.forEach(file => {
-                    let baseName = this.getBaseName(file);
-                    
+                    let baseName = file.replace(/\.[^.]+$/, '').replace(/-\d+$/, '').replace(/\s+\d+$/, '').trim();
                     if (!projects[baseName]) {
                         projects[baseName] = {
                             id: baseName,
-                            title: this.generateTitle(baseName),
+                            title: baseName.split(/[-_\s]+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
                             category: category,
                             files: [],
-                            isVideo: this.isVideoFile(file),
-                            year: this.extractYear(file)
+                            isVideo: ['.mp4', '.webm', '.mov'].some(ext => file.toLowerCase().endsWith(ext)),
+                            year: file.match(/(19|20)\d{2}/)?.[0] || '2024'
                         };
                     }
                     projects[baseName].files.push(file);
                 });
-
-                return Object.values(projects).sort((a, b) => {
-                    const yearA = parseInt(a.year) || 0;
-                    const yearB = parseInt(b.year) || 0;
-                    return yearB - yearA;
-                });
-            }
-
-            getBaseName(filename) {
-                let name = filename.replace(/\.[^.]+$/, '');
-                name = name.replace(/-\d+$/, '');
-                name = name.replace(/\s+\d+$/, '');
-                return name.trim();
-            }
-
-            generateTitle(baseName) {
-                return baseName
-                    .split(/[-_\s]+/)
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                    .join(' ');
-            }
-
-            isVideoFile(filename) {
-                const videoExt = ['.mp4', '.webm', '.mov'];
-                return videoExt.some(ext => filename.toLowerCase().endsWith(ext));
-            }
-
-            extractYear(filename) {
-                const match = filename.match(/(19|20)\d{2}/);
-                return match ? match[0] : '2024';
+                return Object.values(projects).sort((a, b) => parseInt(b.year) - parseInt(a.year));
             }
         }
 
         // =====================================================================
-        // SPLIT SCREEN MANAGER WITH SEARCH
+        // SPLIT SCREEN MANAGER
         // =====================================================================
         class SplitScreenManager {
             constructor() {
@@ -3203,6 +3074,8 @@
                 this.isLoading = false;
                 this.isVideoPlaying = false;
                 this.isWebZoomed = false;
+                this.currentVideo = null;
+                this.isVideoMuted = true;
                 
                 this.preview = document.getElementById('splitPreview');
                 this.previewTitle = document.getElementById('previewTitle');
@@ -3223,7 +3096,6 @@
                     web: document.getElementById('countWeb')
                 };
                 
-                // Preview controls
                 this.videoControlsGroup = document.getElementById('videoControlsGroup');
                 this.webControlsGroup = document.getElementById('webControlsGroup');
                 this.graphicControlsGroup = document.getElementById('graphicControlsGroup');
@@ -3236,9 +3108,6 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
-                this.currentVideo = null;
-                this.isVideoMuted = true;
-                
                 this.init();
             }
 
@@ -3247,7 +3116,6 @@
                 updateLoadingProgress();
                 
                 this.allProjects = this.projectManager.loadAllProjects();
-                
                 this.setupCounts();
                 this.setupFilters();
                 this.setupSearch();
@@ -3266,7 +3134,6 @@
                     web: this.allProjects.web.length
                 };
                 counts.all = counts.graphic + counts.motion + counts.web;
-                
                 this.countElements.all.textContent = counts.all;
                 this.countElements.graphic.textContent = counts.graphic;
                 this.countElements.motion.textContent = counts.motion;
@@ -3278,20 +3145,14 @@
                     let allItems = [];
                     ['graphic', 'motion', 'web'].forEach(cat => {
                         this.allProjects[cat].forEach(project => {
-                            allItems.push({
-                                ...project,
-                                file: project.files[0]
-                            });
+                            allItems.push({ ...project, file: project.files[0] });
                         });
                     });
                     allItems.sort((a, b) => parseInt(b.year) - parseInt(a.year));
                     return allItems;
                 } else {
                     const items = this.allProjects[category] || [];
-                    const result = items.map(project => ({
-                        ...project,
-                        file: project.files[0]
-                    }));
+                    const result = items.map(project => ({ ...project, file: project.files[0] }));
                     result.sort((a, b) => parseInt(b.year) - parseInt(a.year));
                     return result;
                 }
@@ -3301,10 +3162,8 @@
                 this.filterButtons.forEach(btn => {
                     btn.addEventListener('click', () => {
                         if (this.isLoading) return;
-                        
                         this.filterButtons.forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
-                        
                         this.currentCategory = btn.dataset.category;
                         this.buildList(this.currentCategory);
                     });
@@ -3318,7 +3177,6 @@
                 }, 300);
 
                 this.searchInput.addEventListener('input', searchFn);
-
                 this.clearSearch.addEventListener('click', () => {
                     this.searchInput.value = '';
                     this.currentSearch = '';
@@ -3326,64 +3184,43 @@
                     this.filterList();
                     this.searchInput.focus();
                 });
-
                 this.searchInput.addEventListener('focus', () => {
-                    if (this.searchInput.value.length > 0) {
-                        this.clearSearch.classList.add('visible');
-                    }
+                    if (this.searchInput.value.length > 0) this.clearSearch.classList.add('visible');
                 });
-
                 this.searchInput.addEventListener('blur', () => {
                     setTimeout(() => {
-                        if (this.searchInput.value.length === 0) {
-                            this.clearSearch.classList.remove('visible');
-                        }
+                        if (this.searchInput.value.length === 0) this.clearSearch.classList.remove('visible');
                     }, 200);
                 });
             }
 
             filterList() {
                 const search = this.currentSearch;
-                if (!search) {
-                    this.filteredItems = this.allItems;
-                } else {
-                    this.filteredItems = this.allItems.filter(item => 
-                        item.title.toLowerCase().includes(search) ||
-                        item.category.toLowerCase().includes(search)
-                    );
-                }
-                
+                this.filteredItems = search ? this.allItems.filter(item => 
+                    item.title.toLowerCase().includes(search) || item.category.toLowerCase().includes(search)
+                ) : this.allItems;
                 this.renderList();
             }
 
             buildList(category) {
                 if (this.isLoading) return;
                 this.isLoading = true;
-                
                 this.listLoading.style.display = 'block';
                 this.listContainer.innerHTML = '';
                 this.listCount.textContent = 'Loading...';
-                
                 this.clearPreview();
                 
                 setTimeout(() => {
                     this.allItems = this.getProjectsForCategory(category);
                     this.filteredItems = this.allItems;
-                    
                     this.listLoading.style.display = 'none';
                     
                     if (this.filteredItems.length === 0) {
-                        this.listContainer.innerHTML = `
-                            <div class="list-empty">
-                                <i class="fas fa-folder-open"></i>
-                                <p>${this.currentSearch ? 'No projects match your search.' : 'No projects found in this category.'}</p>
-                            </div>
-                        `;
+                        this.listContainer.innerHTML = `<div class="list-empty"><i class="fas fa-folder-open"></i><p>${this.currentSearch ? 'No projects match your search.' : 'No projects found.'}</p></div>`;
                         this.listCount.textContent = '0 projects';
                         this.isLoading = false;
                         return;
                     }
-                    
                     this.renderList();
                     this.isLoading = false;
                 }, 300);
@@ -3391,59 +3228,39 @@
 
             renderList() {
                 const items = this.filteredItems;
-                
                 if (items.length === 0) {
-                    this.listContainer.innerHTML = `
-                        <div class="list-empty">
-                            <i class="fas fa-search"></i>
-                            <p>No projects match your search.</p>
-                        </div>
-                    `;
+                    this.listContainer.innerHTML = `<div class="list-empty"><i class="fas fa-search"></i><p>No projects match your search.</p></div>`;
                     this.listCount.textContent = '0 projects';
                     return;
                 }
                 
                 const fragment = document.createDocumentFragment();
-                
                 items.forEach((item, index) => {
                     const listItem = this.createListItem(item, index);
                     fragment.appendChild(listItem);
                 });
-                
                 this.listContainer.innerHTML = '';
                 this.listContainer.appendChild(fragment);
                 this.listCount.textContent = `${items.length} projects`;
                 
-                if (this.currentSearch) {
-                    this.clearSearch.classList.add('visible');
-                } else {
-                    this.clearSearch.classList.remove('visible');
-                }
+                if (this.currentSearch) this.clearSearch.classList.add('visible');
+                else this.clearSearch.classList.remove('visible');
                 
                 if (items.length > 0 && !this.currentProject) {
                     this.selectProject(items[0], 0);
                 } else if (this.currentProject) {
                     const stillExists = items.some(item => item.id === this.currentProject.id);
-                    if (!stillExists && items.length > 0) {
-                        this.selectProject(items[0], 0);
-                    } else if (stillExists) {
-                        this.listContainer.querySelectorAll('.list-item').forEach(el => {
-                            el.classList.toggle('active', el.dataset.index === String(items.indexOf(this.currentProject)));
-                        });
-                    }
+                    if (!stillExists && items.length > 0) this.selectProject(items[0], 0);
                 }
             }
 
             createListItem(item, index) {
                 const div = document.createElement('div');
                 div.className = 'list-item' + (index === 0 && !this.currentProject ? ' active' : '');
-                if (this.currentProject && item.id === this.currentProject.id) {
-                    div.classList.add('active');
-                }
+                if (this.currentProject && item.id === this.currentProject.id) div.classList.add('active');
                 div.dataset.index = index;
                 
-                const filePath = getFileUrl(item.category, item.file);
-                
+                const filePath = getFileUrl(item.file);
                 const thumb = document.createElement('div');
                 thumb.className = 'thumb';
                 
@@ -3453,8 +3270,8 @@
                     vid.muted = true;
                     vid.playsInline = true;
                     vid.preload = 'metadata';
-                    vid.addEventListener('mouseenter', () => { vid.play().catch(()=>{}); });
-                    vid.addEventListener('mouseleave', () => { vid.pause(); });
+                    vid.addEventListener('mouseenter', () => vid.play().catch(()=>{}));
+                    vid.addEventListener('mouseleave', () => vid.pause());
                     thumb.appendChild(vid);
                 } else {
                     const img = document.createElement('img');
@@ -3466,15 +3283,11 @@
                     };
                     thumb.appendChild(img);
                 }
-                
                 div.appendChild(thumb);
                 
                 const info = document.createElement('div');
                 info.className = 'info';
-                info.innerHTML = `
-                    <h5>${item.title}</h5>
-                    <span class="cat-tag">${item.category}</span>
-                `;
+                info.innerHTML = `<h5>${item.title}</h5><span class="cat-tag">${item.category}</span>`;
                 div.appendChild(info);
                 
                 const arrow = document.createElement('div');
@@ -3484,15 +3297,10 @@
                 
                 div.addEventListener('click', () => {
                     if (this.isLoading) return;
-                    
-                    this.listContainer.querySelectorAll('.list-item').forEach(el => {
-                        el.classList.remove('active');
-                    });
+                    this.listContainer.querySelectorAll('.list-item').forEach(el => el.classList.remove('active'));
                     div.classList.add('active');
-                    
                     this.selectProject(item, index);
                 });
-                
                 return div;
             }
 
@@ -3502,25 +3310,17 @@
             }
 
             updatePreview(item) {
-                const filePath = getFileUrl(item.category, item.file);
+                const filePath = getFileUrl(item.file);
                 
                 this.previewTitle.textContent = item.title;
                 this.previewCat.textContent = item.category.charAt(0).toUpperCase() + item.category.slice(1);
                 this.previewYear.textContent = item.year;
+                this.previewVideoBadge.style.display = item.isVideo ? 'flex' : 'none';
                 
-                // Show/hide video badge
-                if (item.isVideo) {
-                    this.previewVideoBadge.style.display = 'flex';
-                } else {
-                    this.previewVideoBadge.style.display = 'none';
-                }
-                
-                // Show correct controls based on category
                 this.videoControlsGroup.style.display = item.category === 'motion' ? 'flex' : 'none';
                 this.webControlsGroup.style.display = item.category === 'web' ? 'flex' : 'none';
                 this.graphicControlsGroup.style.display = item.category === 'graphic' ? 'flex' : 'none';
                 
-                // Reset controls
                 this.isVideoPlaying = false;
                 this.isWebZoomed = false;
                 this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
@@ -3530,20 +3330,13 @@
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
                 
-                // Remove existing media
                 const existingMedia = this.preview.querySelector('.preview-media');
-                if (existingMedia) {
-                    existingMedia.remove();
-                }
-                
+                if (existingMedia) existingMedia.remove();
                 const placeholder = this.preview.querySelector('.preview-placeholder');
-                if (placeholder) {
-                    placeholder.style.display = 'none';
-                }
+                if (placeholder) placeholder.style.display = 'none';
                 
                 let mediaElement;
                 if (item.isVideo) {
-                    // === MOTION VIDEO ===
                     mediaElement = document.createElement('video');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3557,58 +3350,35 @@
                     mediaElement.style.height = '100%';
                     mediaElement.style.objectFit = 'contain';
                     mediaElement.style.background = '#000';
-                    
                     this.currentVideo = mediaElement;
                     
-                    // Video event listeners
                     mediaElement.addEventListener('loadedmetadata', () => {
                         const durationEl = this.videoControlsGroup.querySelector('.duration');
                         if (durationEl) durationEl.textContent = formatTime(mediaElement.duration);
                     });
-                    
                     mediaElement.addEventListener('timeupdate', () => {
                         if (!isNaN(mediaElement.duration)) {
-                            const progress = (mediaElement.currentTime / mediaElement.duration) * 100;
-                            this.videoProgressFill.style.width = `${progress}%`;
+                            this.videoProgressFill.style.width = `${(mediaElement.currentTime / mediaElement.duration) * 100}%`;
                             const currentEl = this.videoControlsGroup.querySelector('.current-time');
                             if (currentEl) currentEl.textContent = formatTime(mediaElement.currentTime);
                         }
                     });
-                    
                     mediaElement.addEventListener('play', () => {
                         this.isVideoPlaying = true;
                         this.videoPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
                     });
-                    
                     mediaElement.addEventListener('pause', () => {
                         this.isVideoPlaying = false;
                         this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
                     });
-                    
                     mediaElement.addEventListener('ended', () => {
                         this.isVideoPlaying = false;
                         this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
                         mediaElement.currentTime = 0;
                         this.videoProgressFill.style.width = '0%';
                     });
-                    
-                    // Auto-play on hover
-                    this.preview.addEventListener('mouseenter', () => {
-                        if (mediaElement && mediaElement.paused) {
-                            mediaElement.play().catch(() => {});
-                        }
-                    });
-                    
-                    this.preview.addEventListener('mouseleave', () => {
-                        if (mediaElement && !mediaElement.paused && this.isVideoPlaying === false) {
-                            mediaElement.pause();
-                        }
-                    });
-                    
                     this.previewControls.style.opacity = '1';
-                    
                 } else if (item.category === 'web') {
-                    // === WEB IMAGE ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3622,11 +3392,8 @@
                     mediaElement.onerror = function() {
                         this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
                     };
-                    
                     this.previewControls.style.opacity = '1';
-                    
                 } else {
-                    // === GRAPHIC IMAGE ===
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3639,14 +3406,10 @@
                     mediaElement.onerror = function() {
                         this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🎨%3C/text%3E%3C/svg%3E';
                     };
-                    
-                    // Graphic preview - hide controls overlay, only show on hover
                     this.previewControls.style.opacity = '0';
                 }
-                
                 this.preview.insertBefore(mediaElement, this.previewOverlay);
                 
-                // Overlay animation
                 this.previewOverlay.style.opacity = '0';
                 this.previewOverlay.style.transform = 'translateY(20px)';
                 setTimeout(() => {
@@ -3654,7 +3417,6 @@
                     this.previewOverlay.style.transform = 'translateY(0)';
                 }, 100);
                 
-                // Setup controls
                 this.setupVideoControls();
                 this.setupWebControls();
                 this.setupGraphicControls();
@@ -3664,49 +3426,25 @@
                 const video = this.currentVideo;
                 if (!video) return;
                 
-                // Play/Pause
-                this.videoPlayBtn.onclick = () => {
-                    if (video.paused) {
-                        video.play().catch(() => {});
-                    } else {
-                        video.pause();
-                    }
-                };
+                this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
+                video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 
-                // Click on video to toggle play/pause
-                video.onclick = () => {
-                    if (video.paused) {
-                        video.play().catch(() => {});
-                    } else {
-                        video.pause();
-                    }
-                };
-                
-                // Progress bar click
                 const progressBar = this.videoControlsGroup.querySelector('.progress-bar');
                 progressBar.onclick = (e) => {
                     if (isNaN(video.duration)) return;
                     const rect = progressBar.getBoundingClientRect();
-                    const pos = (e.clientX - rect.left) / rect.width;
-                    video.currentTime = pos * video.duration;
+                    video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
                 };
                 
-                // Mute
                 this.videoMuteBtn.onclick = () => {
                     video.muted = !video.muted;
                     this.isVideoMuted = video.muted;
-                    this.videoMuteBtn.innerHTML = video.muted ? 
-                        '<i class="fas fa-volume-mute"></i>' : 
-                        '<i class="fas fa-volume-up"></i>';
+                    this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
                 };
                 
-                // Fullscreen
                 this.videoFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(() => {});
-                    } else {
-                        document.exitFullscreen().catch(() => {});
-                    }
+                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
+                    else document.exitFullscreen().catch(()=>{});
                 };
             }
 
@@ -3714,11 +3452,9 @@
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
                 
-                // Zoom toggle - stays inside the preview box with scrollbars
                 this.webZoomBtn.onclick = () => {
                     this.isWebZoomed = !this.isWebZoomed;
                     if (this.isWebZoomed) {
-                        // Zoom in - show scrollbars
                         img.style.objectFit = 'contain';
                         img.style.width = 'auto';
                         img.style.height = 'auto';
@@ -3730,7 +3466,6 @@
                         this.webZoomBtn.innerHTML = '<i class="fas fa-search-minus"></i>';
                         this.webZoomBtn.title = 'Zoom out';
                     } else {
-                        // Zoom out - fit to box
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = '100%';
@@ -3746,38 +3481,24 @@
                     }
                 };
                 
-                // Fullscreen
                 this.webFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(() => {});
-                    } else {
-                        document.exitFullscreen().catch(() => {});
-                    }
+                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
+                    else document.exitFullscreen().catch(()=>{});
                 };
             }
 
             setupGraphicControls() {
-                // Fullscreen for graphic
                 this.graphicFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(() => {});
-                    } else {
-                        document.exitFullscreen().catch(() => {});
-                    }
+                    if (!document.fullscreenElement) this.preview.requestFullscreen().catch(()=>{});
+                    else document.exitFullscreen().catch(()=>{});
                 };
             }
 
             clearPreview() {
                 const existingMedia = this.preview.querySelector('.preview-media');
-                if (existingMedia) {
-                    existingMedia.remove();
-                }
-                
+                if (existingMedia) existingMedia.remove();
                 const placeholder = this.preview.querySelector('.preview-placeholder');
-                if (placeholder) {
-                    placeholder.style.display = 'flex';
-                }
-                
+                if (placeholder) placeholder.style.display = 'flex';
                 this.previewTitle.textContent = 'Select a project';
                 this.previewCat.textContent = 'Category';
                 this.previewYear.textContent = '2024';
@@ -3803,7 +3524,7 @@
                 thumbnails.innerHTML = '';
                 project.files.forEach((file, i) => {
                     const thumb = document.createElement('img');
-                    thumb.src = getFileUrl('graphic', file);
+                    thumb.src = getFileUrl(file);
                     thumb.alt = `Thumbnail ${i + 1}`;
                     thumb.loading = 'lazy';
                     thumb.className = i === 0 ? 'active' : '';
@@ -3812,40 +3533,30 @@
                     };
                     thumb.addEventListener('click', () => {
                         currentIndex = i;
-                        mainImage.src = getFileUrl('graphic', project.files[currentIndex]);
-                        thumbnails.querySelectorAll('img').forEach((t, idx) => {
-                            t.classList.toggle('active', idx === currentIndex);
-                        });
+                        mainImage.src = getFileUrl(project.files[currentIndex]);
+                        thumbnails.querySelectorAll('img').forEach((t, idx) => t.classList.toggle('active', idx === currentIndex));
                     });
                     thumbnails.appendChild(thumb);
                 });
                 
-                mainImage.src = getFileUrl('graphic', project.files[0]);
+                mainImage.src = getFileUrl(project.files[0]);
                 mainImage.onerror = function() {
                     this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🎨%3C/text%3E%3C/svg%3E';
                 };
                 
                 const prevBtn = modal.querySelector('.prev-btn');
                 const nextBtn = modal.querySelector('.next-btn');
-                
                 const navGraphic = (dir) => {
                     currentIndex = (currentIndex + dir + project.files.length) % project.files.length;
-                    mainImage.src = getFileUrl('graphic', project.files[currentIndex]);
-                    thumbnails.querySelectorAll('img').forEach((t, idx) => {
-                        t.classList.toggle('active', idx === currentIndex);
-                    });
+                    mainImage.src = getFileUrl(project.files[currentIndex]);
+                    thumbnails.querySelectorAll('img').forEach((t, idx) => t.classList.toggle('active', idx === currentIndex));
                 };
-                
                 prevBtn.onclick = () => navGraphic(-1);
                 nextBtn.onclick = () => navGraphic(1);
                 
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                
-                const closeModal = () => {
-                    modal.classList.remove('active');
-                    document.body.style.overflow = '';
-                };
+                const closeModal = () => { modal.classList.remove('active'); document.body.style.overflow = ''; };
                 modal.querySelector('.modal-close').onclick = closeModal;
                 modal.onclick = (e) => { if (e.target === modal) closeModal(); };
             }
@@ -3862,7 +3573,7 @@
                 const muteBtn = modal.querySelector('.mute-btn');
                 const fullscreenBtn = modal.querySelector('.fullscreen-btn');
                 
-                video.src = getFileUrl('motion', project.files[0]);
+                video.src = getFileUrl(project.files[0]);
                 video.load();
                 
                 playBtn.style.display = 'inline-block';
@@ -3873,55 +3584,30 @@
                 
                 const updateControls = () => {
                     if (!isNaN(video.duration)) {
-                        const progress = (video.currentTime / video.duration) * 100;
-                        progressBar.style.width = `${progress}%`;
+                        progressBar.style.width = `${(video.currentTime / video.duration) * 100}%`;
                         currentTime.textContent = formatTime(video.currentTime);
                     }
                 };
                 
                 video.addEventListener('timeupdate', updateControls);
-                video.addEventListener('loadedmetadata', () => {
-                    duration.textContent = formatTime(video.duration);
-                });
-                video.addEventListener('ended', () => {
-                    pauseBtn.style.display = 'none';
-                    playBtn.style.display = 'inline-block';
-                });
+                video.addEventListener('loadedmetadata', () => { duration.textContent = formatTime(video.duration); });
+                video.addEventListener('ended', () => { pauseBtn.style.display = 'none'; playBtn.style.display = 'inline-block'; });
                 
-                playBtn.onclick = () => {
-                    video.play().catch(() => {});
-                    playBtn.style.display = 'none';
-                    pauseBtn.style.display = 'inline-block';
-                };
-                pauseBtn.onclick = () => {
-                    video.pause();
-                    pauseBtn.style.display = 'none';
-                    playBtn.style.display = 'inline-block';
-                };
-                
+                playBtn.onclick = () => { video.play().catch(()=>{}); playBtn.style.display = 'none'; pauseBtn.style.display = 'inline-block'; };
+                pauseBtn.onclick = () => { video.pause(); pauseBtn.style.display = 'none'; playBtn.style.display = 'inline-block'; };
                 progressContainer.onclick = (e) => {
                     if (isNaN(video.duration)) return;
                     const rect = progressContainer.getBoundingClientRect();
-                    const pos = (e.clientX - rect.left) / rect.width;
-                    video.currentTime = pos * video.duration;
+                    video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
                 };
-                
-                muteBtn.onclick = () => {
-                    video.muted = !video.muted;
-                    muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-                };
-                
+                muteBtn.onclick = () => { video.muted = !video.muted; muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>'; };
                 fullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        modal.querySelector('.motion-player').requestFullscreen().catch(() => {});
-                    } else {
-                        document.exitFullscreen().catch(() => {});
-                    }
+                    if (!document.fullscreenElement) modal.querySelector('.motion-player').requestFullscreen().catch(()=>{});
+                    else document.exitFullscreen().catch(()=>{});
                 };
                 
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                
                 const closeModal = () => {
                     modal.classList.remove('active');
                     document.body.style.overflow = '';
@@ -3939,14 +3625,13 @@
                 const toggle = modal.querySelector('.view-toggle');
                 let isFullscreen = false;
                 
-                image.src = getFileUrl('web', project.files[0]);
+                image.src = getFileUrl(project.files[0]);
                 image.alt = project.title;
                 image.style.objectFit = 'contain';
                 image.onerror = function() {
                     this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
                 };
                 toggle.innerHTML = '<i class="fas fa-expand"></i>';
-                
                 toggle.onclick = () => {
                     isFullscreen = !isFullscreen;
                     image.style.objectFit = isFullscreen ? 'cover' : 'contain';
@@ -3955,11 +3640,7 @@
                 
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                
-                const closeModal = () => {
-                    modal.classList.remove('active');
-                    document.body.style.overflow = '';
-                };
+                const closeModal = () => { modal.classList.remove('active'); document.body.style.overflow = ''; };
                 modal.querySelector('.modal-close').onclick = closeModal;
                 modal.onclick = (e) => { if (e.target === modal) closeModal(); };
             }
@@ -3971,12 +3652,9 @@
         class LanguageManager {
             constructor() {
                 this.currentLang = localStorage.getItem('language') || 'en';
-                this.translations = TRANSLATIONS;
                 this.elements = document.querySelectorAll('[data-i18n]');
-                
                 this.langEnBtn = document.getElementById('lang-en');
                 this.langFrBtn = document.getElementById('lang-fr');
-                
                 this.setupListeners();
                 this.applyLanguage(this.currentLang);
             }
@@ -3990,7 +3668,6 @@
                 this.currentLang = lang;
                 localStorage.setItem('language', lang);
                 this.applyLanguage(lang);
-                
                 this.langEnBtn.classList.toggle('active', lang === 'en');
                 this.langFrBtn.classList.toggle('active', lang === 'fr');
             }
@@ -3998,12 +3675,9 @@
             applyLanguage(lang) {
                 this.elements.forEach(el => {
                     const key = el.dataset.i18n;
-                    if (this.translations[lang] && this.translations[lang][key]) {
-                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                            el.placeholder = this.translations[lang][key];
-                        } else {
-                            el.innerHTML = this.translations[lang][key];
-                        }
+                    if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = TRANSLATIONS[lang][key];
+                        else el.innerHTML = TRANSLATIONS[lang][key];
                     }
                 });
             }
@@ -4016,13 +3690,8 @@
             constructor() {
                 this.btn = document.getElementById('theme-toggle');
                 this.currentTheme = localStorage.getItem('theme') || 'light';
-                
                 this.applyTheme(this.currentTheme);
                 this.btn.addEventListener('click', () => this.toggleTheme());
-                
-                document.addEventListener('themeChanged', () => {
-                    handleHeaderOpacity();
-                });
             }
 
             toggleTheme() {
@@ -4030,8 +3699,6 @@
                 this.applyTheme(newTheme);
                 localStorage.setItem('theme', newTheme);
                 this.currentTheme = newTheme;
-                
-                document.dispatchEvent(new Event('themeChanged'));
             }
 
             applyTheme(theme) {
@@ -4046,21 +3713,19 @@
         }
 
         // =====================================================================
-        // MAIN APPLICATION
+        // MAIN APP
         // =====================================================================
         class App {
             constructor() {
                 this.theme = new ThemeManager();
                 this.language = new LanguageManager();
                 this.manager = null;
-                
                 this.init();
             }
 
             async init() {
                 try {
                     this.manager = new SplitScreenManager();
-                    
                     this.setupScrollAnimations();
                     this.setupHeaderScroll();
                     this.setupSmoothNavigation();
@@ -4075,37 +3740,15 @@
 
             setupScrollAnimations() {
                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                        }
-                    });
-                }, {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px'
-                });
-
-                document.querySelectorAll('.fade-in, .service-card, .about-grid .fade-in, .contact-info, .contact-form').forEach(el => {
-                    observer.observe(el);
-                });
+                    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+                document.querySelectorAll('.fade-in, .service-card, .about-grid .fade-in, .contact-info, .contact-form').forEach(el => observer.observe(el));
             }
 
             setupHeaderScroll() {
-                const header = document.getElementById('main-header');
-                setTimeout(handleHeaderOpacity, 100);
-
-                window.addEventListener('scroll', debounce(() => {
-                    handleHeaderOpacity();
-                    if (window.pageYOffset > 50) {
-                        header.classList.add('scrolled');
-                    } else if (window.pageYOffset < 10) {
-                        header.classList.remove('scrolled');
-                    }
-                }, 10));
-
-                window.addEventListener('resize', debounce(() => {
-                    handleHeaderOpacity();
-                }, 100));
+                window.addEventListener('scroll', debounce(handleHeaderScroll, 10));
+                window.addEventListener('resize', debounce(handleHeaderScroll, 100));
+                setTimeout(handleHeaderScroll, 100);
             }
 
             setupSmoothNavigation() {
@@ -4113,18 +3756,11 @@
                     anchor.addEventListener('click', function(e) {
                         const targetId = this.getAttribute('href');
                         if (targetId === '#') return;
-                        
                         const target = document.querySelector(targetId);
                         if (target) {
                             e.preventDefault();
                             const headerHeight = document.getElementById('main-header').offsetHeight;
-                            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            
+                            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - headerHeight, behavior: 'smooth' });
                             document.getElementById('nav-container').classList.remove('active');
                             document.getElementById('hamburger').innerHTML = '<i class="fas fa-bars"></i>';
                         }
@@ -4135,81 +3771,47 @@
             setupContactForm() {
                 const form = document.getElementById('contact-form');
                 if (!form) return;
-
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const btn = form.querySelector('button[type="submit"]');
                     const originalText = btn.innerHTML;
-                    
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     btn.disabled = true;
-
                     try {
-                        const formData = new FormData(form);
-                        const response = await fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: { 'Accept': 'application/json' }
-                        });
-
-                        if (response.ok) {
-                            btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-                            form.reset();
-                            setTimeout(() => {
-                                btn.innerHTML = originalText;
-                                btn.disabled = false;
-                            }, 3000);
-                        } else {
-                            throw new Error('Form submission failed');
-                        }
-                    } catch (error) {
-                        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
-                        setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                        }, 3000);
-                    }
+                        const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+                        if (response.ok) { btn.innerHTML = '<i class="fas fa-check"></i> Sent!'; form.reset(); setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000); }
+                        else throw new Error('Form submission failed');
+                    } catch (error) { btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error'; setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000); }
                 });
             }
 
             setupHeroMute() {
                 const muteBtn = document.getElementById('mute-btn');
                 const video = document.querySelector('.hero-video');
-                
                 if (muteBtn && video) {
                     video.muted = true;
                     muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    
-                    muteBtn.addEventListener('click', () => {
-                        video.muted = !video.muted;
-                        muteBtn.innerHTML = video.muted ? 
-                            '<i class="fas fa-volume-mute"></i>' : 
-                            '<i class="fas fa-volume-up"></i>';
-                    });
+                    muteBtn.addEventListener('click', () => { video.muted = !video.muted; muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>'; });
                 }
             }
 
             setupHamburgerMenu() {
                 const hamburger = document.getElementById('hamburger');
                 const navContainer = document.getElementById('nav-container');
-
                 if (hamburger && navContainer) {
                     hamburger.addEventListener('click', () => {
                         navContainer.classList.toggle('active');
-                        hamburger.innerHTML = navContainer.classList.contains('active') ?
-                            '<i class="fas fa-times"></i>' :
-                            '<i class="fas fa-bars"></i>';
+                        hamburger.innerHTML = navContainer.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     });
                 }
             }
         }
 
         // =====================================================================
-        // INITIALIZE APP
+        // INIT
         // =====================================================================
         document.addEventListener('DOMContentLoaded', () => {
-            const app = new App();
-            window.app = app;
+            window.app = new App();
         });
     </script>
 </body>
