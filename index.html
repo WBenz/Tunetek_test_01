@@ -126,7 +126,7 @@
 
         @media (max-width: 768px) {
             .section-padding {
-                padding: 60px 0;
+                padding: 80px 0;
             }
             .container {
                 padding: 0 20px;
@@ -134,6 +134,9 @@
         }
 
         @media (max-width: 480px) {
+            .section-padding {
+                padding: 80px 0;
+            }
             .container {
                 padding: 0 16px;
             }
@@ -928,6 +931,31 @@
         .service-card:hover .service-image {
             transform: scale(1.02);
             border-color: var(--secondary-color);
+        }
+
+        /* ===================== MOBILE SERVICES CENTERING ===================== */
+        @media (max-width: 768px) {
+            .service-card {
+                text-align: center;
+            }
+            
+            .service-icon-wrapper {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .service-title {
+                text-align: center;
+            }
+            
+            .service-desc {
+                text-align: center;
+            }
+            
+            .service-image {
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
 
         /* ============================================================
