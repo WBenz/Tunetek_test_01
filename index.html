@@ -1162,8 +1162,35 @@
             transform: translateY(0);
         }
 
+        /* FIX: Keep overlay fixed in fullscreen mode */
         .split-preview:fullscreen .preview-overlay {
-            display: none !important;
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 10 !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .split-preview:-webkit-full-screen .preview-overlay {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 10 !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .split-preview:-moz-full-screen .preview-overlay {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 10 !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
 
         .split-preview .preview-overlay h3 {
@@ -1317,21 +1344,6 @@
 
         .split-preview:-moz-full-screen .preview-controls .divider {
             display: none !important;
-        }
-
-        /* ===================== FIX: OVERLAY FIXED IN FULLSCREEN ===================== */
-        .split-preview:fullscreen .preview-overlay {
-            position: fixed !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            z-index: 10 !important;
-            opacity: 1 !important;
-            transform: none !important;
-        }
-
-        .split-preview:fullscreen .preview-overlay h3 {
-            font-size: 1.6rem;
         }
 
         .split-list {
