@@ -126,19 +126,19 @@
 
         @media (max-width: 768px) {
             .section-padding {
-                padding: 80px 0;
+                padding: 70px 0;
             }
             .container {
-                padding: 0 20px;
+                padding: 0 30px;
             }
         }
 
         @media (max-width: 480px) {
             .section-padding {
-                padding: 80px 0;
+                padding: 70px 0;
             }
             .container {
-                padding: 0 16px;
+                padding: 0 24px;
             }
         }
 
@@ -2000,22 +2000,22 @@
 
         /* ===================== RESPONSIVE ===================== */
         @media (max-width: 768px) {
-            /* Fix 1: More section spacing on mobile - increased padding */
+            /* Section spacing - reduced by ~30% */
             .section-padding {
-                padding: 100px 0;
+                padding: 70px 0;
             }
             
-            /* Extra space after hero */
+            /* Extra space after hero - reduced */
             #services {
-                padding-top: 120px;
+                padding-top: 90px;
             }
             
-            /* Extra space before footer */
+            /* Extra space before footer - reduced */
             #contact {
-                padding-bottom: 120px;
+                padding-bottom: 90px;
             }
             
-            /* Fix 2: Center service cards on mobile */
+            /* Center service cards on mobile */
             .service-card {
                 text-align: center;
             }
@@ -2042,13 +2042,13 @@
 
         @media (max-width: 480px) {
             .section-padding {
-                padding: 100px 0;
+                padding: 70px 0;
             }
             #services {
-                padding-top: 120px;
+                padding-top: 90px;
             }
             #contact {
-                padding-bottom: 120px;
+                padding-bottom: 90px;
             }
             .section-title {
                 font-size: 1.8rem;
@@ -4616,7 +4616,7 @@
                 if (muteBtn && video) {
                     video.muted = true;
                     muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    muteBtn.addEventListener('click', () => { video.muted = !video.muted; muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>'; });
+                    muteBtn.addEventListener('click', () => { video.muted = !video.muted; muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute</i>' : '<i class="fas fa-volume-up"></i>'; });
                 }
             }
 
