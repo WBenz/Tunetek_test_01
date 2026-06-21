@@ -1151,13 +1151,16 @@
             left: 0;
             right: 0;
             padding: 30px 40px;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
             color: white;
             opacity: 1 !important;
             transform: translateY(0) !important;
             transition: none;
             pointer-events: none;
             z-index: 2;
+            width: 100% !important;
+            min-width: 100% !important;
+            box-sizing: border-box !important;
         }
 
         /* Hide overlay in fullscreen */
@@ -1204,6 +1207,7 @@
             flex-direction: column !important;
             max-height: 550px;
             min-height: 500px;
+            position: relative !important;
         }
 
         .split-preview.web-fit-mode .preview-media {
@@ -1216,7 +1220,7 @@
             display: block !important;
         }
 
-        /* Overlay becomes sticky in fit-mode */
+        /* Overlay becomes sticky in fit-mode - ALWAYS at bottom */
         .split-preview.web-fit-mode .preview-overlay {
             position: sticky !important;
             bottom: 0 !important;
@@ -1228,59 +1232,51 @@
             pointer-events: none;
             flex-shrink: 0 !important;
             margin-top: auto !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%) !important;
         }
 
         /* ===================== FULLSCREEN OVERRIDES ===================== */
-        .split-preview:fullscreen .preview-overlay {
-            display: none !important;
-        }
-
-        .split-preview:fullscreen.web-fit-mode {
+        .split-preview:fullscreen {
+            max-height: 100vh !important;
+            min-height: 100vh !important;
             overflow: hidden !important;
             align-items: center !important;
             justify-content: center !important;
             display: flex !important;
             flex-direction: column !important;
+            background: #000 !important;
+        }
+
+        .split-preview:fullscreen .preview-media {
+            max-height: 100vh !important;
+            min-height: 100vh !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            flex-shrink: 0 !important;
+        }
+
+        .split-preview:fullscreen.web-fit-mode {
+            overflow: hidden !important;
             max-height: 100vh !important;
             min-height: 100vh !important;
         }
 
         .split-preview:fullscreen.web-fit-mode .preview-media {
-            width: 100% !important;
-            height: 100% !important;
             max-height: 100vh !important;
             min-height: 100vh !important;
+            width: 100% !important;
+            height: 100% !important;
             object-fit: contain !important;
-            flex-shrink: 0 !important;
         }
 
-        .split-preview:fullscreen.web-fit-mode .preview-overlay {
+        .split-preview:fullscreen .preview-overlay {
             display: none !important;
         }
 
-        .split-preview .video-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            color: #fff;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .split-preview:hover .video-badge {
-            opacity: 1;
-        }
-
-        /* ===================== CONTROLS - Always visible ===================== */
+        /* ===================== CONTROLS - Always visible in preview ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1298,23 +1294,6 @@
             pointer-events: auto;
         }
 
-        .preview-controls button {
-            pointer-events: auto;
-        }
-
-        /* Hide controls in fullscreen */
-        .split-preview:fullscreen .preview-controls {
-            display: none !important;
-        }
-
-        .split-preview:-webkit-full-screen .preview-controls {
-            display: none !important;
-        }
-
-        .split-preview:-moz-full-screen .preview-controls {
-            display: none !important;
-        }
-
         /* Controls in fit-mode stay visible */
         .split-preview.web-fit-mode .preview-controls {
             position: sticky !important;
@@ -1324,6 +1303,42 @@
             z-index: 15 !important;
             opacity: 1 !important;
             margin-top: auto !important;
+        }
+
+        /* Controls in fullscreen - show only fullscreen toggle */
+        .split-preview:fullscreen .preview-controls {
+            display: flex !important;
+            opacity: 1 !important;
+            position: fixed !important;
+            bottom: 40px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 99999 !important;
+            background: rgba(0,0,0,0.5) !important;
+            backdrop-filter: blur(10px) !important;
+            padding: 8px 16px !important;
+            border-radius: 50px !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        /* In fullscreen, only show the fullscreen button */
+        .split-preview:fullscreen .preview-controls .video-controls-group,
+        .split-preview:fullscreen .preview-controls .web-controls-group .divider,
+        .split-preview:fullscreen .preview-controls .web-controls-group .web-fit-btn,
+        .split-preview:fullscreen .preview-controls .graphic-controls-group {
+            display: none !important;
+        }
+
+        .split-preview:fullscreen .preview-controls .web-controls-group {
+            display: flex !important;
+            gap: 0 !important;
+            align-items: center !important;
+        }
+
+        .split-preview:fullscreen .preview-controls .web-fullscreen-btn,
+        .split-preview:fullscreen .preview-controls .video-fullscreen-btn,
+        .split-preview:fullscreen .preview-controls .graphic-fullscreen-btn {
+            display: flex !important;
         }
 
         .preview-controls button {
@@ -1398,6 +1413,28 @@
 
         .preview-controls .web-controls-group .divider {
             display: inline-block;
+        }
+
+        .split-preview .video-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .split-preview:hover .video-badge {
+            opacity: 1;
         }
 
         .split-list {
@@ -1559,6 +1596,10 @@
                 min-height: 350px;
                 max-height: 400px;
             }
+            .split-preview.web-fit-mode {
+                max-height: 400px;
+                min-height: 350px;
+            }
             .split-list {
                 max-height: 400px;
             }
@@ -1584,6 +1625,15 @@
             .split-controls {
                 flex-direction: column;
                 gap: 12px;
+            }
+            .split-preview:fullscreen .preview-controls {
+                bottom: 30px !important;
+                padding: 6px 12px !important;
+            }
+            .split-preview:fullscreen .preview-controls button {
+                width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
             }
         }
 
@@ -1628,6 +1678,15 @@
             }
             .split-preview .preview-overlay h3 {
                 font-size: 1.1rem;
+            }
+            .split-preview:fullscreen .preview-controls {
+                bottom: 25px !important;
+                padding: 5px 10px !important;
+            }
+            .split-preview:fullscreen .preview-controls button {
+                width: 26px;
+                height: 26px;
+                font-size: 0.65rem;
             }
         }
 
@@ -1695,35 +1754,16 @@
             .split-preview.web-fit-mode .preview-controls {
                 bottom: 75px !important;
             }
-        }
-
-        /* ===================== FULLSCREEN CONTROLS ===================== */
-        .split-preview:fullscreen .preview-controls {
-            display: none !important;
-        }
-
-        .split-preview .preview-media {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-            transition: opacity 0.5s ease;
-            max-height: 550px;
-        }
-
-        .split-preview:fullscreen .preview-media {
-            max-height: 100vh !important;
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: contain !important;
-        }
-
-        .split-preview:fullscreen video.preview-media {
-            max-height: 100vh !important;
-        }
-
-        .split-preview:fullscreen .preview-placeholder {
-            display: none !important;
+            .split-preview:fullscreen .preview-controls {
+                bottom: 20px !important;
+                padding: 4px 8px !important;
+                gap: 4px !important;
+            }
+            .split-preview:fullscreen .preview-controls button {
+                width: 22px;
+                height: 22px;
+                font-size: 0.55rem;
+            }
         }
 
         /* ===================== GRAPHIC SLIDESHOW NAVIGATION ===================== */
@@ -3797,7 +3837,6 @@
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                 }
                 this.preview.classList.remove('web-fit-mode');
-                // Reset overflow when switching projects
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
@@ -3986,13 +4025,27 @@
                 }
                 this.preview.insertBefore(mediaElement, this.previewOverlay);
                 
-                // Overlay is always visible in preview - no fade in/out
+                // Overlay is always visible in preview
                 this.previewOverlay.style.opacity = '1';
                 this.previewOverlay.style.transform = 'translateY(0)';
+                this.previewOverlay.style.display = 'block';
                 
                 this.setupVideoControls();
                 this.setupWebControls();
                 this.setupGraphicControls();
+                
+                // Ensure fullscreen state is handled
+                if (document.fullscreenElement) {
+                    this.previewOverlay.style.display = 'none';
+                    this.previewControls.style.display = 'flex';
+                    // Only show fullscreen button in controls
+                    this.videoControlsGroup.style.display = 'none';
+                    this.webControlsGroup.style.display = 'flex';
+                    this.graphicControlsGroup.style.display = 'none';
+                    const divider = this.webControlsGroup.querySelector('.divider');
+                    if (divider) divider.style.display = 'none';
+                    this.webFitBtn.style.display = 'none';
+                }
             }
 
             createLoadingOverlay(element, type) {
@@ -4253,6 +4306,23 @@
                                         container.style.alignItems = 'center';
                                         container.style.justifyContent = 'center';
                                         container.style.background = '#000';
+                                        // Hide overlay and show only fullscreen button
+                                        this.previewOverlay.style.display = 'none';
+                                        this.videoControlsGroup.style.display = 'none';
+                                        this.webControlsGroup.style.display = 'none';
+                                        this.graphicControlsGroup.style.display = 'none';
+                                        this.previewControls.style.display = 'flex';
+                                        // Show only the fullscreen button
+                                        const videoFullscreenBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
+                                        if (videoFullscreenBtn) {
+                                            this.videoControlsGroup.style.display = 'flex';
+                                            // Hide other video controls
+                                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                                                if (!el.classList.contains('video-fullscreen-btn')) {
+                                                    el.style.display = 'none';
+                                                }
+                                            });
+                                        }
                                     }, 50);
                                 })
                                 .catch(() => {
@@ -4280,6 +4350,30 @@
                             this.preview.style.justifyContent = 'center';
                             this.preview.style.background = '';
                         }
+                        // Restore overlay and controls
+                        this.previewOverlay.style.display = 'block';
+                        this.previewControls.style.display = 'flex';
+                        // Show correct controls based on category
+                        if (this.currentProject && this.currentProject.category === 'motion') {
+                            this.videoControlsGroup.style.display = 'flex';
+                            // Restore all video controls
+                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                                el.style.display = '';
+                            });
+                            this.webControlsGroup.style.display = 'none';
+                            this.graphicControlsGroup.style.display = 'none';
+                        } else if (this.currentProject && this.currentProject.category === 'web') {
+                            this.webControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.style.display = 'none';
+                            this.graphicControlsGroup.style.display = 'none';
+                            const divider = this.webControlsGroup.querySelector('.divider');
+                            if (divider) divider.style.display = 'inline-block';
+                            this.webFitBtn.style.display = 'inline-flex';
+                        } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                            this.graphicControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.style.display = 'none';
+                            this.webControlsGroup.style.display = 'none';
+                        }
                     }
                 };
                 
@@ -4298,11 +4392,18 @@
                     const isFullscreen = !!document.fullscreenElement;
                     if (isFullscreen) {
                         this.webFitBtn.style.display = 'none';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'none';
+                        // Hide overlay in fullscreen
+                        this.previewOverlay.style.display = 'none';
                     } else {
                         this.webFitBtn.style.display = 'inline-flex';
-                        // When exiting fullscreen, keep fit mode state if it was on
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'inline-block';
+                        // Show overlay in preview
+                        this.previewOverlay.style.display = 'block';
+                        // Restore fit mode state when exiting fullscreen
                         if (this.isWebFit) {
-                            // Re-apply fit mode
                             this.preview.classList.add('web-fit-mode');
                             img.style.objectFit = 'contain';
                             img.style.width = '100%';
@@ -4329,14 +4430,64 @@
                     }
                 };
                 
-                updateWebButtons();
-                document.addEventListener('fullscreenchange', updateWebButtons);
+                // Fullscreen change handler
+                const fullscreenChangeHandler = () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    if (isFullscreen) {
+                        // In fullscreen: hide overlay, keep only fullscreen toggle in controls
+                        this.previewOverlay.style.display = 'none';
+                        this.previewControls.style.display = 'flex';
+                        this.webFitBtn.style.display = 'none';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'none';
+                        // Ensure video controls are hidden in fullscreen for web
+                        this.videoControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                    } else {
+                        // Exit fullscreen: show overlay, restore controls
+                        this.previewOverlay.style.display = 'block';
+                        this.previewControls.style.display = 'flex';
+                        this.webFitBtn.style.display = 'inline-flex';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'inline-block';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                        // Restore fit mode state
+                        if (this.isWebFit) {
+                            this.preview.classList.add('web-fit-mode');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = 'auto';
+                            img.style.maxHeight = 'none';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = '100%';
+                            this.webFitBtn.classList.add('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                        } else {
+                            this.preview.classList.remove('web-fit-mode');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                            this.webFitBtn.classList.remove('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        }
+                    }
+                };
+                
+                // Remove old handler if exists
+                if (this._fullscreenChangeHandlerWeb) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
+                }
+                this._fullscreenChangeHandlerWeb = fullscreenChangeHandler;
+                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
                 
                 this.webFitBtn.onclick = () => {
                     if (document.fullscreenElement) return;
                     this.isWebFit = !this.isWebFit;
                     if (this.isWebFit) {
-                        // Fit width mode ON
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = 'auto';
@@ -4349,7 +4500,6 @@
                         this.webFitBtn.title = 'Reset view';
                         this.preview.scrollTop = 0;
                     } else {
-                        // Fit width mode OFF
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
                         img.style.height = '100%';
@@ -4420,6 +4570,8 @@
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                 }
+                // Reset overlay visibility
+                this.previewOverlay.style.display = 'block';
             }
 
             openGraphicDetail(project) {
