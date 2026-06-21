@@ -37,11 +37,6 @@
             --label-color: #333333;
             --border-light: rgba(0,0,0,0.06);
             
-            --primary: #1a73e8;
-            --primary-dark: #1557b0;
-            --secondary: #ff6b00;
-            --secondary-dark: #e05d00;
-            
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --header-height: 72px;
             --max-width: 1200px;
@@ -53,6 +48,10 @@
             --graphic-color: #ff6b00;
             --motion-color: #6c5ce7;
             --web-color: #00b894;
+            
+            /* Loading constants */
+            --loading-timeout: 300ms;
+            --fade-timeout: 400ms;
         }
 
         /* ===================== DARK THEME ===================== */
@@ -105,7 +104,7 @@
         }
 
         a:hover {
-            color: var(--primary-dark);
+            color: var(--primary-color);
         }
 
         img {
@@ -842,9 +841,9 @@
         }
 
         /* Service-specific accent colors */
-        .service-card:nth-child(1)::before { background: linear-gradient(90deg, #ff6b00, #ff9a44); }
-        .service-card:nth-child(2)::before { background: linear-gradient(90deg, #6c5ce7, #a29bfe); }
-        .service-card:nth-child(3)::before { background: linear-gradient(90deg, #00b894, #55efc4); }
+        .service-card:nth-child(1)::before { background: linear-gradient(90deg, var(--graphic-color), #ff9a44); }
+        .service-card:nth-child(2)::before { background: linear-gradient(90deg, var(--motion-color), #a29bfe); }
+        .service-card:nth-child(3)::before { background: linear-gradient(90deg, var(--web-color), #55efc4); }
 
         /* Service icon wrapper */
         .service-icon-wrapper {
@@ -866,17 +865,17 @@
         /* Individual service icon styles */
         .service-card:nth-child(1) .service-icon-wrapper {
             background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
-            color: #ff6b00;
+            color: var(--graphic-color);
         }
 
         .service-card:nth-child(2) .service-icon-wrapper {
             background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(108, 92, 231, 0.05));
-            color: #6c5ce7;
+            color: var(--motion-color);
         }
 
         .service-card:nth-child(3) .service-icon-wrapper {
             background: linear-gradient(135deg, rgba(0, 184, 148, 0.15), rgba(0, 184, 148, 0.05));
-            color: #00b894;
+            color: var(--web-color);
         }
 
         [data-theme="dark"] .service-card:nth-child(1) .service-icon-wrapper {
@@ -903,13 +902,9 @@
         }
 
         /* Service title with color */
-        .service-card:nth-child(1) .service-title { color: #ff6b00; }
-        .service-card:nth-child(2) .service-title { color: #6c5ce7; }
-        .service-card:nth-child(3) .service-title { color: #00b894; }
-
-        [data-theme="dark"] .service-card:nth-child(1) .service-title { color: #ff8c42; }
-        [data-theme="dark"] .service-card:nth-child(2) .service-title { color: #a29bfe; }
-        [data-theme="dark"] .service-card:nth-child(3) .service-title { color: #55efc4; }
+        .service-card:nth-child(1) .service-title { color: var(--graphic-color); }
+        .service-card:nth-child(2) .service-title { color: var(--motion-color); }
+        .service-card:nth-child(3) .service-title { color: var(--web-color); }
 
         /* Service description */
         .service-desc {
@@ -1108,7 +1103,7 @@
         }
 
         .split-preview::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-dark);
+            background: var(--secondary-color);
         }
 
         .split-preview .preview-media {
@@ -1606,7 +1601,6 @@
             opacity: 1 !important;
         }
 
-        /* Keep controls fixed in preview mode too */
         .split-preview .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1671,7 +1665,6 @@
             flex-shrink: 0 !important;
         }
 
-        /* Keep controls on top of scrollable content */
         .split-preview.web-fit-mode .preview-controls {
             position: sticky;
             bottom: 20px;
@@ -2044,7 +2037,7 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
+            background: var(--accent-color);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -2053,7 +2046,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-dark);
+            background: var(--secondary-color);
         }
 
         ::selection {
@@ -2306,7 +2299,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-secondary);
+            background: var(--accent-color);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -2370,7 +2363,7 @@
 
         .motion-player {
             width: 100%;
-            background: var(--bg-secondary);
+            background: var(--accent-color);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -2442,7 +2435,7 @@
             position: relative;
             height: 70vh;
             min-height: 400px;
-            background: var(--bg-secondary);
+            background: var(--accent-color);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -2954,6 +2947,13 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script>
         // =====================================================================
+        // CONSTANTS
+        // =====================================================================
+        const LOADING_TIMEOUT = 300;
+        const FADE_TIMEOUT = 400;
+        const HEADER_HEIGHT = 72;
+
+        // =====================================================================
         // PROGRESS TRACKING
         // =====================================================================
         const loadingItems = { total: 0, loaded: 0, progress: 0 };
@@ -2975,7 +2975,7 @@
             else loadingText.textContent = 'Complete!';
 
             if (percent >= 100) {
-                setTimeout(() => loadingOverlay.classList.add('hidden'), 400);
+                setTimeout(() => loadingOverlay.classList.add('hidden'), FADE_TIMEOUT);
             }
         }
 
@@ -2997,7 +2997,7 @@
         }
 
         // =====================================================================
-        // FILE MANIFEST - DIRECT FILE LIST (NO API CALLS!)
+        // FILE MANIFEST
         // =====================================================================
         const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/';
 
@@ -3397,7 +3397,6 @@
                         this.allProjects[cat] = processed;
                         this.categoryCounts[cat] = processed.length;
                     });
-                    console.log('📁 Projects loaded from manifest');
                     return this.allProjects;
                 } catch (error) {
                     console.error('Error loading projects:', error);
@@ -3591,7 +3590,7 @@
                     }
                     this.renderList();
                     this.isLoading = false;
-                }, 300);
+                }, LOADING_TIMEOUT);
             }
 
             renderList() {
@@ -3740,76 +3739,7 @@
                     this.currentVideo = mediaElement;
                     
                     // === LOADING OVERLAY FOR MOTION ===
-                    const loadingOverlay = document.createElement('div');
-                    loadingOverlay.className = 'graphic-loading-overlay active';
-                    loadingOverlay.innerHTML = `
-                        <div class="graphic-loading-spinner"></div>
-                        <div class="graphic-loading-progress">0%</div>
-                    `;
-                    this.preview.appendChild(loadingOverlay);
-                    
-                    // Track video loading progress
-                    let progressInterval = null;
-                    let loadingComplete = false;
-                    
-                    const updateVideoProgress = () => {
-                        if (mediaElement.readyState >= 3 || loadingComplete) {
-                            if (progressInterval) {
-                                clearInterval(progressInterval);
-                                progressInterval = null;
-                            }
-                            const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
-                            if (progressText) progressText.textContent = '100%';
-                            setTimeout(() => {
-                                loadingOverlay.classList.remove('active');
-                            }, 300);
-                            return true;
-                        }
-                        return false;
-                    };
-                    
-                    mediaElement.addEventListener('loadedmetadata', () => {
-                        const durationEl = this.videoControlsGroup.querySelector('.duration');
-                        if (durationEl) durationEl.textContent = formatTime(mediaElement.duration);
-                        updateVideoProgress();
-                    });
-                    
-                    mediaElement.addEventListener('canplay', () => {
-                        loadingComplete = true;
-                        updateVideoProgress();
-                    });
-                    
-                    mediaElement.addEventListener('canplaythrough', () => {
-                        loadingComplete = true;
-                        updateVideoProgress();
-                    });
-                    
-                    // Progress simulation while loading
-                    let progress = 0;
-                    progressInterval = setInterval(() => {
-                        if (mediaElement.readyState >= 3 || loadingComplete) {
-                            if (progressInterval) {
-                                clearInterval(progressInterval);
-                                progressInterval = null;
-                            }
-                            return;
-                        }
-                        progress += Math.random() * 3 + 1;
-                        if (progress > 90) progress = 90;
-                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
-                        if (progressText) progressText.textContent = Math.min(Math.round(progress), 90) + '%';
-                    }, 200);
-                    
-                    // Clean up interval when done
-                    mediaElement.addEventListener('loadeddata', () => {
-                        setTimeout(() => {
-                            if (progressInterval) {
-                                clearInterval(progressInterval);
-                                progressInterval = null;
-                            }
-                            updateVideoProgress();
-                        }, 500);
-                    });
+                    this.createLoadingOverlay(mediaElement, 'video');
                     
                     mediaElement.addEventListener('timeupdate', () => {
                         if (!isNaN(mediaElement.duration)) {
@@ -3848,54 +3778,8 @@
                     mediaElement.style.minHeight = 'auto';
                     
                     // === LOADING OVERLAY FOR WEB ===
-                    const loadingOverlay = document.createElement('div');
-                    loadingOverlay.className = 'graphic-loading-overlay active';
-                    loadingOverlay.innerHTML = `
-                        <div class="graphic-loading-spinner"></div>
-                        <div class="graphic-loading-progress">0%</div>
-                    `;
-                    this.preview.appendChild(loadingOverlay);
+                    this.createLoadingOverlay(mediaElement, 'image');
                     
-                    // Track image loading progress
-                    let progressInterval = null;
-                    
-                    const updateImageProgress = (percent) => {
-                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
-                        if (progressText) progressText.textContent = Math.min(Math.round(percent), 100) + '%';
-                        if (percent >= 100) {
-                            if (progressInterval) {
-                                clearInterval(progressInterval);
-                                progressInterval = null;
-                            }
-                            setTimeout(() => {
-                                loadingOverlay.classList.remove('active');
-                            }, 300);
-                        }
-                    };
-                    
-                    // Simulate progress while image loads
-                    let progress = 0;
-                    progressInterval = setInterval(() => {
-                        progress += Math.random() * 4 + 2;
-                        if (progress > 85) progress = 85;
-                        updateImageProgress(progress);
-                    }, 150);
-                    
-                    mediaElement.onload = () => {
-                        if (progressInterval) {
-                            clearInterval(progressInterval);
-                            progressInterval = null;
-                        }
-                        updateImageProgress(100);
-                    };
-                    mediaElement.onerror = function() {
-                        if (progressInterval) {
-                            clearInterval(progressInterval);
-                            progressInterval = null;
-                        }
-                        updateImageProgress(100);
-                        this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Crect fill="%23333" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="sans-serif" font-size="40" dy=".35em" text-anchor="middle" x="400" y="300"%3E🌐%3C/text%3E%3C/svg%3E';
-                    };
                     this.previewControls.style.opacity = '1';
                     
                     // Reset fit state
@@ -4004,6 +3888,101 @@
                 this.setupGraphicControls();
             }
 
+            createLoadingOverlay(element, type) {
+                const loadingOverlay = document.createElement('div');
+                loadingOverlay.className = 'graphic-loading-overlay active';
+                loadingOverlay.innerHTML = `
+                    <div class="graphic-loading-spinner"></div>
+                    <div class="graphic-loading-progress">0%</div>
+                `;
+                this.preview.appendChild(loadingOverlay);
+                
+                let progressInterval = null;
+                let loadingComplete = false;
+                
+                const updateProgress = (percent) => {
+                    const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                    if (progressText) progressText.textContent = Math.min(Math.round(percent), 100) + '%';
+                    if (percent >= 100) {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        setTimeout(() => {
+                            loadingOverlay.classList.remove('active');
+                        }, LOADING_TIMEOUT);
+                    }
+                };
+                
+                if (type === 'video') {
+                    const video = element;
+                    
+                    video.addEventListener('loadedmetadata', () => {
+                        const durationEl = this.videoControlsGroup.querySelector('.duration');
+                        if (durationEl) durationEl.textContent = formatTime(video.duration);
+                        updateProgress(100);
+                    });
+                    
+                    video.addEventListener('canplay', () => {
+                        loadingComplete = true;
+                        updateProgress(100);
+                    });
+                    
+                    video.addEventListener('canplaythrough', () => {
+                        loadingComplete = true;
+                        updateProgress(100);
+                    });
+                    
+                    let progress = 0;
+                    progressInterval = setInterval(() => {
+                        if (video.readyState >= 3 || loadingComplete) {
+                            if (progressInterval) {
+                                clearInterval(progressInterval);
+                                progressInterval = null;
+                            }
+                            return;
+                        }
+                        progress += Math.random() * 3 + 1;
+                        if (progress > 90) progress = 90;
+                        updateProgress(progress);
+                    }, 200);
+                    
+                    video.addEventListener('loadeddata', () => {
+                        setTimeout(() => {
+                            if (progressInterval) {
+                                clearInterval(progressInterval);
+                                progressInterval = null;
+                            }
+                            updateProgress(100);
+                        }, 500);
+                    });
+                } else if (type === 'image') {
+                    const img = element;
+                    
+                    let progress = 0;
+                    progressInterval = setInterval(() => {
+                        progress += Math.random() * 4 + 2;
+                        if (progress > 85) progress = 85;
+                        updateProgress(progress);
+                    }, 150);
+                    
+                    img.onload = () => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        updateProgress(100);
+                    };
+                    img.onerror = () => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        updateProgress(100);
+                    };
+                }
+            }
+
             updateGraphicSlide() {
                 const img = this.preview.querySelector('.preview-media');
                 if (!img || !this.graphicProjectFiles.length) return;
@@ -4107,7 +4086,7 @@
                                     if (progressText) progressText.textContent = '100%';
                                     setTimeout(() => {
                                         loadingOverlay.classList.remove('active');
-                                    }, 300);
+                                    }, LOADING_TIMEOUT);
                                 }
                             } else {
                                 setTimeout(checkLoaded, 100);
@@ -4208,16 +4187,12 @@
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
                 
-                // Handle fullscreen state changes - hide Fit Width button in fullscreen
                 const updateWebButtons = () => {
                     const isFullscreen = !!document.fullscreenElement;
                     if (isFullscreen) {
-                        // In fullscreen: hide Fit Width button
                         this.webFitBtn.style.display = 'none';
                     } else {
-                        // In preview: show Fit Width button
                         this.webFitBtn.style.display = 'inline-flex';
-                        // Reset fit state when exiting fullscreen
                         if (this.isWebFit) {
                             this.isWebFit = false;
                             this.preview.classList.remove('web-fit-mode');
@@ -4233,13 +4208,11 @@
                     }
                 };
                 
-                // Call initially and on fullscreen change
                 updateWebButtons();
                 document.addEventListener('fullscreenchange', updateWebButtons);
                 
-                // FIT WIDTH button - only works in preview mode
                 this.webFitBtn.onclick = () => {
-                    if (document.fullscreenElement) return; // Don't work in fullscreen
+                    if (document.fullscreenElement) return;
                     this.isWebFit = !this.isWebFit;
                     if (this.isWebFit) {
                         img.style.objectFit = 'contain';
@@ -4269,7 +4242,6 @@
                     }
                 };
                 
-                // Fullscreen button
                 this.webFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         this.preview.requestFullscreen().catch(()=>{});
