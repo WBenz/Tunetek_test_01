@@ -135,23 +135,10 @@
 
         @media (max-width: 480px) {
             .section-padding {
-                padding: 70px 0;
+                padding: 80px 0;
             }
             .container {
                 padding: 0 16px;
-            }
-        }
-
-        /* ===================== SECTION HEADER SPACING ON MOBILE ===================== */
-        @media (max-width: 768px) {
-            .section-header {
-                margin-top: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .section-header {
-                margin-top: 10px;
             }
         }
 
@@ -944,31 +931,6 @@
         .service-card:hover .service-image {
             transform: scale(1.02);
             border-color: var(--secondary-color);
-        }
-
-        /* ===================== MOBILE SERVICES CENTERING ===================== */
-        @media (max-width: 768px) {
-            .service-card {
-                text-align: center;
-            }
-            
-            .service-icon-wrapper {
-                margin-left: auto;
-                margin-right: auto;
-            }
-            
-            .service-title {
-                text-align: center;
-            }
-            
-            .service-desc {
-                text-align: center;
-            }
-            
-            .service-image {
-                margin-left: auto;
-                margin-right: auto;
-            }
         }
 
         /* ============================================================
@@ -2035,9 +1997,35 @@
 
         /* ===================== RESPONSIVE ===================== */
         @media (max-width: 768px) {
-            .services-grid {
-                grid-template-columns: 1fr;
+            /* Fix 1: More section spacing on mobile - increased padding */
+            .section-padding {
+                padding: 100px 0;
             }
+            
+            /* Extra space after hero */
+            #services {
+                padding-top: 120px;
+            }
+            
+            /* Extra space before footer */
+            #contact {
+                padding-bottom: 120px;
+            }
+            
+            /* Fix 2: Center service cards on mobile */
+            .service-card {
+                text-align: center;
+            }
+            .service-icon-wrapper {
+                margin: 0 auto 1.5rem;
+            }
+            .service-title {
+                text-align: center;
+            }
+            .service-desc {
+                text-align: center;
+            }
+            
             .section-title {
                 font-size: 2rem;
             }
@@ -2050,6 +2038,15 @@
         }
 
         @media (max-width: 480px) {
+            .section-padding {
+                padding: 100px 0;
+            }
+            #services {
+                padding-top: 120px;
+            }
+            #contact {
+                padding-bottom: 120px;
+            }
             .section-title {
                 font-size: 1.8rem;
             }
