@@ -1198,7 +1198,7 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* ===================== WEB FIT MODE - OVERLAY STICKY ===================== */
+        /* ===================== WEB FIT MODE - OVERLAY PERFECTLY FIXED ===================== */
         .split-preview.web-fit-mode {
             overflow: auto !important;
             align-items: flex-start !important;
@@ -1208,6 +1208,7 @@
             max-height: 550px;
             min-height: 500px;
             position: relative !important;
+            scroll-behavior: smooth !important;
         }
 
         .split-preview.web-fit-mode .preview-media {
@@ -1220,7 +1221,7 @@
             display: block !important;
         }
 
-        /* Overlay becomes sticky in fit-mode - ALWAYS at bottom */
+        /* Overlay becomes sticky in fit-mode - PERFECTLY FIXED AT BOTTOM */
         .split-preview.web-fit-mode .preview-overlay {
             position: sticky !important;
             bottom: 0 !important;
@@ -1235,6 +1236,8 @@
             width: 100% !important;
             min-width: 100% !important;
             background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%) !important;
+            max-height: 100% !important;
+            top: auto !important;
         }
 
         /* ===================== FULLSCREEN OVERRIDES ===================== */
@@ -4498,7 +4501,10 @@
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
+                        // KEY FIX: Scroll to top to ensure overlay is positioned correctly
                         this.preview.scrollTop = 0;
+                        // Force reflow to ensure sticky positioning works
+                        void this.preview.offsetHeight;
                     } else {
                         img.style.objectFit = 'contain';
                         img.style.width = '100%';
