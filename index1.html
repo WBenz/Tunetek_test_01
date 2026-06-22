@@ -643,7 +643,7 @@
             }
         }
 
-        /* ===================== HERO - SERVICE ICONS GRID ===================== */
+        /* ===================== HERO - ANIMATED MORPHING TEXT + PARTICLES ===================== */
         #hero {
             position: relative;
             min-height: 100vh;
@@ -655,15 +655,26 @@
             background: linear-gradient(145deg, var(--tertiary-color) 0%, var(--accent-color) 100%);
         }
 
-        .hero-container {
+        /* ===== Particles Canvas ===== */
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 1200px;
-            padding: 40px 30px;
-            position: relative;
-            z-index: 2;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        /* ===== Hero Badge ===== */
+        /* ===== Hero Content ===== */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 40px 20px;
+        }
+
         .hero-badge {
             display: inline-block;
             padding: 6px 20px;
@@ -674,156 +685,96 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             animation: fadeInDown 0.8s ease;
         }
 
-        /* ===== Hero Text ===== */
-        .hero-text {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .hero-text h1 {
+        .hero-headline {
             font-family: var(--font-heading);
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 800;
             line-height: 1.1;
             color: var(--text-color);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            animation: fadeInUp 0.8s ease 0.2s both;
         }
 
-        .hero-text h1 .highlight {
+        .hero-headline .highlight {
             color: var(--secondary-color);
+            position: relative;
         }
 
-        .hero-text p {
+        .hero-headline .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+            animation: underline-grow 1s ease 1s both;
+        }
+
+        /* ===== Morphing Text ===== */
+        .morphing-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .morphing-label {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--text-color);
+            opacity: 0.6;
+            font-weight: 500;
+        }
+
+        .morphing-text {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            font-weight: 700;
+            color: var(--secondary-color);
+            min-width: 140px;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            padding: 0 4px;
+        }
+
+        .morphing-text .word {
+            display: inline-block;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            white-space: nowrap;
+        }
+
+        .morphing-text .word.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .morphing-text .word.exit {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        /* ===== Hero Subtitle ===== */
+        .hero-subtitle {
             font-size: clamp(1rem, 1.4vw, 1.2rem);
             color: var(--text-color);
             opacity: 0.7;
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 32px;
             line-height: 1.6;
-        }
-
-        /* ===== Service Icons Grid ===== */
-        .hero-services {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 900px;
-            margin: 0 auto 40px;
-        }
-
-        .hero-service-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 32px 24px;
-            text-align: center;
-            border: 1px solid var(--border-light);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 0.8s ease both;
-        }
-
-        .hero-service-card:nth-child(1) { animation-delay: 0.2s; }
-        .hero-service-card:nth-child(2) { animation-delay: 0.4s; }
-        .hero-service-card:nth-child(3) { animation-delay: 0.6s; }
-
-        .hero-service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .hero-service-card:nth-child(1)::before {
-            background: linear-gradient(90deg, var(--graphic-color), #ff9a44);
-        }
-        .hero-service-card:nth-child(2)::before {
-            background: linear-gradient(90deg, var(--motion-color), #a29bfe);
-        }
-        .hero-service-card:nth-child(3)::before {
-            background: linear-gradient(90deg, var(--web-color), #55efc4);
-        }
-
-        .hero-service-card:hover::before {
-            opacity: 1;
-        }
-
-        .hero-service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-            border-color: var(--secondary-color);
-        }
-
-        .hero-service-card .icon-wrapper {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 2rem;
-            transition: all 0.4s ease;
-        }
-
-        .hero-service-card:nth-child(1) .icon-wrapper {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
-            color: var(--graphic-color);
-        }
-
-        .hero-service-card:nth-child(2) .icon-wrapper {
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(108, 92, 231, 0.05));
-            color: var(--motion-color);
-        }
-
-        .hero-service-card:nth-child(3) .icon-wrapper {
-            background: linear-gradient(135deg, rgba(0, 184, 148, 0.15), rgba(0, 184, 148, 0.05));
-            color: var(--web-color);
-        }
-
-        [data-theme="dark"] .hero-service-card:nth-child(1) .icon-wrapper {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(255, 107, 0, 0.05));
-        }
-
-        [data-theme="dark"] .hero-service-card:nth-child(2) .icon-wrapper {
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.25), rgba(108, 92, 231, 0.05));
-        }
-
-        [data-theme="dark"] .hero-service-card:nth-child(3) .icon-wrapper {
-            background: linear-gradient(135deg, rgba(0, 184, 148, 0.25), rgba(0, 184, 148, 0.05));
-        }
-
-        .hero-service-card:hover .icon-wrapper {
-            transform: scale(1.1) rotate(-5deg);
-        }
-
-        .hero-service-card h3 {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 8px;
-        }
-
-        .hero-service-card:nth-child(1) h3 { color: var(--graphic-color); }
-        .hero-service-card:nth-child(2) h3 { color: var(--motion-color); }
-        .hero-service-card:nth-child(3) h3 { color: var(--web-color); }
-
-        .hero-service-card p {
-            font-size: 0.85rem;
-            color: var(--text-color);
-            opacity: 0.6;
-            line-height: 1.5;
-            margin: 0;
+            animation: fadeInUp 0.8s ease 0.6s both;
         }
 
         /* ===== Hero Actions ===== */
@@ -887,87 +838,6 @@
             border-color: var(--secondary-color);
         }
 
-        /* ===== Floating Background Elements ===== */
-        .hero-bg-shapes {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .hero-bg-shapes .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.04;
-        }
-
-        .shape-1 {
-            width: 400px;
-            height: 400px;
-            top: -100px;
-            right: -100px;
-            background: var(--graphic-color);
-            animation: float-shape 25s ease-in-out infinite;
-        }
-
-        .shape-2 {
-            width: 300px;
-            height: 300px;
-            bottom: -80px;
-            left: -80px;
-            background: var(--motion-color);
-            animation: float-shape 20s ease-in-out infinite reverse;
-        }
-
-        .shape-3 {
-            width: 200px;
-            height: 200px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--web-color);
-            animation: float-shape 18s ease-in-out infinite 2s;
-        }
-
-        /* ===== Animations ===== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes float-shape {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(50px, -50px) scale(1.1);
-            }
-            66% {
-                transform: translate(-40px, 40px) scale(0.9);
-            }
-        }
-
         /* ===== Scroll Indicator ===== */
         .scroll-indicator {
             position: absolute;
@@ -1013,6 +883,38 @@
             animation: scroll-wheel 2s infinite;
         }
 
+        /* ===== Animations ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes underline-grow {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
         @keyframes bounce {
             0%, 100% {
                 transform: translateX(-50%) translateY(0);
@@ -1037,102 +939,90 @@
             }
         }
 
-        /* ===== Responsive Hero ===== */
-        @media (max-width: 992px) {
-            .hero-services {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
+        /* ===== Floating Orbs ===== */
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+            background: var(--secondary-color);
+            animation: float-orb 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+            background: var(--web-color);
+            animation: float-orb 25s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--motion-color);
+            animation: float-orb 18s ease-in-out infinite 2s;
+        }
+
+        @keyframes float-orb {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
             }
-            .hero-service-card {
-                padding: 24px 16px;
+            33% {
+                transform: translate(40px, -40px) scale(1.1);
             }
-            .hero-service-card .icon-wrapper {
-                width: 60px;
-                height: 60px;
-                font-size: 1.6rem;
-            }
-            .hero-service-card h3 {
-                font-size: 1rem;
-            }
-            .hero-service-card p {
-                font-size: 0.75rem;
+            66% {
+                transform: translate(-30px, 30px) scale(0.9);
             }
         }
 
+        /* ===== Responsive Hero ===== */
         @media (max-width: 768px) {
-            .hero-services {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
+            .morphing-container {
+                flex-direction: column;
+                gap: 4px;
             }
-            .hero-service-card {
-                padding: 20px 14px;
-            }
-            .hero-service-card .icon-wrapper {
-                width: 50px;
-                height: 50px;
-                font-size: 1.3rem;
-                margin-bottom: 10px;
-            }
-            .hero-service-card h3 {
-                font-size: 0.9rem;
-            }
-            .hero-service-card p {
-                font-size: 0.7rem;
-            }
-            .hero-text h1 {
-                font-size: 2rem;
-            }
-            .scroll-indicator {
-                display: none;
+            .morphing-text {
+                min-width: 120px;
             }
             .hero-actions .btn {
                 padding: 12px 24px;
                 font-size: 0.8rem;
             }
-            .shape-1, .shape-2, .shape-3 {
+            .orb-1, .orb-2, .orb-3 {
+                display: none;
+            }
+            .scroll-indicator {
                 display: none;
             }
         }
 
         @media (max-width: 480px) {
-            .hero-services {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
+            .hero-headline {
+                font-size: 2rem;
             }
-            .hero-service-card {
-                padding: 16px 12px;
-                border-radius: 14px;
+            .morphing-text {
+                min-width: 100px;
+                font-size: 0.9rem;
             }
-            .hero-service-card .icon-wrapper {
-                width: 42px;
-                height: 42px;
-                font-size: 1.1rem;
-                margin-bottom: 8px;
-            }
-            .hero-service-card h3 {
-                font-size: 0.8rem;
-            }
-            .hero-service-card p {
-                font-size: 0.6rem;
-            }
-            .hero-text h1 {
-                font-size: 1.6rem;
-            }
-            .hero-text p {
-                font-size: 0.85rem;
+            .morphing-label {
+                font-size: 0.9rem;
             }
             .hero-badge {
                 font-size: 0.6rem;
                 padding: 4px 14px;
-            }
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-            .hero-actions .btn {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
             }
         }
 
@@ -3035,44 +2925,40 @@
 
     <!-- ==================== HERO ==================== -->
     <section id="hero" aria-label="Hero">
-        <!-- Background Shapes -->
-        <div class="hero-bg-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-        </div>
+        <!-- Particles Canvas -->
+        <canvas id="particles-canvas"></canvas>
 
-        <div class="hero-container">
+        <!-- Floating Orbs -->
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+
+        <div class="hero-content">
             <!-- Badge -->
-            <div class="hero-badge" style="display: block; margin: 0 auto 20px; text-align: center; width: fit-content;" data-i18n="hero.badge">✦ Creative Studio</div>
+            <div class="hero-badge" data-i18n="hero.badge">✦ Creative Studio</div>
 
-            <!-- Hero Text -->
-            <div class="hero-text">
-                <h1>
-                    We craft<br>
-                    <span class="highlight">design that matters</span>
-                </h1>
-                <p data-i18n="hero.subtitle">Creative design solutions for brands that want to stand out.</p>
+            <!-- Headline -->
+            <h1 class="hero-headline">
+                We create<br>
+                <span class="highlight">design that</span>
+            </h1>
+
+            <!-- Morphing Text -->
+            <div class="morphing-container">
+                <span class="morphing-label">that</span>
+                <span class="morphing-text" id="morphing-text">
+                    <span class="word active" data-word="Inspires">Inspires</span>
+                    <span class="word" data-word="Connects">Connects</span>
+                    <span class="word" data-word="Engages">Engages</span>
+                    <span class="word" data-word="Transforms">Transforms</span>
+                    <span class="word" data-word="Delivers">Delivers</span>
+                </span>
             </div>
 
-            <!-- Service Icons Grid -->
-            <div class="hero-services">
-                <div class="hero-service-card">
-                    <div class="icon-wrapper"><i class="fas fa-paint-brush"></i></div>
-                    <h3>Graphic Design</h3>
-                    <p>Visual identities that tell your story</p>
-                </div>
-                <div class="hero-service-card">
-                    <div class="icon-wrapper"><i class="fas fa-film"></i></div>
-                    <h3>Motion Design</h3>
-                    <p>Animations that captivate and engage</p>
-                </div>
-                <div class="hero-service-card">
-                    <div class="icon-wrapper"><i class="fas fa-code"></i></div>
-                    <h3>Web Design</h3>
-                    <p>Digital experiences that convert</p>
-                </div>
-            </div>
+            <!-- Subtitle -->
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                Creative design solutions for brands that want to stand out.
+            </p>
 
             <!-- Actions -->
             <div class="hero-actions">
@@ -3455,6 +3341,186 @@
 
     <!-- ==================== SCRIPTS ==================== -->
     <script>
+        // =====================================================================
+        // PARTICLES
+        // =====================================================================
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 80;
+            let mouseX = null;
+            let mouseY = null;
+
+            function init() {
+                resize();
+                createParticles();
+                animate();
+                window.addEventListener('resize', resize);
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseleave', onMouseLeave);
+            }
+
+            function resize() {
+                const hero = document.getElementById('hero');
+                width = hero.offsetWidth;
+                height = hero.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            function createParticles() {
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: Math.random() * 3 + 1,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5,
+                        opacity: Math.random() * 0.3 + 0.1
+                    });
+                }
+            }
+
+            function onMouseMove(e) {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+            }
+
+            function onMouseLeave() {
+                mouseX = null;
+                mouseY = null;
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Get theme colors
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                const particleColor = isDark ? '255, 255, 255' : '0, 0, 0';
+                const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim() || '#ff6b00';
+
+                particles.forEach((p, i) => {
+                    // Update position
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    // Mouse interaction
+                    if (mouseX !== null && mouseY !== null) {
+                        const dx = mouseX - p.x;
+                        const dy = mouseY - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            const force = (150 - dist) / 150;
+                            p.x -= dx * force * 0.02;
+                            p.y -= dy * force * 0.02;
+                        }
+                    }
+
+                    // Wrap around
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    // Draw particle
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${particleColor}, ${p.opacity})`;
+                    ctx.fill();
+                });
+
+                // Draw connections
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(${particleColor}, ${0.06 * (1 - dist / 120)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            // Re-initialize on theme change
+            const observer = new MutationObserver(() => {
+                resize();
+                createParticles();
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+            init();
+        })();
+
+        // =====================================================================
+        // MORPHING TEXT
+        // =====================================================================
+        (function() {
+            const container = document.getElementById('morphing-text');
+            if (!container) return;
+
+            const words = container.querySelectorAll('.word');
+            let currentIndex = 0;
+            let interval = null;
+
+            function morphText() {
+                // Remove active from current
+                words.forEach(w => w.classList.remove('active', 'exit'));
+                
+                // Add exit to current
+                words[currentIndex].classList.add('exit');
+                
+                // Move to next
+                const nextIndex = (currentIndex + 1) % words.length;
+                
+                // After exit animation, show next
+                setTimeout(() => {
+                    words[currentIndex].classList.remove('exit');
+                    words[nextIndex].classList.add('active');
+                    currentIndex = nextIndex;
+                }, 500);
+            }
+
+            function startMorphing() {
+                // Set initial active
+                words[0].classList.add('active');
+                currentIndex = 0;
+                
+                // Start interval
+                if (interval) clearInterval(interval);
+                interval = setInterval(morphText, 3000);
+            }
+
+            // Start when visible
+            const hero = document.getElementById('hero');
+            if (hero) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startMorphing();
+                        }
+                    });
+                }, { threshold: 0.1 });
+                observer.observe(hero);
+            }
+
+            // Also start immediately if already visible
+            setTimeout(startMorphing, 1000);
+        })();
+
         // =====================================================================
         // CONSTANTS
         // =====================================================================
