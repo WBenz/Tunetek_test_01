@@ -2218,7 +2218,7 @@
             align-items: center;
         }
 
-        /* ===================== ABOUT ===================== */
+        /* ===================== ABOUT SECTION ===================== */
         #about {
             background-color: var(--accent-color);
         }
@@ -2253,14 +2253,158 @@
             font-size: 1.1rem;
         }
 
-        .about-content p {
+        /* ===== QUOTE ===== */
+        .about-quote {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+            padding: 16px 20px;
+            margin: 12px 0 20px;
+            border-left: 4px solid var(--secondary-color);
+            background: var(--card-bg);
+            border-radius: 8px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        /* ===== TIMELINE ===== */
+        .about-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 16px 0 20px;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-year {
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+            min-width: 48px;
+            font-family: var(--font-heading);
+        }
+
+        .timeline-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            flex-shrink: 0;
+        }
+
+        .timeline-text {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .timeline-text strong {
+            color: var(--secondary-color);
+        }
+
+        /* ===== BADGES ===== */
+        .about-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 10px;
+            margin: 16px 0 20px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 6px 4px;
+        }
+
+        .badge-icon {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+
+        .badge-number {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-family: var(--font-heading);
+            line-height: 1.2;
+        }
+
+        .badge-label {
+            font-size: 0.6rem;
+            color: var(--text-color);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-weight: 600;
+        }
+
+        /* ===== CERTIFICATION BADGES ===== */
+        .about-certifications {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 16px 0 20px;
+        }
+
+        .cert-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            border: 1px solid var(--border-light);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: all var(--transition);
+        }
+
+        .cert-badge:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .cert-badge .cert-icon {
+            font-size: 1.1rem;
+        }
+
+        /* ===== ABOUT DESCRIPTION ===== */
+        .about-content .about-desc {
             color: var(--text-color);
             line-height: 1.8;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             text-align: justify;
             text-justify: inter-word;
         }
 
+        .about-content .about-desc:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* ===== RESPONSIVE ABOUT ===== */
         @media (max-width: 768px) {
             .about-grid {
                 grid-template-columns: 1fr;
@@ -2270,15 +2414,82 @@
                 max-width: 250px;
                 margin: 0 auto;
             }
-            .about-content p {
-                text-align: justify;
-                text-justify: inter-word;
-            }
             .about-content h3 {
                 text-align: center;
             }
             .about-content .role {
                 text-align: center;
+            }
+            .about-quote {
+                text-align: center;
+                border-left: none;
+                border-top: 4px solid var(--secondary-color);
+                padding: 16px;
+            }
+            .about-timeline {
+                padding: 12px 16px;
+            }
+            .timeline-item {
+                gap: 10px;
+            }
+            .timeline-year {
+                font-size: 0.75rem;
+                min-width: 40px;
+            }
+            .timeline-text {
+                font-size: 0.8rem;
+            }
+            .about-badges {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+                padding: 12px;
+            }
+            .badge-icon {
+                font-size: 1.2rem;
+            }
+            .badge-number {
+                font-size: 0.9rem;
+            }
+            .badge-label {
+                font-size: 0.5rem;
+            }
+            .about-certifications {
+                justify-content: center;
+            }
+            .cert-badge {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+            }
+            .cert-badge .cert-icon {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-badges {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
+                padding: 10px;
+            }
+            .badge-icon {
+                font-size: 1rem;
+            }
+            .badge-number {
+                font-size: 0.8rem;
+            }
+            .badge-label {
+                font-size: 0.45rem;
+            }
+            .about-quote {
+                font-size: 0.95rem;
+                padding: 12px 16px;
+            }
+            .cert-badge {
+                font-size: 0.6rem;
+                padding: 4px 10px;
+            }
+            .cert-badge .cert-icon {
+                font-size: 0.8rem;
             }
         }
 
@@ -2908,12 +3119,97 @@
                 <div class="about-content fade-in fade-in-delay-1">
                     <h3 data-i18n="about.name">Wassef Ben Slimane</h3>
                     <span class="role" data-i18n="about.role">Lead Designer & Creative Director</span>
-                    
-                    <p data-i18n="about.desc1">
-                        With over 10 years of experience in graphic, motion, and web design, Wassef Ben Slimane founded Tunetek Studio Design to blend artistic creativity with technical excellence.
+
+                    <!-- Quote -->
+                    <div class="about-quote" data-i18n="about.quote">
+                        "Design is my language. Gaming is my passion. AI is my future."
+                    </div>
+
+                    <!-- Statistics Badges -->
+                    <div class="about-badges">
+                        <div class="badge-item">
+                            <span class="badge-icon">⏱️</span>
+                            <span class="badge-number">10+</span>
+                            <span class="badge-label" data-i18n="about.badge.years">Years Experience</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="badge-icon">🎨</span>
+                            <span class="badge-number">200+</span>
+                            <span class="badge-label" data-i18n="about.badge.graphic">Graphic Designs</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="badge-icon">🎬</span>
+                            <span class="badge-number">50+</span>
+                            <span class="badge-label" data-i18n="about.badge.motion">Motion Videos</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="badge-icon">🌐</span>
+                            <span class="badge-number">30+</span>
+                            <span class="badge-label" data-i18n="about.badge.web">Websites Built</span>
+                        </div>
+                        <div class="badge-item">
+                            <span class="badge-icon">🌍</span>
+                            <span class="badge-number">15+</span>
+                            <span class="badge-label" data-i18n="about.badge.clients">Clients Served</span>
+                        </div>
+                    </div>
+
+                    <!-- Journey Timeline -->
+                    <div class="about-timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-year">2014</span>
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-text" data-i18n="about.timeline.2014">Started <strong>Design Career</strong></span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2016</span>
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-text" data-i18n="about.timeline.2016">Founded <strong>Tunetek Studio</strong></span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2018</span>
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-text" data-i18n="about.timeline.2018">Became <strong>Adobe Certified Trainer</strong></span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2020</span>
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-text" data-i18n="about.timeline.2020">Joined <strong>Capcom</strong> as Ambassador</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2022</span>
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-text" data-i18n="about.timeline.2022">Certified <strong>Unreal Engine 5</strong> Game Designer</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2024</span>
+                            <span class="timeline-dot"></span>
+                            <span class="timeline-text" data-i18n="about.timeline.2024">Google Certified <strong>Generative AI</strong> Engineer</span>
+                        </div>
+                    </div>
+
+                    <!-- Certification Badges -->
+                    <div class="about-certifications">
+                        <span class="cert-badge">
+                            <span class="cert-icon">🎮</span> Capcom Ambassador
+                        </span>
+                        <span class="cert-badge">
+                            <span class="cert-icon">🎓</span> Adobe Certified Trainer
+                        </span>
+                        <span class="cert-badge">
+                            <span class="cert-icon">⚡</span> Unreal Engine 5
+                        </span>
+                        <span class="cert-badge">
+                            <span class="cert-icon">🤖</span> Google Gen AI Engineer
+                        </span>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="about-desc" data-i18n="about.desc1">
+                        A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I've had the privilege of working with clients across <strong>France, Germany, Japan, USA, Hong Kong, and Malaysia</strong> — bringing a global perspective to every project.
                     </p>
-                    <p data-i18n="about.desc2">
-                        After working with leading design agencies worldwide, he established the studio in 2016, which has since become known for innovative design solutions that are both visually appealing and functionally effective.
+                    <p class="about-desc" data-i18n="about.desc2">
+                        Beyond design, I'm deeply committed to giving back. I've served in numerous charitable volunteer initiatives and currently act as <strong>Treasurer in a sports association</strong> — because I believe great design is about more than aesthetics; it's about making a positive impact.
                     </p>
                 </div>
             </div>
@@ -3425,8 +3721,20 @@
                 'about.title': 'About the Founder',
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Lead Designer & Creative Director',
-                'about.desc1': 'With over 10 years of experience in graphic, motion, and web design, Wassef Ben Slimane founded Tunetek Studio Design to blend artistic creativity with technical excellence.',
-                'about.desc2': 'After working with leading design agencies worldwide, he established the studio in 2016, which has since become known for innovative design solutions that are both visually appealing and functionally effective.',
+                'about.quote': '"Design is my language. Gaming is my passion. AI is my future."',
+                'about.badge.years': 'Years Experience',
+                'about.badge.graphic': 'Graphic Designs',
+                'about.badge.motion': 'Motion Videos',
+                'about.badge.web': 'Websites Built',
+                'about.badge.clients': 'Clients Served',
+                'about.timeline.2014': 'Started <strong>Design Career</strong>',
+                'about.timeline.2016': 'Founded <strong>Tunetek Studio</strong>',
+                'about.timeline.2018': 'Became <strong>Adobe Certified Trainer</strong>',
+                'about.timeline.2020': 'Joined <strong>Capcom</strong> as Ambassador',
+                'about.timeline.2022': 'Certified <strong>Unreal Engine 5</strong> Game Designer',
+                'about.timeline.2024': 'Google Certified <strong>Generative AI</strong> Engineer',
+                'about.desc1': 'A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I\'ve had the privilege of working with clients across <strong>France, Germany, Japan, USA, Hong Kong, and Malaysia</strong> — bringing a global perspective to every project.',
+                'about.desc2': 'Beyond design, I\'m deeply committed to giving back. I\'ve served in numerous charitable volunteer initiatives and currently act as <strong>Treasurer in a sports association</strong> — because I believe great design is about more than aesthetics; it\'s about making a positive impact.',
                 'contact.title': 'Get In Touch',
                 'contact.subtitle': 'Have a project in mind? We\'d love to hear about it.',
                 'contact.info.title': 'Contact Information',
@@ -3478,8 +3786,20 @@
                 'about.title': 'À propos du Fondateur',
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Designer Principal & Directeur Créatif',
-                'about.desc1': 'Avec plus de 10 ans d\'expérience en design graphique, motion et web, Wassef Ben Slimane a fondé Tunetek Studio Design pour allier créativité artistique et excellence technique.',
-                'about.desc2': 'Après avoir travaillé avec des agences de design de premier plan dans le monde entier, il a créé le studio en 2016, qui est depuis devenu connu pour ses solutions de design innovantes à la fois visuellement attrayantes et fonctionnellement efficaces.',
+                'about.quote': '"Le design est mon langage. Le gaming est ma passion. L\'IA est mon futur."',
+                'about.badge.years': "Années d'Expérience",
+                'about.badge.graphic': 'Designs Graphiques',
+                'about.badge.motion': 'Vidéos Motion',
+                'about.badge.web': 'Sites Web Créés',
+                'about.badge.clients': 'Clients Servis',
+                'about.timeline.2014': 'Début de la <strong>Carrière en Design</strong>',
+                'about.timeline.2016': 'Fondation de <strong>Tunetek Studio</strong>',
+                'about.timeline.2018': 'Devenu <strong>Formateur Certifié Adobe</strong>',
+                'about.timeline.2020': 'Rejoint <strong>Capcom</strong> en tant qu\'Ambassadeur',
+                'about.timeline.2022': 'Certifié <strong>Unreal Engine 5</strong> Game Designer',
+                'about.timeline.2024': 'Ingénieur <strong>IA Générative</strong> Certifié Google',
+                'about.desc1': 'Un créatif polyvalent avec plus de 10 ans d\'expérience à la croisée du design, du gaming et de l\'IA. Basé en Tunisie, j\'ai eu le privilège de travailler avec des clients à travers <strong>la France, l\'Allemagne, le Japon, les États-Unis, Hong Kong et la Malaisie</strong> — apportant une perspective globale à chaque projet.',
+                'about.desc2': 'Au-delà du design, je suis profondément engagé à redonner. J\'ai participé à de nombreuses initiatives bénévoles caritatives et je suis actuellement <strong>Trésorier dans une association sportive</strong> — parce que je crois qu\'un bon design va au-delà de l\'esthétique ; il s\'agit d\'avoir un impact positif.',
                 'contact.title': 'Contactez-nous',
                 'contact.subtitle': 'Vous avez un projet en tête ? Nous serions ravis d\'en discuter.',
                 'contact.info.title': 'Informations de contact',
