@@ -1198,7 +1198,7 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* ===================== WEB FIT MODE - OVERLAY PERFECTLY FIXED ===================== */
+        /* ===================== WEB FIT MODE ===================== */
         .split-preview.web-fit-mode {
             overflow: auto !important;
             align-items: flex-start !important;
@@ -1221,7 +1221,6 @@
             display: block !important;
         }
 
-        /* Overlay becomes sticky in fit-mode - PERFECTLY FIXED AT BOTTOM */
         .split-preview.web-fit-mode .preview-overlay {
             position: sticky !important;
             bottom: 0 !important;
@@ -1279,7 +1278,7 @@
             display: none !important;
         }
 
-        /* ===================== CONTROLS - Always visible in preview ===================== */
+        /* ===================== CONTROLS - Desktop ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1416,6 +1415,199 @@
 
         .preview-controls .web-controls-group .divider {
             display: inline-block;
+        }
+
+        /* ===================== RESPONSIVE CONTROLS - MOVED LOWER ON MOBILE ===================== */
+        @media (max-width: 992px) {
+            .preview-controls {
+                bottom: 70px;
+                padding: 6px 12px;
+            }
+            .preview-controls button {
+                width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
+            }
+            .preview-controls .video-progress .progress-bar {
+                width: 60px;
+            }
+            .split-preview:fullscreen .preview-controls {
+                bottom: 30px !important;
+                padding: 6px 12px !important;
+            }
+            .split-preview:fullscreen .preview-controls button {
+                width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .split-filters {
+                gap: 6px;
+            }
+            .split-filter-btn {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .split-preview {
+                min-height: 280px;
+                max-height: 350px;
+            }
+            .split-preview.web-fit-mode {
+                max-height: 350px;
+                min-height: 280px;
+            }
+            .split-list {
+                max-height: 350px;
+                padding: 12px 16px;
+            }
+            .split-list .list-item {
+                padding: 10px 12px;
+                gap: 12px;
+            }
+            .split-list .list-item .thumb {
+                width: 44px;
+                height: 34px;
+            }
+            .search-wrapper input {
+                padding: 8px 16px 8px 36px;
+                font-size: 0.8rem;
+            }
+            .preview-controls .divider {
+                height: 20px;
+                margin: 0 4px;
+            }
+            .split-preview .preview-overlay {
+                padding: 16px 20px;
+            }
+            .split-preview .preview-overlay h3 {
+                font-size: 1.1rem;
+            }
+            /* Move controls lower on tablet */
+            .preview-controls {
+                bottom: 60px !important;
+                padding: 6px 12px !important;
+                gap: 6px !important;
+            }
+            .preview-controls button {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 0.7rem !important;
+            }
+            .preview-controls .video-progress .progress-bar {
+                width: 50px !important;
+            }
+            .preview-controls .video-progress .time {
+                font-size: 0.6rem !important;
+                min-width: 30px !important;
+            }
+            .split-preview:fullscreen .preview-controls {
+                bottom: 25px !important;
+                padding: 5px 10px !important;
+            }
+            .split-preview:fullscreen .preview-controls button {
+                width: 26px;
+                height: 26px;
+                font-size: 0.65rem;
+            }
+            /* Controls in fit-mode on tablet */
+            .split-preview.web-fit-mode .preview-controls {
+                bottom: 80px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .split-filter-btn {
+                padding: 6px 10px;
+                font-size: 0.65rem;
+            }
+            .split-filter-btn .count {
+                display: none;
+            }
+            .split-preview {
+                min-height: 220px;
+                max-height: 280px;
+            }
+            .split-preview.web-fit-mode {
+                max-height: 280px;
+                min-height: 220px;
+            }
+            .split-preview .preview-overlay {
+                padding: 14px 18px;
+            }
+            .split-preview .preview-overlay h3 {
+                font-size: 1rem;
+            }
+            .split-list {
+                max-height: 300px;
+                padding: 8px 12px;
+            }
+            .split-list .list-item {
+                padding: 8px 10px;
+                gap: 10px;
+            }
+            .split-list .list-item .thumb {
+                width: 36px;
+                height: 28px;
+            }
+            .search-wrapper {
+                min-width: 120px;
+            }
+            .search-wrapper input {
+                padding: 6px 12px 6px 32px;
+                font-size: 0.7rem;
+            }
+            /* Move controls even lower on mobile - just below title overlay */
+            .preview-controls {
+                bottom: 70px !important;
+                padding: 4px 10px !important;
+                gap: 4px !important;
+                max-width: 92% !important;
+                flex-wrap: nowrap !important;
+            }
+            .preview-controls button {
+                width: 24px !important;
+                height: 24px !important;
+                font-size: 0.6rem !important;
+                min-width: 24px !important;
+            }
+            .preview-controls .video-progress .progress-bar {
+                width: 35px !important;
+                min-width: 30px !important;
+            }
+            .preview-controls .video-progress .time {
+                font-size: 0.55rem !important;
+                min-width: 24px !important;
+            }
+            .preview-controls .video-progress {
+                gap: 4px !important;
+                margin: 0 4px !important;
+            }
+            .preview-controls .divider {
+                height: 14px !important;
+                margin: 0 2px !important;
+            }
+            .preview-controls .web-fit-btn {
+                width: 24px !important;
+                height: 24px !important;
+                font-size: 0.6rem !important;
+                min-width: 24px !important;
+            }
+            .split-preview.web-fit-mode .preview-controls {
+                bottom: 85px !important;
+            }
+            .split-preview:fullscreen .preview-controls {
+                bottom: 20px !important;
+                padding: 4px 8px !important;
+                gap: 4px !important;
+            }
+            .split-preview:fullscreen .preview-controls button {
+                width: 22px;
+                height: 22px;
+                font-size: 0.55rem;
+                min-width: 22px;
+            }
         }
 
         .split-preview .video-badge {
@@ -1588,185 +1780,6 @@
         .split-list::-webkit-scrollbar-thumb {
             background: var(--secondary-color);
             border-radius: 4px;
-        }
-
-        @media (max-width: 992px) {
-            .split-container {
-                grid-template-columns: 1fr;
-                min-height: auto;
-            }
-            .split-preview {
-                min-height: 350px;
-                max-height: 400px;
-            }
-            .split-preview.web-fit-mode {
-                max-height: 400px;
-                min-height: 350px;
-            }
-            .split-list {
-                max-height: 400px;
-            }
-            .split-preview .preview-overlay {
-                padding: 20px 24px;
-            }
-            .preview-controls {
-                bottom: 70px;
-                padding: 6px 12px;
-            }
-            .preview-controls button {
-                width: 30px;
-                height: 30px;
-                font-size: 0.75rem;
-            }
-            .preview-controls .video-progress .progress-bar {
-                width: 60px;
-            }
-            .search-wrapper {
-                min-width: 150px;
-                max-width: 100%;
-            }
-            .split-controls {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 30px !important;
-                padding: 6px 12px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 30px;
-                height: 30px;
-                font-size: 0.75rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .split-filters {
-                gap: 6px;
-            }
-            .split-filter-btn {
-                padding: 8px 14px;
-                font-size: 0.75rem;
-            }
-            .split-preview {
-                min-height: 280px;
-                max-height: 350px;
-            }
-            .split-preview.web-fit-mode {
-                max-height: 350px;
-                min-height: 280px;
-            }
-            .split-list {
-                max-height: 350px;
-                padding: 12px 16px;
-            }
-            .split-list .list-item {
-                padding: 10px 12px;
-                gap: 12px;
-            }
-            .split-list .list-item .thumb {
-                width: 44px;
-                height: 34px;
-            }
-            .search-wrapper input {
-                padding: 8px 16px 8px 36px;
-                font-size: 0.8rem;
-            }
-            .preview-controls .divider {
-                height: 20px;
-                margin: 0 4px;
-            }
-            .split-preview .preview-overlay {
-                padding: 16px 20px;
-            }
-            .split-preview .preview-overlay h3 {
-                font-size: 1.1rem;
-            }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 25px !important;
-                padding: 5px 10px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .split-filter-btn {
-                padding: 6px 10px;
-                font-size: 0.65rem;
-            }
-            .split-filter-btn .count {
-                display: none;
-            }
-            .split-preview {
-                min-height: 220px;
-                max-height: 280px;
-            }
-            .split-preview.web-fit-mode {
-                max-height: 280px;
-                min-height: 220px;
-            }
-            .split-preview .preview-overlay {
-                padding: 14px 18px;
-            }
-            .split-preview .preview-overlay h3 {
-                font-size: 1rem;
-            }
-            .split-list {
-                max-height: 300px;
-                padding: 8px 12px;
-            }
-            .split-list .list-item {
-                padding: 8px 10px;
-                gap: 10px;
-            }
-            .split-list .list-item .thumb {
-                width: 36px;
-                height: 28px;
-            }
-            .search-wrapper {
-                min-width: 120px;
-            }
-            .search-wrapper input {
-                padding: 6px 12px 6px 32px;
-                font-size: 0.7rem;
-            }
-            .preview-controls {
-                bottom: 60px;
-                padding: 4px 10px;
-                gap: 6px;
-                flex-wrap: wrap;
-                justify-content: center;
-                max-width: 90%;
-            }
-            .preview-controls button {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
-            }
-            .preview-controls .video-progress .progress-bar {
-                width: 40px;
-            }
-            .preview-controls .divider {
-                height: 16px;
-                margin: 0 2px;
-            }
-            .split-preview.web-fit-mode .preview-controls {
-                bottom: 75px !important;
-            }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 20px !important;
-                padding: 4px 8px !important;
-                gap: 4px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 22px;
-                height: 22px;
-                font-size: 0.55rem;
-            }
         }
 
         /* ===================== GRAPHIC SLIDESHOW NAVIGATION ===================== */
@@ -4501,9 +4514,7 @@
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
-                        // KEY FIX: Scroll to top to ensure overlay is positioned correctly
                         this.preview.scrollTop = 0;
-                        // Force reflow to ensure sticky positioning works
                         void this.preview.offsetHeight;
                     } else {
                         img.style.objectFit = 'contain';
@@ -4576,7 +4587,6 @@
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                 }
-                // Reset overlay visibility
                 this.previewOverlay.style.display = 'block';
             }
 
