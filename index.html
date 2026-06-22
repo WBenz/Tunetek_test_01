@@ -2218,7 +2218,7 @@
             align-items: center;
         }
 
-        /* ===================== ABOUT SECTION - CLEAN & MINIMAL ===================== */
+        /* ===================== ABOUT - REVERTED TO ORIGINAL ===================== */
         #about {
             background-color: var(--accent-color);
         }
@@ -2227,14 +2227,29 @@
             display: grid;
             grid-template-columns: 280px 1fr;
             gap: 48px;
-            align-items: start;
+            align-items: stretch;
+        }
+
+        .about-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 50%;
         }
 
         .about-image img {
             width: 100%;
-            border-radius: 50%;
+            height: 100%;
+            object-fit: cover;
             border: 5px solid var(--secondary-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .about-content h3 {
@@ -2248,135 +2263,40 @@
         .about-content .role {
             color: var(--text-color);
             font-weight: 500;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: block;
             font-size: 1.1rem;
         }
 
-        /* ===== STATS BADGES ===== */
-        .about-badges {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 16px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-        }
-
-        .badge-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 6px 4px;
-        }
-
-        .badge-icon {
-            font-size: 1.4rem;
-            margin-bottom: 2px;
-        }
-
-        .badge-number {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--secondary-color);
-            font-family: var(--font-heading);
-            line-height: 1.2;
-        }
-
-        .badge-label {
-            font-size: 0.6rem;
-            color: var(--text-color);
-            opacity: 0.6;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            font-weight: 600;
-        }
-
-        /* ===== CERTIFICATION BADGES ===== */
-        .about-certifications {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .cert-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--card-bg);
-            border-radius: 30px;
-            border: 1px solid var(--border-light);
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-color);
-            transition: all var(--transition);
-        }
-
-        .cert-badge:hover {
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .cert-badge .cert-icon {
-            font-size: 1.1rem;
-        }
-
-        /* ===== GLOBAL REACH ===== */
-        .about-global {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        .about-global .flag {
-            font-size: 1.2rem;
-        }
-
-        .about-global .label {
-            font-weight: 600;
-            color: var(--secondary-color);
-        }
-
-        /* ===== DESCRIPTION ===== */
-        .about-content .about-desc {
+        .about-content p {
             color: var(--text-color);
             line-height: 1.8;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             text-align: justify;
             text-justify: inter-word;
         }
 
-        .about-content .about-desc:last-of-type {
+        .about-content p:last-of-type {
             margin-bottom: 0;
         }
 
-        .about-content .about-desc strong {
-            color: var(--secondary-color);
-        }
-
-        /* ===== RESPONSIVE ABOUT ===== */
         @media (max-width: 768px) {
             .about-grid {
                 grid-template-columns: 1fr;
                 gap: 32px;
+                align-items: start;
             }
             .about-image {
                 max-width: 250px;
                 margin: 0 auto;
+                height: 250px;
+            }
+            .about-image img {
+                height: 100%;
+                object-fit: cover;
+            }
+            .about-content {
+                justify-content: flex-start;
             }
             .about-content h3 {
                 text-align: center;
@@ -2384,66 +2304,16 @@
             .about-content .role {
                 text-align: center;
             }
-            .about-badges {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 6px;
-                padding: 12px;
-            }
-            .badge-icon {
-                font-size: 1.2rem;
-            }
-            .badge-number {
-                font-size: 0.9rem;
-            }
-            .badge-label {
-                font-size: 0.5rem;
-            }
-            .about-certifications {
-                justify-content: center;
-            }
-            .cert-badge {
-                font-size: 0.7rem;
-                padding: 6px 12px;
-            }
-            .cert-badge .cert-icon {
-                font-size: 0.9rem;
-            }
-            .about-global {
-                justify-content: center;
-                font-size: 0.8rem;
-                padding: 10px 14px;
+            .about-content p {
+                text-align: justify;
+                text-justify: inter-word;
             }
         }
 
         @media (max-width: 480px) {
-            .about-badges {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 4px;
-                padding: 10px;
-            }
-            .badge-icon {
-                font-size: 1rem;
-            }
-            .badge-number {
-                font-size: 0.8rem;
-            }
-            .badge-label {
-                font-size: 0.45rem;
-            }
-            .cert-badge {
-                font-size: 0.6rem;
-                padding: 4px 10px;
-            }
-            .cert-badge .cert-icon {
-                font-size: 0.8rem;
-            }
-            .about-global {
-                font-size: 0.7rem;
-                padding: 8px 12px;
-                gap: 4px;
-            }
-            .about-global .flag {
-                font-size: 1rem;
+            .about-image {
+                height: 200px;
+                max-width: 200px;
             }
         }
 
@@ -3073,65 +2943,12 @@
                 <div class="about-content fade-in fade-in-delay-1">
                     <h3 data-i18n="about.name">Wassef Ben Slimane</h3>
                     <span class="role" data-i18n="about.role">Lead Designer & Creative Director</span>
-
-                    <!-- ===== STATS BADGES ===== -->
-                    <div class="about-badges">
-                        <div class="badge-item">
-                            <span class="badge-icon">⏱️</span>
-                            <span class="badge-number">10+</span>
-                            <span class="badge-label" data-i18n="about.badge.years">Years Experience</span>
-                        </div>
-                        <div class="badge-item">
-                            <span class="badge-icon">🎨</span>
-                            <span class="badge-number">200+</span>
-                            <span class="badge-label" data-i18n="about.badge.graphic">Graphic Designs</span>
-                        </div>
-                        <div class="badge-item">
-                            <span class="badge-icon">🎬</span>
-                            <span class="badge-number">50+</span>
-                            <span class="badge-label" data-i18n="about.badge.motion">Motion Videos</span>
-                        </div>
-                        <div class="badge-item">
-                            <span class="badge-icon">🌐</span>
-                            <span class="badge-number">30+</span>
-                            <span class="badge-label" data-i18n="about.badge.web">Websites Built</span>
-                        </div>
-                        <div class="badge-item">
-                            <span class="badge-icon">🌍</span>
-                            <span class="badge-number">15+</span>
-                            <span class="badge-label" data-i18n="about.badge.clients">Clients Served</span>
-                        </div>
-                    </div>
-
-                    <!-- ===== CERTIFICATION BADGES ===== -->
-                    <div class="about-certifications">
-                        <span class="cert-badge">
-                            <span class="cert-icon">🎮</span> Capcom Ambassador
-                        </span>
-                        <span class="cert-badge">
-                            <span class="cert-icon">🎓</span> Adobe Certified Trainer
-                        </span>
-                        <span class="cert-badge">
-                            <span class="cert-icon">⚡</span> Unreal Engine 5
-                        </span>
-                        <span class="cert-badge">
-                            <span class="cert-icon">🤖</span> Google Gen AI Engineer
-                        </span>
-                    </div>
-
-                    <!-- ===== GLOBAL REACH ===== -->
-                    <div class="about-global">
-                        <span class="flag">🌍</span>
-                        <span class="label">Global Reach:</span>
-                        <span>🇹🇳 Tunisia · 🇫🇷 France · 🇩🇪 Germany · 🇯🇵 Japan · 🇺🇸 USA · 🇭🇰 Hong Kong · 🇲🇾 Malaysia</span>
-                    </div>
-
-                    <!-- ===== DESCRIPTION ===== -->
-                    <p class="about-desc" data-i18n="about.desc1">
-                        A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I've had the privilege of working with clients across <strong>France, Germany, Japan, USA, Hong Kong, and Malaysia</strong> — bringing a global perspective to every project.
+                    
+                    <p data-i18n="about.desc1">
+                        A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I've had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.
                     </p>
-                    <p class="about-desc" data-i18n="about.desc2">
-                        Beyond design, I'm deeply committed to giving back. I've served in numerous charitable volunteer initiatives and currently act as <strong>Treasurer in a sports association</strong> — because I believe great design is about more than aesthetics; it's about making a positive impact.
+                    <p data-i18n="about.desc2">
+                        Beyond design, I'm deeply committed to giving back. I've served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it's about making a positive impact.
                     </p>
                 </div>
             </div>
@@ -3643,13 +3460,8 @@
                 'about.title': 'About the Founder',
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Lead Designer & Creative Director',
-                'about.badge.years': 'Years Experience',
-                'about.badge.graphic': 'Graphic Designs',
-                'about.badge.motion': 'Motion Videos',
-                'about.badge.web': 'Websites Built',
-                'about.badge.clients': 'Clients Served',
-                'about.desc1': 'A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I\'ve had the privilege of working with clients across <strong>France, Germany, Japan, USA, Hong Kong, and Malaysia</strong> — bringing a global perspective to every project.',
-                'about.desc2': 'Beyond design, I\'m deeply committed to giving back. I\'ve served in numerous charitable volunteer initiatives and currently act as <strong>Treasurer in a sports association</strong> — because I believe great design is about more than aesthetics; it\'s about making a positive impact.',
+                'about.desc1': 'A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I\'ve had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.',
+                'about.desc2': 'Beyond design, I\'m deeply committed to giving back. I\'ve served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it\'s about making a positive impact.',
                 'contact.title': 'Get In Touch',
                 'contact.subtitle': 'Have a project in mind? We\'d love to hear about it.',
                 'contact.info.title': 'Contact Information',
@@ -3701,13 +3513,8 @@
                 'about.title': 'À propos du Fondateur',
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Designer Principal & Directeur Créatif',
-                'about.badge.years': "Années d'Expérience",
-                'about.badge.graphic': 'Designs Graphiques',
-                'about.badge.motion': 'Vidéos Motion',
-                'about.badge.web': 'Sites Web Créés',
-                'about.badge.clients': 'Clients Servis',
-                'about.desc1': 'Un créatif polyvalent avec plus de 10 ans d\'expérience à la croisée du design, du gaming et de l\'IA. Basé en Tunisie, j\'ai eu le privilège de travailler avec des clients à travers <strong>la France, l\'Allemagne, le Japon, les États-Unis, Hong Kong et la Malaisie</strong> — apportant une perspective globale à chaque projet.',
-                'about.desc2': 'Au-delà du design, je suis profondément engagé à redonner. J\'ai participé à de nombreuses initiatives bénévoles caritatives et je suis actuellement <strong>Trésorier dans une association sportive</strong> — parce que je crois qu\'un bon design va au-delà de l\'esthétique ; il s\'agit d\'avoir un impact positif.',
+                'about.desc1': 'Un créatif polyvalent avec plus de 10 ans d\'expérience à la croisée du design, du gaming et de l\'IA. Basé en Tunisie, j\'ai eu le privilège de travailler avec des clients à travers la France, l\'Allemagne, le Japon, les États-Unis, Hong Kong et la Malaisie — apportant une perspective globale à chaque projet.',
+                'about.desc2': 'Au-delà du design, je suis profondément engagé à redonner. J\'ai participé à de nombreuses initiatives bénévoles caritatives et je suis actuellement Trésorier dans une association sportive — parce que je crois qu\'un bon design va au-delà de l\'esthétique ; il s\'agit d\'avoir un impact positif.',
                 'contact.title': 'Contactez-nous',
                 'contact.subtitle': 'Vous avez un projet en tête ? Nous serions ravis d\'en discuter.',
                 'contact.info.title': 'Informations de contact',
@@ -4767,9 +4574,7 @@
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
-                        // KEY FIX: Scroll to top to ensure overlay is positioned correctly
                         this.preview.scrollTop = 0;
-                        // Force reflow to ensure sticky positioning works
                         void this.preview.offsetHeight;
                     } else {
                         img.style.objectFit = 'contain';
@@ -4842,7 +4647,6 @@
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                 }
-                // Reset overlay visibility
                 this.previewOverlay.style.display = 'block';
             }
 
