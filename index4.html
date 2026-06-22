@@ -643,7 +643,7 @@
             }
         }
 
-        /* ===================== HERO - ANIMATED MORPHING TEXT + PARTICLES ===================== */
+        /* ===================== HERO - DESIGN STUDIO DESK ===================== */
         #hero {
             position: relative;
             min-height: 100vh;
@@ -652,151 +652,683 @@
             justify-content: center;
             padding-top: var(--header-height);
             overflow: hidden;
-            background: linear-gradient(145deg, var(--tertiary-color) 0%, var(--accent-color) 100%);
+            background: var(--tertiary-color);
         }
 
-        /* ===== Particles Canvas ===== */
-        #particles-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .hero-container {
             width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* ===== Hero Content ===== */
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            max-width: 900px;
-            padding: 40px 20px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 6px 20px;
-            border-radius: 50px;
-            background: var(--secondary-color);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        .hero-headline {
-            font-family: var(--font-heading);
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            color: var(--text-color);
-            margin-bottom: 12px;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .hero-headline .highlight {
-            color: var(--secondary-color);
-            position: relative;
-        }
-
-        .hero-headline .highlight::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--secondary-color);
-            border-radius: 2px;
-            animation: underline-grow 1s ease 1s both;
-        }
-
-        /* ===== Morphing Text ===== */
-        .morphing-container {
+            height: calc(100vh - var(--header-height));
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
-        .morphing-label {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            color: var(--text-color);
-            opacity: 0.6;
-            font-weight: 500;
-        }
-
-        .morphing-text {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            font-weight: 700;
-            color: var(--secondary-color);
-            min-width: 140px;
-            display: inline-block;
-            text-align: center;
             position: relative;
-            padding: 0 4px;
+            background: linear-gradient(145deg, var(--tertiary-color) 0%, var(--accent-color) 100%);
         }
 
-        .morphing-text .word {
-            display: inline-block;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+        .hero-desk {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            position: relative;
+        }
+
+        /* ===== Desk Surface ===== */
+        .desk-surface {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            background: linear-gradient(180deg, 
+                rgba(139, 119, 101, 0.15) 0%,
+                rgba(139, 119, 101, 0.08) 60%,
+                rgba(139, 119, 101, 0.05) 100%
+            );
+            border-radius: 30px;
+            border: 1px solid var(--border-light);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.06),
+                inset 0 2px 0 rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+        }
+
+        /* ===== Desk Items ===== */
+        .desk-item {
             position: absolute;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+        }
+
+        .desk-item:hover {
+            transform: translateY(-12px) scale(1.05);
+            z-index: 10;
+        }
+
+        .desk-item .item-label {
+            position: absolute;
+            bottom: -32px;
             left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-color);
             opacity: 0;
+            transition: all 0.3s ease;
             white-space: nowrap;
+            background: var(--card-bg);
+            padding: 2px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
         }
 
-        .morphing-text .word.active {
+        .desk-item:hover .item-label {
             opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+            bottom: -36px;
         }
 
-        .morphing-text .word.exit {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.8);
+        /* ===== Laptop ===== */
+        .laptop {
+            top: 30px;
+            left: 30px;
+            width: 200px;
+            transform: rotate(-8deg);
         }
 
-        /* ===== Hero Subtitle ===== */
-        .hero-subtitle {
-            font-size: clamp(1rem, 1.4vw, 1.2rem);
+        .laptop:hover {
+            transform: rotate(-4deg) translateY(-12px) scale(1.05);
+        }
+
+        .laptop-screen {
+            width: 100%;
+            height: 130px;
+            background: #1a1a2e;
+            border-radius: 12px 12px 0 0;
+            padding: 12px;
+            position: relative;
+            border: 2px solid #2d2d44;
+            border-bottom: none;
+        }
+
+        .laptop-content {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .laptop-bar {
+            width: 60%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+        }
+
+        .laptop-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .laptop-lines span {
+            height: 3px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+        }
+
+        .laptop-lines span:nth-child(1) { width: 80%; }
+        .laptop-lines span:nth-child(2) { width: 60%; }
+        .laptop-lines span:nth-child(3) { width: 70%; }
+
+        .laptop-preview {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .preview-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .preview-dot:nth-child(2) {
+            background: var(--web-color);
+            animation: pulse-dot 2s infinite;
+        }
+
+        .laptop-base {
+            width: 80%;
+            height: 6px;
+            background: linear-gradient(180deg, #2d2d44, #1a1a2e);
+            margin: 0 auto;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* ===== Sketchbook ===== */
+        .sketchbook {
+            top: 160px;
+            left: 260px;
+            width: 150px;
+            transform: rotate(12deg);
+        }
+
+        .sketchbook:hover {
+            transform: rotate(8deg) translateY(-12px) scale(1.05);
+        }
+
+        .sketchbook-cover {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #e8d5b5, #d4b896);
+            border-radius: 4px 12px 12px 4px;
+            padding: 8px 12px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 3px solid #b8956e;
+        }
+
+        .sketchbook-spine {
+            position: absolute;
+            left: -3px;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            background: #b8956e;
+            border-radius: 2px 0 0 2px;
+        }
+
+        .sketchbook-pages {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .page-line {
+            height: 3px;
+            background: rgba(0,0,0,0.06);
+            border-radius: 2px;
+        }
+
+        .page-line:nth-child(1) { width: 80%; }
+        .page-line:nth-child(2) { width: 60%; }
+        .page-line:nth-child(3) { width: 70%; }
+        .page-line:nth-child(4) { width: 50%; }
+
+        .sketchbook-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 1.4rem;
+            opacity: 0.4;
+        }
+
+        /* ===== Color Palette ===== */
+        .palette {
+            top: 240px;
+            left: 50px;
+            width: 140px;
+            transform: rotate(-5deg);
+        }
+
+        .palette:hover {
+            transform: rotate(-2deg) translateY(-12px) scale(1.05);
+        }
+
+        .palette-colors {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            padding: 10px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .palette-colors span {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .palette-colors span:hover {
+            transform: scale(1.2);
+        }
+
+        /* ===== Coffee Cup ===== */
+        .coffee {
+            top: 30px;
+            right: 80px;
+            width: 70px;
+            transform: rotate(8deg);
+        }
+
+        .coffee:hover {
+            transform: rotate(4deg) translateY(-12px) scale(1.05);
+        }
+
+        .coffee-cup {
+            position: relative;
+            width: 100%;
+        }
+
+        .coffee-body {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(180deg, #f5f0eb, #e8e0d8);
+            border-radius: 0 0 16px 16px;
+            border: 2px solid #d4c8bc;
+            border-top: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coffee-liquid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(180deg, #6d4c2a, #4a3220);
+            border-radius: 0 0 14px 14px;
+        }
+
+        .coffee-handle {
+            position: absolute;
+            right: -16px;
+            top: 8px;
+            width: 16px;
+            height: 30px;
+            border: 3px solid #d4c8bc;
+            border-left: none;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .coffee-steam {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .coffee-steam span {
+            width: 3px;
+            height: 16px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            animation: steam 2s infinite ease-in-out;
+        }
+
+        .coffee-steam span:nth-child(1) { animation-delay: 0s; height: 12px; }
+        .coffee-steam span:nth-child(2) { animation-delay: 0.6s; height: 18px; }
+        .coffee-steam span:nth-child(3) { animation-delay: 1.2s; height: 14px; }
+
+        /* ===== Ruler ===== */
+        .ruler {
+            bottom: 40px;
+            right: 40px;
+            width: 180px;
+            transform: rotate(-6deg);
+        }
+
+        .ruler:hover {
+            transform: rotate(-3deg) translateY(-12px) scale(1.05);
+        }
+
+        .ruler-body {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(180deg, #f5e6c8, #e8d5b5);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            gap: 6px;
+            border: 1px solid #d4b896;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .ruler-mark {
+            width: 2px;
+            height: 12px;
+            background: #8a7a6a;
+            flex-shrink: 0;
+        }
+
+        .ruler-mark:nth-child(5) { height: 16px; }
+        .ruler-mark:nth-child(8) { height: 16px; }
+        .ruler-mark:nth-child(3) { height: 14px; }
+
+        /* ===== Paint Brush ===== */
+        .brush {
+            bottom: 60px;
+            left: 120px;
+            width: 140px;
+            transform: rotate(15deg);
+        }
+
+        .brush:hover {
+            transform: rotate(10deg) translateY(-12px) scale(1.05);
+        }
+
+        .brush-body {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .brush-handle {
+            width: 100px;
+            height: 8px;
+            background: linear-gradient(180deg, #d4a574, #b8834a);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .brush-tip {
+            width: 16px;
+            height: 12px;
+            background: linear-gradient(180deg, #6c5ce7, #a29bfe);
+            border-radius: 0 50% 50% 0;
+            flex-shrink: 0;
+            animation: brush-glow 2s ease-in-out infinite;
+        }
+
+        /* ===== Hero Text Overlay ===== */
+        .hero-overlay-text {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 5;
+            width: 90%;
+            max-width: 800px;
+            pointer-events: none;
+        }
+
+        .hero-overlay-text .hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-color);
+            margin-bottom: 16px;
+            pointer-events: auto;
+        }
+
+        .hero-overlay-text .hero-title-line {
+            display: block;
+        }
+
+        .hero-overlay-text .hero-subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
             color: var(--text-color);
             opacity: 0.7;
-            max-width: 600px;
-            margin: 0 auto 32px;
-            line-height: 1.6;
-            animation: fadeInUp 0.8s ease 0.6s both;
+            margin-bottom: 32px;
+            pointer-events: auto;
         }
 
-        /* ===== Hero Actions ===== */
-        .hero-actions {
+        .hero-overlay-text .hero-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 16px;
             justify-content: center;
-            animation: fadeInUp 0.8s ease 0.8s both;
+            pointer-events: auto;
         }
 
+        /* ===== Animations ===== */
+        @keyframes steam {
+            0%, 100% {
+                transform: translateY(0) scaleY(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-8px) scaleY(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes brush-glow {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(108, 92, 231, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(108, 92, 231, 0.4);
+            }
+        }
+
+        /* ===== Responsive Hero ===== */
+        @media (max-width: 992px) {
+            .desk-surface {
+                height: 350px;
+            }
+            .laptop { 
+                width: 150px; 
+                top: 20px;
+                left: 20px;
+            }
+            .laptop-screen { height: 100px; }
+            .sketchbook { 
+                width: 120px;
+                top: 130px;
+                left: 190px;
+            }
+            .sketchbook-cover { height: 80px; }
+            .palette {
+                width: 110px;
+                top: 190px;
+                left: 30px;
+            }
+            .coffee {
+                width: 55px;
+                top: 20px;
+                right: 50px;
+            }
+            .coffee-body { height: 48px; }
+            .ruler {
+                width: 140px;
+                bottom: 30px;
+                right: 30px;
+            }
+            .brush {
+                width: 110px;
+                bottom: 50px;
+                left: 80px;
+            }
+            .brush-handle { width: 80px; }
+            .hero-overlay-text {
+                bottom: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .desk-surface {
+                height: 300px;
+            }
+            .laptop { 
+                width: 120px; 
+                top: 15px;
+                left: 15px;
+            }
+            .laptop-screen { height: 80px; }
+            .sketchbook { 
+                width: 100px;
+                top: 100px;
+                left: 150px;
+            }
+            .sketchbook-cover { height: 65px; }
+            .palette {
+                width: 90px;
+                top: 160px;
+                left: 20px;
+            }
+            .coffee {
+                width: 45px;
+                top: 15px;
+                right: 35px;
+            }
+            .coffee-body { height: 38px; }
+            .coffee-handle { 
+                right: -12px;
+                width: 12px;
+                height: 22px;
+            }
+            .ruler {
+                width: 110px;
+                bottom: 25px;
+                right: 20px;
+            }
+            .brush {
+                width: 90px;
+                bottom: 40px;
+                left: 60px;
+            }
+            .brush-handle { width: 65px; }
+            .brush-tip { width: 14px; height: 10px; }
+            .hero-overlay-text {
+                bottom: 80px;
+            }
+            .hero-overlay-text .hero-actions {
+                gap: 10px;
+            }
+            .hero-overlay-text .hero-actions .btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+            .desk-item .item-label {
+                font-size: 0.55rem;
+                bottom: -28px;
+            }
+            .desk-item:hover .item-label {
+                bottom: -32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .desk-surface {
+                height: 250px;
+                border-radius: 20px;
+                padding: 10px;
+            }
+            .laptop { 
+                width: 90px; 
+                top: 10px;
+                left: 10px;
+            }
+            .laptop-screen { height: 60px; padding: 6px; }
+            .laptop-content { padding: 6px; gap: 3px; }
+            .laptop-bar { height: 3px; }
+            .laptop-lines span { height: 2px; }
+            .laptop-base { height: 4px; }
+            .sketchbook { 
+                width: 75px;
+                top: 75px;
+                left: 110px;
+            }
+            .sketchbook-cover { height: 50px; padding: 4px 8px; }
+            .sketchbook-pages { gap: 2px; margin-top: 4px; }
+            .page-line { height: 2px; }
+            .sketchbook-icon { font-size: 1rem; }
+            .palette {
+                width: 70px;
+                top: 130px;
+                left: 10px;
+            }
+            .palette-colors { 
+                gap: 4px; 
+                padding: 6px;
+            }
+            .coffee {
+                width: 35px;
+                top: 10px;
+                right: 25px;
+            }
+            .coffee-body { height: 30px; }
+            .coffee-handle { 
+                right: -10px;
+                width: 10px;
+                height: 18px;
+                border-width: 2px;
+            }
+            .coffee-steam span { 
+                width: 2px;
+                height: 10px;
+            }
+            .coffee-steam span:nth-child(2) { height: 14px; }
+            .ruler {
+                width: 80px;
+                bottom: 20px;
+                right: 15px;
+            }
+            .ruler-body { height: 14px; gap: 4px; padding: 0 4px; }
+            .ruler-mark { height: 8px; }
+            .ruler-mark:nth-child(5) { height: 10px; }
+            .ruler-mark:nth-child(8) { height: 10px; }
+            .brush {
+                width: 70px;
+                bottom: 30px;
+                left: 40px;
+            }
+            .brush-handle { width: 50px; height: 6px; }
+            .brush-tip { 
+                width: 12px; 
+                height: 8px;
+            }
+            .hero-overlay-text {
+                bottom: 60px;
+            }
+            .hero-overlay-text .hero-title {
+                font-size: 1.4rem;
+            }
+            .hero-overlay-text .hero-subtitle {
+                font-size: 0.8rem;
+                margin-bottom: 20px;
+            }
+            .hero-overlay-text .hero-actions .btn {
+                padding: 8px 16px;
+                font-size: 0.7rem;
+            }
+            .desk-item .item-label {
+                font-size: 0.45rem;
+                bottom: -24px;
+                padding: 1px 8px;
+            }
+            .desk-item:hover .item-label {
+                bottom: -28px;
+            }
+        }
+
+        /* ===================== BUTTONS ===================== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 14px 32px;
+            padding: 12px 28px;
             font-family: var(--font-body);
             font-size: 0.9rem;
             font-weight: 600;
             border: none;
-            border-radius: 50px;
+            border-radius: 30px;
             cursor: pointer;
             transition: all var(--transition);
             text-decoration: none;
@@ -809,221 +1341,35 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(255, 107, 0, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255, 107, 0, 0.4);
             color: white;
         }
 
         .btn-secondary {
-            background: rgba(0, 0, 0, 0.06);
-            color: var(--text-color);
-            border: 2px solid var(--border-light);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn-secondary:hover {
-            transform: translateY(-3px) scale(1.02);
-            background: rgba(0, 0, 0, 0.1);
-            border-color: var(--secondary-color);
-            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            color: white;
         }
 
         [data-theme="dark"] .btn-secondary {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
             color: white;
         }
 
         [data-theme="dark"] .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--secondary-color);
-        }
-
-        /* ===== Scroll Indicator ===== */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            animation: bounce 2s infinite;
-        }
-
-        .scroll-indicator span {
-            font-size: 0.7rem;
-            color: var(--text-color);
-            opacity: 0.3;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .scroll-indicator .mouse {
-            width: 24px;
-            height: 36px;
-            border: 2px solid var(--text-color);
-            border-radius: 12px;
-            opacity: 0.3;
-            position: relative;
-        }
-
-        .scroll-indicator .mouse::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 8px;
-            background: var(--text-color);
-            border-radius: 2px;
-            opacity: 0.5;
-            animation: scroll-wheel 2s infinite;
-        }
-
-        /* ===== Animations ===== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes underline-grow {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(-8px);
-            }
-        }
-
-        @keyframes scroll-wheel {
-            0% {
-                opacity: 0.5;
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(6px);
-            }
-            100% {
-                opacity: 0.5;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        /* ===== Floating Orbs ===== */
-        .floating-orb {
-            position: absolute;
-            border-radius: 50%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.06;
-        }
-
-        .orb-1 {
-            width: 300px;
-            height: 300px;
-            top: -100px;
-            right: -100px;
-            background: var(--secondary-color);
-            animation: float-orb 20s ease-in-out infinite;
-        }
-
-        .orb-2 {
-            width: 200px;
-            height: 200px;
-            bottom: -50px;
-            left: -50px;
-            background: var(--web-color);
-            animation: float-orb 25s ease-in-out infinite reverse;
-        }
-
-        .orb-3 {
-            width: 150px;
-            height: 150px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--motion-color);
-            animation: float-orb 18s ease-in-out infinite 2s;
-        }
-
-        @keyframes float-orb {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(40px, -40px) scale(1.1);
-            }
-            66% {
-                transform: translate(-30px, 30px) scale(0.9);
-            }
-        }
-
-        /* ===== Responsive Hero ===== */
-        @media (max-width: 768px) {
-            .morphing-container {
-                flex-direction: column;
-                gap: 4px;
-            }
-            .morphing-text {
-                min-width: 120px;
-            }
-            .hero-actions .btn {
-                padding: 12px 24px;
-                font-size: 0.8rem;
-            }
-            .orb-1, .orb-2, .orb-3 {
-                display: none;
-            }
-            .scroll-indicator {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-headline {
-                font-size: 2rem;
-            }
-            .morphing-text {
-                min-width: 100px;
-                font-size: 0.9rem;
-            }
-            .morphing-label {
-                font-size: 0.9rem;
-            }
-            .hero-badge {
-                font-size: 0.6rem;
-                padding: 4px 14px;
-            }
+            background: rgba(255, 255, 255, 0.25);
         }
 
         /* ===================== SERVICES ===================== */
@@ -2925,57 +3271,114 @@
 
     <!-- ==================== HERO ==================== -->
     <section id="hero" aria-label="Hero">
-        <!-- Particles Canvas -->
-        <canvas id="particles-canvas"></canvas>
+        <div class="hero-container">
+            <div class="hero-desk">
+                <!-- Desk Surface -->
+                <div class="desk-surface">
+                    <!-- Laptop -->
+                    <div class="desk-item laptop" data-tooltip="Web Design">
+                        <div class="laptop-screen">
+                            <div class="laptop-content">
+                                <div class="laptop-bar"></div>
+                                <div class="laptop-lines">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="laptop-preview">
+                                    <span class="preview-dot"></span>
+                                    <span class="preview-dot"></span>
+                                    <span class="preview-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="laptop-base"></div>
+                        <span class="item-label">Web Design</span>
+                    </div>
 
-        <!-- Floating Orbs -->
-        <div class="floating-orb orb-1"></div>
-        <div class="floating-orb orb-2"></div>
-        <div class="floating-orb orb-3"></div>
+                    <!-- Sketchbook -->
+                    <div class="desk-item sketchbook" data-tooltip="Graphic Design">
+                        <div class="sketchbook-cover">
+                            <div class="sketchbook-spine"></div>
+                            <div class="sketchbook-pages">
+                                <span class="page-line"></span>
+                                <span class="page-line"></span>
+                                <span class="page-line"></span>
+                                <span class="page-line"></span>
+                            </div>
+                            <div class="sketchbook-icon">✏️</div>
+                        </div>
+                        <span class="item-label">Graphic Design</span>
+                    </div>
 
-        <div class="hero-content">
-            <!-- Badge -->
-            <div class="hero-badge" data-i18n="hero.badge">✦ Creative Studio</div>
+                    <!-- Color Palette -->
+                    <div class="desk-item palette" data-tooltip="Brand Identity">
+                        <div class="palette-colors">
+                            <span style="background:#ff6b00;"></span>
+                            <span style="background:#6c5ce7;"></span>
+                            <span style="background:#00b894;"></span>
+                            <span style="background:#fdcb6e;"></span>
+                            <span style="background:#e17055;"></span>
+                            <span style="background:#0984e3;"></span>
+                        </div>
+                        <span class="item-label">Brand Identity</span>
+                    </div>
 
-            <!-- Headline -->
-            <h1 class="hero-headline">
-                We create<br>
-                <span class="highlight">design that</span>
-            </h1>
+                    <!-- Coffee Cup -->
+                    <div class="desk-item coffee" data-tooltip="Fuel for creativity">
+                        <div class="coffee-cup">
+                            <div class="coffee-body">
+                                <div class="coffee-liquid"></div>
+                            </div>
+                            <div class="coffee-handle"></div>
+                            <div class="coffee-steam">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <span class="item-label">Creativity Fuel</span>
+                    </div>
 
-            <!-- Morphing Text -->
-            <div class="morphing-container">
-                <span class="morphing-label">that</span>
-                <span class="morphing-text" id="morphing-text">
-                    <span class="word active" data-word="Inspires">Inspires</span>
-                    <span class="word" data-word="Connects">Connects</span>
-                    <span class="word" data-word="Engages">Engages</span>
-                    <span class="word" data-word="Transforms">Transforms</span>
-                    <span class="word" data-word="Delivers">Delivers</span>
-                </span>
+                    <!-- Ruler -->
+                    <div class="desk-item ruler" data-tooltip="Precision & Detail">
+                        <div class="ruler-body">
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                            <span class="ruler-mark"></span>
+                        </div>
+                        <span class="item-label">Precision</span>
+                    </div>
+
+                    <!-- Paint Brush -->
+                    <div class="desk-item brush" data-tooltip="Motion Design">
+                        <div class="brush-body">
+                            <div class="brush-handle"></div>
+                            <div class="brush-tip"></div>
+                        </div>
+                        <span class="item-label">Motion Design</span>
+                    </div>
+                </div>
+
+                <!-- Hero Text Overlay -->
+                <div class="hero-overlay-text">
+                    <h1 class="hero-title">
+                        <span class="hero-title-line">We design the future,</span>
+                        <span class="hero-title-line">one pixel at a time.</span>
+                    </h1>
+                    <p class="hero-subtitle">Creative design solutions for brands that want to stand out.</p>
+                    <div class="hero-actions">
+                        <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
+                            <span>View Our Work</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn btn-secondary" data-i18n="hero.cta.contact">
+                            <span>Let's Talk</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <!-- Subtitle -->
-            <p class="hero-subtitle" data-i18n="hero.subtitle">
-                Creative design solutions for brands that want to stand out.
-            </p>
-
-            <!-- Actions -->
-            <div class="hero-actions">
-                <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
-                    <span>View Our Work</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="#contact" class="btn btn-secondary" data-i18n="hero.cta.contact">
-                    <span>Let's Talk</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <div class="mouse"></div>
-            <span>Scroll</span>
         </div>
     </section>
 
@@ -3342,186 +3745,6 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script>
         // =====================================================================
-        // PARTICLES
-        // =====================================================================
-        (function() {
-            const canvas = document.getElementById('particles-canvas');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            let width, height;
-            let particles = [];
-            const particleCount = 80;
-            let mouseX = null;
-            let mouseY = null;
-
-            function init() {
-                resize();
-                createParticles();
-                animate();
-                window.addEventListener('resize', resize);
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseleave', onMouseLeave);
-            }
-
-            function resize() {
-                const hero = document.getElementById('hero');
-                width = hero.offsetWidth;
-                height = hero.offsetHeight;
-                canvas.width = width;
-                canvas.height = height;
-            }
-
-            function createParticles() {
-                particles = [];
-                for (let i = 0; i < particleCount; i++) {
-                    particles.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        size: Math.random() * 3 + 1,
-                        speedX: (Math.random() - 0.5) * 0.5,
-                        speedY: (Math.random() - 0.5) * 0.5,
-                        opacity: Math.random() * 0.3 + 0.1
-                    });
-                }
-            }
-
-            function onMouseMove(e) {
-                const rect = canvas.getBoundingClientRect();
-                mouseX = e.clientX - rect.left;
-                mouseY = e.clientY - rect.top;
-            }
-
-            function onMouseLeave() {
-                mouseX = null;
-                mouseY = null;
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-
-                // Get theme colors
-                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                const particleColor = isDark ? '255, 255, 255' : '0, 0, 0';
-                const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim() || '#ff6b00';
-
-                particles.forEach((p, i) => {
-                    // Update position
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-
-                    // Mouse interaction
-                    if (mouseX !== null && mouseY !== null) {
-                        const dx = mouseX - p.x;
-                        const dy = mouseY - p.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 150) {
-                            const force = (150 - dist) / 150;
-                            p.x -= dx * force * 0.02;
-                            p.y -= dy * force * 0.02;
-                        }
-                    }
-
-                    // Wrap around
-                    if (p.x < 0) p.x = width;
-                    if (p.x > width) p.x = 0;
-                    if (p.y < 0) p.y = height;
-                    if (p.y > height) p.y = 0;
-
-                    // Draw particle
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(${particleColor}, ${p.opacity})`;
-                    ctx.fill();
-                });
-
-                // Draw connections
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 120) {
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = `rgba(${particleColor}, ${0.06 * (1 - dist / 120)})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.stroke();
-                        }
-                    }
-                }
-
-                requestAnimationFrame(animate);
-            }
-
-            // Re-initialize on theme change
-            const observer = new MutationObserver(() => {
-                resize();
-                createParticles();
-            });
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-            init();
-        })();
-
-        // =====================================================================
-        // MORPHING TEXT
-        // =====================================================================
-        (function() {
-            const container = document.getElementById('morphing-text');
-            if (!container) return;
-
-            const words = container.querySelectorAll('.word');
-            let currentIndex = 0;
-            let interval = null;
-
-            function morphText() {
-                // Remove active from current
-                words.forEach(w => w.classList.remove('active', 'exit'));
-                
-                // Add exit to current
-                words[currentIndex].classList.add('exit');
-                
-                // Move to next
-                const nextIndex = (currentIndex + 1) % words.length;
-                
-                // After exit animation, show next
-                setTimeout(() => {
-                    words[currentIndex].classList.remove('exit');
-                    words[nextIndex].classList.add('active');
-                    currentIndex = nextIndex;
-                }, 500);
-            }
-
-            function startMorphing() {
-                // Set initial active
-                words[0].classList.add('active');
-                currentIndex = 0;
-                
-                // Start interval
-                if (interval) clearInterval(interval);
-                interval = setInterval(morphText, 3000);
-            }
-
-            // Start when visible
-            const hero = document.getElementById('hero');
-            if (hero) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            startMorphing();
-                        }
-                    });
-                }, { threshold: 0.1 });
-                observer.observe(hero);
-            }
-
-            // Also start immediately if already visible
-            setTimeout(startMorphing, 1000);
-        })();
-
-        // =====================================================================
         // CONSTANTS
         // =====================================================================
         const LOADING_TIMEOUT = 300;
@@ -3829,8 +4052,6 @@
                 'nav.portfolio': 'Projects',
                 'nav.about': 'About',
                 'nav.contact': 'Contact',
-                'hero.badge': '✦ Creative Studio',
-                'hero.subtitle': 'Creative design solutions for brands that want to stand out.',
                 'hero.cta.portfolio': 'View Our Work',
                 'hero.cta.contact': "Let's Talk",
                 'services.title': 'Our Services',
@@ -3885,8 +4106,6 @@
                 'nav.portfolio': 'Projets',
                 'nav.about': 'À propos',
                 'nav.contact': 'Contact',
-                'hero.badge': '✦ Studio Créatif',
-                'hero.subtitle': 'Des solutions de design créatives pour les marques qui veulent se démarquer.',
                 'hero.cta.portfolio': 'Voir nos travaux',
                 'hero.cta.contact': 'Contactez-nous',
                 'services.title': 'Nos Services',
