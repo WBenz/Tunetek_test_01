@@ -669,54 +669,74 @@
             justify-content: center;
         }
 
-        /* ===== Hero Logo (Initial State) ===== */
-        .hero-logo {
+        /* ===== Hero Logo & Slogan (Initial State) ===== */
+        .hero-top-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             transition: all 0.8s ease;
             position: relative;
             z-index: 10;
             opacity: 1;
             transform: scale(1);
+            pointer-events: none;
         }
 
-        .hero-logo img {
+        .hero-top-content .hero-logo-img {
             height: 80px;
             width: auto;
+            display: block;
         }
 
-        .hero-logo .logo-text-big {
+        .hero-top-content .brand-name {
             font-family: var(--font-heading);
-            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
             color: var(--secondary-color);
             letter-spacing: 4px;
             line-height: 1.1;
+            text-align: center;
         }
 
-        .hero-logo .logo-text-big .sub {
-            font-size: 0.4em;
+        .hero-top-content .brand-name .sub {
+            font-size: 0.35em;
             font-weight: 400;
             color: var(--text-color);
             opacity: 0.5;
             letter-spacing: 6px;
             display: block;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
+        .hero-top-content .hero-slogan {
+            font-family: var(--font-heading);
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            font-weight: 600;
+            color: var(--secondary-color);
+            letter-spacing: 3px;
+            margin-top: 4px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .hero-top-content .hero-slogan .highlight {
+            color: var(--secondary-color);
+        }
+
+        /* ===== Scroll Hint ===== */
         .hero-scroll-hint {
             position: absolute;
-            bottom: 60px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-color);
             opacity: 0.3;
             letter-spacing: 2px;
             animation: bounce-hint 2s infinite;
             z-index: 5;
+            transition: opacity 0.6s ease;
         }
 
         @keyframes bounce-hint {
@@ -724,7 +744,7 @@
             50% { transform: translateX(-50%) translateY(-8px); }
         }
 
-        /* ===== Desk Surface (Hidden initially, assembles on scroll) ===== */
+        /* ===== Desk Surface (Hidden initially) ===== */
         .desk-surface {
             position: absolute;
             top: 0;
@@ -733,11 +753,7 @@
             height: 100%;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 1s ease 0.5s;
-        }
-
-        .desk-surface.visible {
-            opacity: 1;
+            transition: opacity 1s ease;
         }
 
         .desk-surface-inner {
@@ -746,9 +762,9 @@
             height: 100%;
             max-height: 600px;
             background: linear-gradient(180deg, 
-                rgba(139, 119, 101, 0.12) 0%,
-                rgba(139, 119, 101, 0.06) 60%,
-                rgba(139, 119, 101, 0.03) 100%
+                rgba(139, 119, 101, 0.10) 0%,
+                rgba(139, 119, 101, 0.05) 60%,
+                rgba(139, 119, 101, 0.02) 100%
             );
             border-radius: 30px;
             border: 1px solid var(--border-light);
@@ -760,12 +776,12 @@
             justify-content: center;
         }
 
-        /* ===== Desk Items ===== */
+        /* ===== Desk Items - Hidden Initially ===== */
         .desk-item {
             position: absolute;
             opacity: 0;
-            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             pointer-events: none;
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .desk-item.visible {
@@ -790,7 +806,7 @@
         }
 
         .desk-item.visible .item-label {
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
         .desk-item.visible:hover .item-label {
@@ -799,14 +815,14 @@
 
         /* ===== Laptop ===== */
         .desk-item.laptop {
-            top: 25%;
-            left: 8%;
+            top: 22%;
+            left: 6%;
             width: 200px;
-            transform: translateX(-80px) rotate(-8deg) scale(0.9);
+            transform: translateX(-120px) rotate(-12deg) scale(0.7);
         }
 
         .desk-item.laptop.visible {
-            transform: translateX(0) rotate(-6deg) scale(1);
+            transform: translateX(0) rotate(-5deg) scale(1);
         }
 
         .laptop-screen {
@@ -882,10 +898,10 @@
 
         /* ===== Sketchbook ===== */
         .desk-item.sketchbook {
-            top: 50%;
-            left: 30%;
+            top: 48%;
+            left: 28%;
             width: 150px;
-            transform: translateX(80px) rotate(12deg) scale(0.9);
+            transform: translateX(120px) rotate(18deg) scale(0.7);
         }
 
         .desk-item.sketchbook.visible {
@@ -942,9 +958,9 @@
         /* ===== Color Palette ===== */
         .desk-item.palette {
             top: 65%;
-            left: 5%;
+            left: 3%;
             width: 140px;
-            transform: translateY(60px) rotate(-5deg) scale(0.9);
+            transform: translateY(80px) rotate(-8deg) scale(0.7);
         }
 
         .desk-item.palette.visible {
@@ -976,14 +992,14 @@
 
         /* ===== Coffee Cup ===== */
         .desk-item.coffee {
-            top: 15%;
-            right: 10%;
+            top: 12%;
+            right: 8%;
             width: 70px;
-            transform: translateY(-40px) rotate(8deg) scale(0.9);
+            transform: translateY(-60px) rotate(12deg) scale(0.7);
         }
 
         .desk-item.coffee.visible {
-            transform: translateY(0) rotate(4deg) scale(1);
+            transform: translateY(0) rotate(5deg) scale(1);
         }
 
         .coffee-cup {
@@ -1047,9 +1063,9 @@
         /* ===== Ruler ===== */
         .desk-item.ruler {
             bottom: 18%;
-            right: 6%;
+            right: 4%;
             width: 180px;
-            transform: translateX(80px) rotate(-6deg) scale(0.9);
+            transform: translateX(100px) rotate(-10deg) scale(0.7);
         }
 
         .desk-item.ruler.visible {
@@ -1082,14 +1098,14 @@
 
         /* ===== Paint Brush ===== */
         .desk-item.brush {
-            bottom: 28%;
-            left: 12%;
+            bottom: 30%;
+            left: 10%;
             width: 140px;
-            transform: translateX(-60px) rotate(15deg) scale(0.9);
+            transform: translateX(-80px) rotate(20deg) scale(0.7);
         }
 
         .desk-item.brush.visible {
-            transform: translateX(0) rotate(10deg) scale(1);
+            transform: translateX(0) rotate(12deg) scale(1);
         }
 
         .brush-body {
@@ -1114,53 +1130,28 @@
             animation: brush-glow 2s ease-in-out infinite;
         }
 
-        /* ===== Hero Text Overlay (Appears after desk assembles) ===== */
-        .hero-overlay-text {
+        /* ===== Hero Actions (Appears after desk assembles) ===== */
+        .hero-actions-wrapper {
             position: absolute;
-            bottom: 40px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            text-align: center;
             z-index: 5;
-            width: 90%;
-            max-width: 800px;
-            pointer-events: none;
             opacity: 0;
-            transition: opacity 1.2s ease 1s;
+            transition: opacity 1.2s ease 0.8s;
+            pointer-events: none;
         }
 
-        .hero-overlay-text.visible {
+        .hero-actions-wrapper.visible {
             opacity: 1;
-        }
-
-        .hero-overlay-text .hero-title {
-            font-family: var(--font-heading);
-            font-size: clamp(1.8rem, 4vw, 3rem);
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--text-color);
-            margin-bottom: 8px;
             pointer-events: auto;
         }
 
-        .hero-overlay-text .hero-title .highlight {
-            color: var(--secondary-color);
-        }
-
-        .hero-overlay-text .hero-subtitle {
-            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-            color: var(--text-color);
-            opacity: 0.7;
-            margin-bottom: 24px;
-            pointer-events: auto;
-        }
-
-        .hero-overlay-text .hero-actions {
+        .hero-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 16px;
             justify-content: center;
-            pointer-events: auto;
         }
 
         /* ===== Animations ===== */
@@ -1191,90 +1182,90 @@
 
         /* ===== Responsive Hero ===== */
         @media (max-width: 992px) {
-            .desk-item.laptop { width: 150px; top: 20%; left: 5%; }
+            .desk-item.laptop { width: 150px; top: 18%; left: 4%; }
             .laptop-screen { height: 100px; }
-            .desk-item.sketchbook { width: 120px; top: 45%; left: 25%; }
+            .desk-item.sketchbook { width: 120px; top: 44%; left: 24%; }
             .sketchbook-cover { height: 80px; }
-            .desk-item.palette { width: 110px; top: 60%; left: 3%; }
-            .desk-item.coffee { width: 55px; top: 12%; right: 5%; }
+            .desk-item.palette { width: 110px; top: 60%; left: 2%; }
+            .desk-item.coffee { width: 55px; top: 10%; right: 4%; }
             .coffee-body { height: 48px; }
-            .desk-item.ruler { width: 140px; bottom: 15%; right: 4%; }
-            .desk-item.brush { width: 110px; bottom: 25%; left: 8%; }
+            .desk-item.ruler { width: 140px; bottom: 15%; right: 3%; }
+            .desk-item.brush { width: 110px; bottom: 28%; left: 6%; }
             .brush-handle { width: 80px; }
-            .hero-overlay-text { bottom: 30px; }
+            .hero-top-content .hero-logo-img { height: 60px; }
+            .hero-top-content .brand-name { font-size: 2.8rem; }
+            .hero-top-content .hero-slogan { font-size: 1.2rem; }
         }
 
         @media (max-width: 768px) {
-            .desk-item.laptop { width: 120px; top: 15%; left: 4%; }
+            .desk-item.laptop { width: 120px; top: 15%; left: 3%; }
             .laptop-screen { height: 80px; padding: 8px; }
             .laptop-content { padding: 6px; gap: 3px; }
             .laptop-bar { height: 3px; }
             .laptop-lines span { height: 2px; }
             .laptop-base { height: 4px; }
-            .desk-item.sketchbook { width: 100px; top: 40%; left: 20%; }
+            .desk-item.sketchbook { width: 100px; top: 38%; left: 18%; }
             .sketchbook-cover { height: 65px; padding: 4px 8px; }
             .sketchbook-pages { gap: 2px; margin-top: 4px; }
             .page-line { height: 2px; }
             .sketchbook-icon { font-size: 1rem; }
-            .desk-item.palette { width: 90px; top: 55%; left: 2%; }
+            .desk-item.palette { width: 90px; top: 55%; left: 1%; }
             .palette-colors { gap: 4px; padding: 6px; }
-            .desk-item.coffee { width: 45px; top: 10%; right: 4%; }
+            .desk-item.coffee { width: 45px; top: 8%; right: 3%; }
             .coffee-body { height: 38px; }
             .coffee-handle { right: -12px; width: 12px; height: 22px; }
-            .desk-item.ruler { width: 110px; bottom: 12%; right: 3%; }
+            .desk-item.ruler { width: 110px; bottom: 12%; right: 2%; }
             .ruler-body { height: 16px; padding: 0 6px; gap: 4px; }
             .ruler-mark { height: 10px; }
             .ruler-mark:nth-child(5) { height: 12px; }
             .ruler-mark:nth-child(8) { height: 12px; }
-            .desk-item.brush { width: 90px; bottom: 22%; left: 5%; }
+            .desk-item.brush { width: 90px; bottom: 22%; left: 4%; }
             .brush-handle { width: 65px; height: 6px; }
             .brush-tip { width: 14px; height: 10px; }
-            .hero-overlay-text .hero-title { font-size: 1.6rem; }
-            .hero-overlay-text .hero-subtitle { font-size: 0.85rem; }
-            .hero-overlay-text .hero-actions .btn { padding: 10px 20px; font-size: 0.8rem; }
-            .hero-logo img { height: 50px; }
-            .hero-logo .logo-text-big { font-size: 1.8rem; }
+            .hero-top-content .hero-logo-img { height: 50px; }
+            .hero-top-content .brand-name { font-size: 2.2rem; }
+            .hero-top-content .hero-slogan { font-size: 1rem; letter-spacing: 2px; }
+            .hero-actions .btn { padding: 10px 20px; font-size: 0.8rem; }
             .hero-scroll-hint { bottom: 30px; font-size: 0.6rem; }
         }
 
         @media (max-width: 480px) {
-            .desk-item.laptop { width: 90px; top: 12%; left: 3%; }
+            .desk-item.laptop { width: 90px; top: 12%; left: 2%; }
             .laptop-screen { height: 60px; padding: 4px; }
             .laptop-content { padding: 4px; gap: 2px; }
             .laptop-bar { height: 2px; }
             .laptop-lines span { height: 2px; }
             .laptop-base { height: 3px; }
-            .desk-item.sketchbook { width: 75px; top: 35%; left: 16%; }
+            .desk-item.sketchbook { width: 75px; top: 32%; left: 14%; }
             .sketchbook-cover { height: 50px; padding: 4px 6px; }
             .sketchbook-pages { gap: 2px; margin-top: 3px; }
             .page-line { height: 2px; }
             .sketchbook-icon { font-size: 0.8rem; bottom: 4px; right: 6px; }
             .desk-item.palette { width: 70px; top: 48%; left: 1%; }
             .palette-colors { gap: 3px; padding: 4px; }
-            .desk-item.coffee { width: 35px; top: 8%; right: 3%; }
+            .desk-item.coffee { width: 35px; top: 6%; right: 2%; }
             .coffee-body { height: 30px; }
             .coffee-handle { right: -10px; width: 10px; height: 18px; border-width: 2px; }
             .coffee-steam span { width: 2px; height: 10px; }
             .coffee-steam span:nth-child(2) { height: 14px; }
-            .desk-item.ruler { width: 80px; bottom: 10%; right: 2%; }
+            .desk-item.ruler { width: 80px; bottom: 10%; right: 1%; }
             .ruler-body { height: 14px; padding: 0 4px; gap: 3px; }
             .ruler-mark { height: 8px; }
             .ruler-mark:nth-child(5) { height: 10px; }
             .ruler-mark:nth-child(8) { height: 10px; }
-            .desk-item.brush { width: 70px; bottom: 18%; left: 3%; }
+            .desk-item.brush { width: 70px; bottom: 18%; left: 2%; }
             .brush-handle { width: 50px; height: 5px; }
             .brush-tip { width: 12px; height: 8px; }
-            .hero-overlay-text { bottom: 20px; }
-            .hero-overlay-text .hero-title { font-size: 1.2rem; }
-            .hero-overlay-text .hero-subtitle { font-size: 0.7rem; margin-bottom: 16px; }
-            .hero-overlay-text .hero-actions .btn { padding: 8px 16px; font-size: 0.65rem; }
-            .hero-logo img { height: 40px; }
-            .hero-logo .logo-text-big { font-size: 1.4rem; }
-            .hero-logo .logo-text-big .sub { font-size: 0.35em; }
+            .hero-top-content .hero-logo-img { height: 40px; }
+            .hero-top-content .brand-name { font-size: 1.8rem; letter-spacing: 2px; }
+            .hero-top-content .brand-name .sub { font-size: 0.3em; letter-spacing: 4px; }
+            .hero-top-content .hero-slogan { font-size: 0.85rem; letter-spacing: 1px; }
+            .hero-actions { flex-direction: column; align-items: center; gap: 10px; }
+            .hero-actions .btn { padding: 8px 20px; font-size: 0.7rem; width: 100%; max-width: 220px; justify-content: center; }
             .hero-scroll-hint { bottom: 20px; font-size: 0.5rem; }
             .desk-item .item-label { font-size: 0.4rem; bottom: -20px; padding: 1px 6px; }
             .desk-item.visible .item-label { opacity: 0; }
-            .desk-item.visible:hover .item-label { opacity: 0.5; }
+            .desk-item.visible:hover .item-label { opacity: 0.4; }
         }
 
         /* ===================== BUTTONS ===================== */
@@ -3230,16 +3221,17 @@
     <!-- ==================== HERO ==================== -->
     <section id="hero" aria-label="Hero">
         <div class="hero-container">
-            <!-- Hero Logo (Initial State) -->
-            <div class="hero-logo" id="heroLogo">
-                <img src="logo_transparent.png" alt="Tunetek Studio Design">
-                <div class="logo-text-big">
+            <!-- Hero Logo & Slogan (Initial State) -->
+            <div class="hero-top-content" id="heroTopContent">
+                <img src="logo_transparent.png" alt="Tunetek Studio Design" class="hero-logo-img">
+                <div class="brand-name">
                     Tunetek
                     <span class="sub">Studio Design</span>
                 </div>
+                <div class="hero-slogan">✦ <span class="highlight">Crafting</span> Visual Excellence ✦</div>
             </div>
 
-            <!-- Desk Surface (Assembles on scroll) -->
+            <!-- Desk Surface (Hidden initially) -->
             <div class="desk-surface" id="deskSurface">
                 <div class="desk-surface-inner">
                     <!-- Laptop -->
@@ -3329,12 +3321,8 @@
                 </div>
             </div>
 
-            <!-- Hero Text Overlay (Appears after desk assembles) -->
-            <div class="hero-overlay-text" id="heroOverlayText">
-                <h1 class="hero-title">
-                    <span class="highlight">Crafting</span> Visual Excellence
-                </h1>
-                <p class="hero-subtitle" data-i18n="hero.subtitle">Creative design solutions for brands that want to stand out.</p>
+            <!-- Hero Actions (Appears after desk assembles) -->
+            <div class="hero-actions-wrapper" id="heroActions">
                 <div class="hero-actions">
                     <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
                         <span>View Our Work</span>
@@ -3714,73 +3702,86 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script>
         // =====================================================================
-        // SCROLL-TRIGGERED DESK ANIMATION
+        // SCROLL-TRIGGERED DESK ANIMATION - FIXED
         // =====================================================================
         (function() {
             const hero = document.getElementById('hero');
-            const heroLogo = document.getElementById('heroLogo');
+            const heroTopContent = document.getElementById('heroTopContent');
             const deskSurface = document.getElementById('deskSurface');
             const deskItems = document.querySelectorAll('.desk-item');
-            const heroOverlayText = document.getElementById('heroOverlayText');
+            const heroActions = document.getElementById('heroActions');
             const scrollHint = document.getElementById('scrollHint');
+
+            // Ensure all desk items start hidden
+            deskItems.forEach(item => {
+                item.classList.remove('visible');
+                item.style.opacity = '0';
+            });
+
+            // Hide actions initially
+            if (heroActions) {
+                heroActions.classList.remove('visible');
+                heroActions.style.opacity = '0';
+            }
+
+            // Hide desk surface initially
+            if (deskSurface) {
+                deskSurface.style.opacity = '0';
+            }
 
             let isComplete = false;
 
             function updateHero() {
                 const rect = hero.getBoundingClientRect();
-                const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight * 1.2)));
+                // Calculate scroll progress based on how much of the hero is visible
+                const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight * 1.3)));
 
-                // Logo shrinks and fades as user scrolls
-                if (heroLogo) {
-                    const logoScale = Math.max(0.5, 1 - scrollProgress * 0.6);
-                    const logoOpacity = Math.max(0, 1 - scrollProgress * 1.2);
-                    heroLogo.style.transform = `scale(${logoScale})`;
-                    heroLogo.style.opacity = logoOpacity;
+                // TOP CONTENT (Logo + Slogan): Shrink and fade as user scrolls
+                if (heroTopContent) {
+                    const scale = Math.max(0.4, 1 - scrollProgress * 0.6);
+                    const opacity = Math.max(0, 1 - scrollProgress * 1.2);
+                    heroTopContent.style.transform = `scale(${scale})`;
+                    heroTopContent.style.opacity = opacity;
                 }
 
-                // Show desk surface after some scroll
+                // DESK SURFACE: Appear after some scroll
                 if (deskSurface) {
-                    const deskOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.15) * 2.5));
+                    const deskOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.1) * 3));
                     deskSurface.style.opacity = deskOpacity;
-
-                    if (deskOpacity > 0.1 && !deskSurface.classList.contains('visible')) {
-                        deskSurface.classList.add('visible');
-                    }
                 }
 
-                // Animate each desk item
+                // DESK ITEMS: Each item appears at different scroll positions
                 deskItems.forEach((item) => {
                     const delay = parseFloat(item.dataset.delay) || 0;
-                    const startThreshold = 0.2 + delay * 0.15;
-                    const itemProgress = Math.max(0, Math.min(1, (scrollProgress - startThreshold) * 4));
+                    const startThreshold = 0.15 + delay * 0.12;
+                    const itemProgress = Math.max(0, Math.min(1, (scrollProgress - startThreshold) * 5));
 
-                    if (itemProgress > 0.1 && !item.classList.contains('visible')) {
+                    if (itemProgress > 0.1) {
                         item.classList.add('visible');
-                    }
-
-                    // Additional transform for smooth entry
-                    if (itemProgress < 1) {
-                        const scale = 0.9 + itemProgress * 0.1;
-                        const translateX = parseFloat(item.style.transform?.match(/translateX\(([^)]+)\)/)?.[1] || '0');
-                        const translateY = parseFloat(item.style.transform?.match(/translateY\(([^)]+)\)/)?.[1] || '0');
-                        // Let CSS transitions handle the rest
+                        item.style.opacity = Math.min(1, itemProgress * 1.2);
+                    } else {
+                        item.classList.remove('visible');
+                        item.style.opacity = '0';
                     }
                 });
 
-                // Show overlay when desk is mostly assembled
+                // HERO ACTIONS: Appear when desk is mostly assembled
                 if (scrollProgress > 0.7 && !isComplete) {
                     isComplete = true;
-                    if (heroOverlayText) {
-                        heroOverlayText.classList.add('visible');
+                    if (heroActions) {
+                        heroActions.classList.add('visible');
+                        heroActions.style.opacity = '1';
                     }
                     if (scrollHint) {
                         scrollHint.style.opacity = '0';
+                        scrollHint.style.transition = 'opacity 0.8s ease';
                     }
                 }
 
-                // Hide scroll hint after some scroll
-                if (scrollHint && scrollProgress > 0.2) {
-                    scrollHint.style.opacity = Math.max(0, 1 - (scrollProgress - 0.2) * 5);
+                // SCROLL HINT: Fade out after some scroll
+                if (scrollHint && scrollProgress > 0.15) {
+                    const hintOpacity = Math.max(0, 1 - (scrollProgress - 0.15) * 6);
+                    scrollHint.style.opacity = hintOpacity;
                 }
             }
 
@@ -3796,11 +3797,11 @@
                 }
             });
 
-            // Initial update
-            setTimeout(updateHero, 100);
-
             // Also update on resize
             window.addEventListener('resize', updateHero);
+
+            // Initial update after DOM is ready
+            setTimeout(updateHero, 200);
         })();
 
         // =====================================================================
