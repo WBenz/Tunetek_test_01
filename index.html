@@ -1198,7 +1198,7 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* ===================== WEB FIT MODE - OVERLAY PERFECTLY FIXED ===================== */
+        /* ===================== WEB FIT MODE ===================== */
         .split-preview.web-fit-mode {
             overflow: auto !important;
             align-items: flex-start !important;
@@ -1221,7 +1221,6 @@
             display: block !important;
         }
 
-        /* Overlay becomes sticky in fit-mode - PERFECTLY FIXED AT BOTTOM */
         .split-preview.web-fit-mode .preview-overlay {
             position: sticky !important;
             bottom: 0 !important;
@@ -1279,7 +1278,7 @@
             display: none !important;
         }
 
-        /* ===================== CONTROLS - Always visible in preview ===================== */
+        /* ===================== CONTROLS ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1297,7 +1296,6 @@
             pointer-events: auto;
         }
 
-        /* Controls in fit-mode stay visible */
         .split-preview.web-fit-mode .preview-controls {
             position: sticky !important;
             bottom: 100px !important;
@@ -1308,7 +1306,6 @@
             margin-top: auto !important;
         }
 
-        /* Controls in fullscreen - show only fullscreen toggle */
         .split-preview:fullscreen .preview-controls {
             display: flex !important;
             opacity: 1 !important;
@@ -1324,7 +1321,6 @@
             border: 1px solid rgba(255,255,255,0.1) !important;
         }
 
-        /* In fullscreen, only show the fullscreen button */
         .split-preview:fullscreen .preview-controls .video-controls-group,
         .split-preview:fullscreen .preview-controls .web-controls-group .divider,
         .split-preview:fullscreen .preview-controls .web-controls-group .web-fit-btn,
@@ -1401,7 +1397,6 @@
             align-items: center;
         }
 
-        /* ===================== DIVIDER STYLES ===================== */
         .preview-controls .divider {
             width: 1px;
             height: 28px;
@@ -2218,38 +2213,36 @@
             align-items: center;
         }
 
-        /* ===================== ABOUT - REVERTED TO ORIGINAL ===================== */
+        /* ===================== ABOUT - CENTERED LAYOUT ===================== */
         #about {
             background-color: var(--accent-color);
         }
 
         .about-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 48px;
-            align-items: stretch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .about-image {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 50%;
+            max-width: 250px;
+            width: 100%;
+            margin: 0 auto;
         }
 
         .about-image img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            border-radius: 50%;
             border: 5px solid var(--secondary-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .about-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            text-align: center;
+            width: 100%;
         }
 
         .about-content h3 {
@@ -2258,14 +2251,16 @@
             font-weight: 700;
             color: var(--secondary-color);
             margin-bottom: 0.5rem;
+            text-align: center;
         }
 
         .about-content .role {
             color: var(--text-color);
             font-weight: 500;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: block;
             font-size: 1.1rem;
+            text-align: center;
         }
 
         .about-content p {
@@ -2274,46 +2269,21 @@
             margin-bottom: 16px;
             text-align: justify;
             text-justify: inter-word;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .about-content p:last-of-type {
             margin-bottom: 0;
         }
 
-        @media (max-width: 768px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-                gap: 32px;
-                align-items: start;
-            }
-            .about-image {
-                max-width: 250px;
-                margin: 0 auto;
-                height: 250px;
-            }
-            .about-image img {
-                height: 100%;
-                object-fit: cover;
-            }
-            .about-content {
-                justify-content: flex-start;
-            }
-            .about-content h3 {
-                text-align: center;
-            }
-            .about-content .role {
-                text-align: center;
-            }
-            .about-content p {
-                text-align: justify;
-                text-justify: inter-word;
-            }
-        }
-
         @media (max-width: 480px) {
             .about-image {
-                height: 200px;
                 max-width: 200px;
+            }
+            .about-content p {
+                max-width: 100%;
             }
         }
 
@@ -2948,6 +2918,9 @@
                         A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I've had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.
                     </p>
                     <p data-i18n="about.desc2">
+                        My journey has been shaped by diverse roles: I'm a proud Capcom Ambassador in the gaming industry, a certified Adobe Trainer, a certified Unreal Engine 5 Game Designer, and a Google Certified Generative AI Engineer. These experiences allow me to blend traditional design with cutting-edge technology.
+                    </p>
+                    <p data-i18n="about.desc3">
                         Beyond design, I'm deeply committed to giving back. I've served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it's about making a positive impact.
                     </p>
                 </div>
@@ -3461,7 +3434,8 @@
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Lead Designer & Creative Director',
                 'about.desc1': 'A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I\'ve had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.',
-                'about.desc2': 'Beyond design, I\'m deeply committed to giving back. I\'ve served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it\'s about making a positive impact.',
+                'about.desc2': 'My journey has been shaped by diverse roles: I\'m a proud Capcom Ambassador in the gaming industry, a certified Adobe Trainer, a certified Unreal Engine 5 Game Designer, and a Google Certified Generative AI Engineer. These experiences allow me to blend traditional design with cutting-edge technology.',
+                'about.desc3': 'Beyond design, I\'m deeply committed to giving back. I\'ve served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it\'s about making a positive impact.',
                 'contact.title': 'Get In Touch',
                 'contact.subtitle': 'Have a project in mind? We\'d love to hear about it.',
                 'contact.info.title': 'Contact Information',
@@ -3514,7 +3488,8 @@
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Designer Principal & Directeur Créatif',
                 'about.desc1': 'Un créatif polyvalent avec plus de 10 ans d\'expérience à la croisée du design, du gaming et de l\'IA. Basé en Tunisie, j\'ai eu le privilège de travailler avec des clients à travers la France, l\'Allemagne, le Japon, les États-Unis, Hong Kong et la Malaisie — apportant une perspective globale à chaque projet.',
-                'about.desc2': 'Au-delà du design, je suis profondément engagé à redonner. J\'ai participé à de nombreuses initiatives bénévoles caritatives et je suis actuellement Trésorier dans une association sportive — parce que je crois qu\'un bon design va au-delà de l\'esthétique ; il s\'agit d\'avoir un impact positif.',
+                'about.desc2': 'Mon parcours a été façonné par des rôles divers : je suis un fier Ambassadeur Capcom dans l\'industrie du jeu vidéo, un Formateur Certifié Adobe, un Concepteur de Jeux Certifié Unreal Engine 5, et un Ingénieur IA Générative Certifié Google. Ces expériences me permettent de fusionner le design traditionnel avec la technologie de pointe.',
+                'about.desc3': 'Au-delà du design, je suis profondément engagé à redonner. J\'ai participé à de nombreuses initiatives bénévoles caritatives et je suis actuellement Trésorier dans une association sportive — parce que je crois qu\'un bon design va au-delà de l\'esthétique ; il s\'agit d\'avoir un impact positif.',
                 'contact.title': 'Contactez-nous',
                 'contact.subtitle': 'Vous avez un projet en tête ? Nous serions ravis d\'en discuter.',
                 'contact.info.title': 'Informations de contact',
@@ -3889,12 +3864,10 @@
                 this.previewYear.textContent = item.year;
                 this.previewVideoBadge.style.display = item.isVideo ? 'flex' : 'none';
                 
-                // Show correct controls
                 this.videoControlsGroup.style.display = item.category === 'motion' ? 'flex' : 'none';
                 this.webControlsGroup.style.display = item.category === 'web' ? 'flex' : 'none';
                 this.graphicControlsGroup.style.display = item.category === 'graphic' ? 'flex' : 'none';
                 
-                // Reset states
                 this.isVideoPlaying = false;
                 this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
                 this.videoProgressFill.style.width = '0%';
@@ -3902,7 +3875,6 @@
                 this.preview.scrollLeft = 0;
                 this.preview.classList.remove('web-fit-mode');
                 
-                // Remove old navigation and loading overlay
                 const oldNav = this.preview.querySelector('.graphic-slide-nav');
                 if (oldNav) oldNav.remove();
                 const oldCounter = this.preview.querySelector('.graphic-slide-counter');
@@ -3980,7 +3952,6 @@
                     }
                     this.preview.classList.remove('web-fit-mode');
                 } else {
-                    // ===== GRAPHIC PROJECT - WITH LOADING ANIMATION =====
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3995,7 +3966,6 @@
                     };
                     this.previewControls.style.opacity = '1';
                     
-                    // ===== LOADING OVERLAY FOR GRAPHIC =====
                     const loadingOverlay = document.createElement('div');
                     loadingOverlay.className = 'graphic-loading-overlay active';
                     loadingOverlay.innerHTML = `
@@ -4004,7 +3974,6 @@
                     `;
                     this.preview.appendChild(loadingOverlay);
                     
-                    // Track image loading progress
                     let progressInterval = null;
                     let progress = 0;
                     
@@ -4039,7 +4008,6 @@
                         }, 300);
                     };
                     
-                    // ===== GRAPHIC SLIDESHOW NAVIGATION =====
                     if (this.graphicProjectFiles.length > 1) {
                         const navContainer = document.createElement('div');
                         navContainer.className = 'graphic-slide-nav';
@@ -4101,7 +4069,6 @@
                 }
                 this.preview.insertBefore(mediaElement, this.previewOverlay);
                 
-                // Overlay is always visible in preview
                 this.previewOverlay.style.opacity = '1';
                 this.previewOverlay.style.transform = 'translateY(0)';
                 this.previewOverlay.style.display = 'block';
@@ -4110,11 +4077,9 @@
                 this.setupWebControls();
                 this.setupGraphicControls();
                 
-                // Ensure fullscreen state is handled
                 if (document.fullscreenElement) {
                     this.previewOverlay.style.display = 'none';
                     this.previewControls.style.display = 'flex';
-                    // Only show fullscreen button in controls
                     this.videoControlsGroup.style.display = 'none';
                     this.webControlsGroup.style.display = 'flex';
                     this.graphicControlsGroup.style.display = 'none';
@@ -4382,17 +4347,14 @@
                                         container.style.alignItems = 'center';
                                         container.style.justifyContent = 'center';
                                         container.style.background = '#000';
-                                        // Hide overlay and show only fullscreen button
                                         this.previewOverlay.style.display = 'none';
                                         this.videoControlsGroup.style.display = 'none';
                                         this.webControlsGroup.style.display = 'none';
                                         this.graphicControlsGroup.style.display = 'none';
                                         this.previewControls.style.display = 'flex';
-                                        // Show only the fullscreen button
                                         const videoFullscreenBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
                                         if (videoFullscreenBtn) {
                                             this.videoControlsGroup.style.display = 'flex';
-                                            // Hide other video controls
                                             this.videoControlsGroup.querySelectorAll('*').forEach(el => {
                                                 if (!el.classList.contains('video-fullscreen-btn')) {
                                                     el.style.display = 'none';
@@ -4426,13 +4388,10 @@
                             this.preview.style.justifyContent = 'center';
                             this.preview.style.background = '';
                         }
-                        // Restore overlay and controls
                         this.previewOverlay.style.display = 'block';
                         this.previewControls.style.display = 'flex';
-                        // Show correct controls based on category
                         if (this.currentProject && this.currentProject.category === 'motion') {
                             this.videoControlsGroup.style.display = 'flex';
-                            // Restore all video controls
                             this.videoControlsGroup.querySelectorAll('*').forEach(el => {
                                 el.style.display = '';
                             });
@@ -4470,15 +4429,12 @@
                         this.webFitBtn.style.display = 'none';
                         const divider = this.webControlsGroup.querySelector('.divider');
                         if (divider) divider.style.display = 'none';
-                        // Hide overlay in fullscreen
                         this.previewOverlay.style.display = 'none';
                     } else {
                         this.webFitBtn.style.display = 'inline-flex';
                         const divider = this.webControlsGroup.querySelector('.divider');
                         if (divider) divider.style.display = 'inline-block';
-                        // Show overlay in preview
                         this.previewOverlay.style.display = 'block';
-                        // Restore fit mode state when exiting fullscreen
                         if (this.isWebFit) {
                             this.preview.classList.add('web-fit-mode');
                             img.style.objectFit = 'contain';
@@ -4506,21 +4462,17 @@
                     }
                 };
                 
-                // Fullscreen change handler
                 const fullscreenChangeHandler = () => {
                     const isFullscreen = !!document.fullscreenElement;
                     if (isFullscreen) {
-                        // In fullscreen: hide overlay, keep only fullscreen toggle in controls
                         this.previewOverlay.style.display = 'none';
                         this.previewControls.style.display = 'flex';
                         this.webFitBtn.style.display = 'none';
                         const divider = this.webControlsGroup.querySelector('.divider');
                         if (divider) divider.style.display = 'none';
-                        // Ensure video controls are hidden in fullscreen for web
                         this.videoControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
                     } else {
-                        // Exit fullscreen: show overlay, restore controls
                         this.previewOverlay.style.display = 'block';
                         this.previewControls.style.display = 'flex';
                         this.webFitBtn.style.display = 'inline-flex';
@@ -4528,7 +4480,6 @@
                         if (divider) divider.style.display = 'inline-block';
                         this.videoControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
-                        // Restore fit mode state
                         if (this.isWebFit) {
                             this.preview.classList.add('web-fit-mode');
                             img.style.objectFit = 'contain';
@@ -4553,7 +4504,6 @@
                     }
                 };
                 
-                // Remove old handler if exists
                 if (this._fullscreenChangeHandlerWeb) {
                     document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
                 }

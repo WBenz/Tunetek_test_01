@@ -2218,7 +2218,7 @@
             align-items: center;
         }
 
-        /* ===================== ABOUT ===================== */
+        /* ===================== ABOUT - REVERTED TO ORIGINAL ===================== */
         #about {
             background-color: var(--accent-color);
         }
@@ -2227,14 +2227,29 @@
             display: grid;
             grid-template-columns: 280px 1fr;
             gap: 48px;
-            align-items: start;
+            align-items: stretch;
+        }
+
+        .about-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 50%;
         }
 
         .about-image img {
             width: 100%;
-            border-radius: 50%;
+            height: 100%;
+            object-fit: cover;
             border: 5px solid var(--secondary-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .about-content h3 {
@@ -2261,24 +2276,44 @@
             text-justify: inter-word;
         }
 
+        .about-content p:last-of-type {
+            margin-bottom: 0;
+        }
+
         @media (max-width: 768px) {
             .about-grid {
                 grid-template-columns: 1fr;
                 gap: 32px;
+                align-items: start;
             }
             .about-image {
                 max-width: 250px;
                 margin: 0 auto;
+                height: 250px;
             }
-            .about-content p {
-                text-align: justify;
-                text-justify: inter-word;
+            .about-image img {
+                height: 100%;
+                object-fit: cover;
+            }
+            .about-content {
+                justify-content: flex-start;
             }
             .about-content h3 {
                 text-align: center;
             }
             .about-content .role {
                 text-align: center;
+            }
+            .about-content p {
+                text-align: justify;
+                text-justify: inter-word;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-image {
+                height: 200px;
+                max-width: 200px;
             }
         }
 
@@ -2910,10 +2945,10 @@
                     <span class="role" data-i18n="about.role">Lead Designer & Creative Director</span>
                     
                     <p data-i18n="about.desc1">
-                        With over 10 years of experience in graphic, motion, and web design, Wassef Ben Slimane founded Tunetek Studio Design to blend artistic creativity with technical excellence.
+                        A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I've had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.
                     </p>
                     <p data-i18n="about.desc2">
-                        After working with leading design agencies worldwide, he established the studio in 2016, which has since become known for innovative design solutions that are both visually appealing and functionally effective.
+                        Beyond design, I'm deeply committed to giving back. I've served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it's about making a positive impact.
                     </p>
                 </div>
             </div>
@@ -3425,8 +3460,8 @@
                 'about.title': 'About the Founder',
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Lead Designer & Creative Director',
-                'about.desc1': 'With over 10 years of experience in graphic, motion, and web design, Wassef Ben Slimane founded Tunetek Studio Design to blend artistic creativity with technical excellence.',
-                'about.desc2': 'After working with leading design agencies worldwide, he established the studio in 2016, which has since become known for innovative design solutions that are both visually appealing and functionally effective.',
+                'about.desc1': 'A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I\'ve had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.',
+                'about.desc2': 'Beyond design, I\'m deeply committed to giving back. I\'ve served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it\'s about making a positive impact.',
                 'contact.title': 'Get In Touch',
                 'contact.subtitle': 'Have a project in mind? We\'d love to hear about it.',
                 'contact.info.title': 'Contact Information',
@@ -3478,8 +3513,8 @@
                 'about.title': 'À propos du Fondateur',
                 'about.name': 'Wassef Ben Slimane',
                 'about.role': 'Designer Principal & Directeur Créatif',
-                'about.desc1': 'Avec plus de 10 ans d\'expérience en design graphique, motion et web, Wassef Ben Slimane a fondé Tunetek Studio Design pour allier créativité artistique et excellence technique.',
-                'about.desc2': 'Après avoir travaillé avec des agences de design de premier plan dans le monde entier, il a créé le studio en 2016, qui est depuis devenu connu pour ses solutions de design innovantes à la fois visuellement attrayantes et fonctionnellement efficaces.',
+                'about.desc1': 'Un créatif polyvalent avec plus de 10 ans d\'expérience à la croisée du design, du gaming et de l\'IA. Basé en Tunisie, j\'ai eu le privilège de travailler avec des clients à travers la France, l\'Allemagne, le Japon, les États-Unis, Hong Kong et la Malaisie — apportant une perspective globale à chaque projet.',
+                'about.desc2': 'Au-delà du design, je suis profondément engagé à redonner. J\'ai participé à de nombreuses initiatives bénévoles caritatives et je suis actuellement Trésorier dans une association sportive — parce que je crois qu\'un bon design va au-delà de l\'esthétique ; il s\'agit d\'avoir un impact positif.',
                 'contact.title': 'Contactez-nous',
                 'contact.subtitle': 'Vous avez un projet en tête ? Nous serions ravis d\'en discuter.',
                 'contact.info.title': 'Informations de contact',
@@ -3945,6 +3980,7 @@
                     }
                     this.preview.classList.remove('web-fit-mode');
                 } else {
+                    // ===== GRAPHIC PROJECT - WITH LOADING ANIMATION =====
                     mediaElement = document.createElement('img');
                     mediaElement.className = 'preview-media';
                     mediaElement.src = filePath;
@@ -3959,14 +3995,51 @@
                     };
                     this.previewControls.style.opacity = '1';
                     
+                    // ===== LOADING OVERLAY FOR GRAPHIC =====
                     const loadingOverlay = document.createElement('div');
-                    loadingOverlay.className = 'graphic-loading-overlay';
+                    loadingOverlay.className = 'graphic-loading-overlay active';
                     loadingOverlay.innerHTML = `
                         <div class="graphic-loading-spinner"></div>
                         <div class="graphic-loading-progress">0%</div>
                     `;
                     this.preview.appendChild(loadingOverlay);
                     
+                    // Track image loading progress
+                    let progressInterval = null;
+                    let progress = 0;
+                    
+                    progressInterval = setInterval(() => {
+                        progress += Math.random() * 4 + 2;
+                        if (progress > 85) progress = 85;
+                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                        if (progressText) progressText.textContent = Math.min(Math.round(progress), 85) + '%';
+                    }, 150);
+                    
+                    mediaElement.onload = () => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                        if (progressText) progressText.textContent = '100%';
+                        setTimeout(() => {
+                            loadingOverlay.classList.remove('active');
+                        }, 300);
+                    };
+                    
+                    mediaElement.onerror = () => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                            progressInterval = null;
+                        }
+                        const progressText = loadingOverlay.querySelector('.graphic-loading-progress');
+                        if (progressText) progressText.textContent = '100%';
+                        setTimeout(() => {
+                            loadingOverlay.classList.remove('active');
+                        }, 300);
+                    };
+                    
+                    // ===== GRAPHIC SLIDESHOW NAVIGATION =====
                     if (this.graphicProjectFiles.length > 1) {
                         const navContainer = document.createElement('div');
                         navContainer.className = 'graphic-slide-nav';
@@ -4501,9 +4574,7 @@
                         this.webFitBtn.classList.add('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                         this.webFitBtn.title = 'Reset view';
-                        // KEY FIX: Scroll to top to ensure overlay is positioned correctly
                         this.preview.scrollTop = 0;
-                        // Force reflow to ensure sticky positioning works
                         void this.preview.offsetHeight;
                     } else {
                         img.style.objectFit = 'contain';
@@ -4576,7 +4647,6 @@
                     this.webFitBtn.classList.remove('active');
                     this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                 }
-                // Reset overlay visibility
                 this.previewOverlay.style.display = 'block';
             }
 
