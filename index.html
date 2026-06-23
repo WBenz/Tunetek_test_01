@@ -1330,43 +1330,6 @@
             margin-top: auto !important;
         }
 
-        /* ✅ FIX: Keep controls visible in fullscreen */
-        .split-preview:fullscreen .preview-controls {
-            display: flex !important;
-            position: fixed !important;
-            bottom: 40px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            z-index: 99999 !important;
-            background: rgba(0,0,0,0.6) !important;
-            backdrop-filter: blur(10px) !important;
-            padding: 8px 16px !important;
-            border-radius: 50px !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        /* ✅ FIX: Only show video controls in fullscreen for motion projects */
-        .split-preview:fullscreen.video-active .video-controls-group {
-            display: flex !important;
-        }
-        
-        .split-preview:fullscreen:not(.video-active) .video-controls-group {
-            display: none !important;
-        }
-
-        /* Hide other controls in fullscreen */
-        .split-preview:fullscreen .web-controls-group,
-        .split-preview:fullscreen .graphic-controls-group {
-            display: none !important;
-        }
-
-        /* Hide overlay in fullscreen */
-        .split-preview:fullscreen .preview-overlay {
-            display: none !important;
-        }
-
         .preview-controls button {
             width: 36px;
             height: 36px;
@@ -1729,17 +1692,6 @@
             .split-preview .preview-overlay h3 {
                 font-size: 1.1rem;
             }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 25px !important;
-                padding: 5px 10px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
-                min-width: 26px;
-                min-height: 26px;
-            }
             .split-list .load-more-btn {
                 padding: 8px 20px;
                 font-size: 0.8rem;
@@ -1815,18 +1767,6 @@
             }
             .split-preview.web-fit-mode .preview-controls {
                 bottom: 75px !important;
-            }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 20px !important;
-                padding: 4px 8px !important;
-                gap: 4px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 22px;
-                height: 22px;
-                font-size: 0.55rem;
-                min-width: 22px;
-                min-height: 22px;
             }
             .split-list .load-more-btn {
                 padding: 6px 16px;
@@ -2756,35 +2696,57 @@
             color: white;
         }
 
-        /* ===================== FIX: Only show video controls when a video is present ===================== */
-        .split-preview:has(video.preview-media) {
-            /* This class is used to indicate video is active */
-        }
+        /* ============================================================
+                   FIX: Proper fullscreen controls management
+                   ============================================================ */
         
-        .split-preview:has(video.preview-media) .video-controls-group {
-            display: flex !important;
-        }
-        
-        .split-preview:not(:has(video.preview-media)) .video-controls-group {
+        /* In fullscreen, show the appropriate controls based on project type */
+        .split-preview:fullscreen .video-controls-group {
             display: none !important;
         }
-
-        /* Force controls to be visible and clickable when in fullscreen */
-        .split-preview:fullscreen .preview-controls,
-        .split-preview:fullscreen .preview-controls * {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
+        
+        .split-preview:fullscreen .web-controls-group {
+            display: none !important;
         }
-
-        /* Only show video controls in fullscreen if there's a video */
-        .split-preview:fullscreen:has(video.preview-media) .video-controls-group {
+        
+        .split-preview:fullscreen .graphic-controls-group {
+            display: none !important;
+        }
+        
+        /* Only show video controls in fullscreen for motion projects */
+        .split-preview:fullscreen.motion-project .video-controls-group {
             display: flex !important;
+        }
+        
+        /* Only show web controls in fullscreen for web projects */
+        .split-preview:fullscreen.web-project .web-controls-group {
+            display: flex !important;
+        }
+        
+        /* Only show graphic controls in fullscreen for graphic projects */
+        .split-preview:fullscreen.graphic-project .graphic-controls-group {
+            display: flex !important;
+        }
+        
+        /* Keep controls visible in fullscreen */
+        .split-preview:fullscreen .preview-controls {
+            display: flex !important;
+            position: fixed !important;
+            bottom: 40px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 99999 !important;
+            background: rgba(0,0,0,0.6) !important;
+            backdrop-filter: blur(10px) !important;
+            padding: 8px 16px !important;
+            border-radius: 50px !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
             opacity: 1 !important;
             visibility: visible !important;
         }
         
-        .split-preview:fullscreen:not(:has(video.preview-media)) .video-controls-group {
+        /* Hide overlay in fullscreen */
+        .split-preview:fullscreen .preview-overlay {
             display: none !important;
         }
     </style>
@@ -4089,6 +4051,17 @@
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
+                
+                // Add class to preview for fullscreen control targeting
+                this.preview.classList.remove('motion-project', 'web-project', 'graphic-project');
+                if (item.category === 'motion') {
+                    this.preview.classList.add('motion-project');
+                } else if (item.category === 'web') {
+                    this.preview.classList.add('web-project');
+                } else if (item.category === 'graphic') {
+                    this.preview.classList.add('graphic-project');
+                }
+                
                 this.updatePreview(item);
             }
 
@@ -4129,7 +4102,7 @@
                     this.previewControls.style.opacity = '1';
                     this.previewControls.style.visibility = 'visible';
                     
-                    // Only show video controls if this is a motion project
+                    // Show appropriate controls based on category
                     if (this.currentCategoryType === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.opacity = '1';
@@ -4435,17 +4408,6 @@
                 this.setupVideoControls();
                 this.setupWebControls();
                 this.setupGraphicControls();
-                
-                if (document.fullscreenElement) {
-                    this.previewOverlay.style.display = 'none';
-                    this.previewControls.style.display = 'flex';
-                    this.videoControlsGroup.style.display = 'none';
-                    this.webControlsGroup.style.display = 'flex';
-                    this.graphicControlsGroup.style.display = 'none';
-                    const divider = this.webControlsGroup.querySelector('.divider');
-                    if (divider) divider.style.display = 'none';
-                    this.webFitBtn.style.display = 'none';
-                }
             }
 
             createLoadingOverlay(element, type) {
@@ -4906,6 +4868,7 @@
                 }
                 
                 this.currentCategoryType = null;
+                this.preview.classList.remove('motion-project', 'web-project', 'graphic-project');
                 
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) existingMedia.remove();
