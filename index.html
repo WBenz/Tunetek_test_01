@@ -3744,8 +3744,6 @@
                 this.isVideoMuted = true;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
-                
-                // ✅ FIX: Store category separately for fullscreen restore
                 this.currentCategoryType = null;
                 
                 this.currentPage = 0;
@@ -4041,7 +4039,6 @@
                 return div;
             }
 
-            // ✅ FIX: Store category type when selecting project
             selectProject(item, index) {
                 this.currentProject = item;
                 this.currentCategoryType = item.category;
@@ -4067,7 +4064,7 @@
                 if (currentEl) currentEl.textContent = formatTime(video.currentTime);
             }
 
-            // ✅ FIX: Use stored category type for restoring controls
+            // ========== FIXED: Fullscreen change handler ==========
             _handleFullscreenChange() {
                 const video = this.currentVideo;
                 if (!document.fullscreenElement) {
@@ -4089,15 +4086,23 @@
                     // Show overlay again
                     this.previewOverlay.style.display = 'block';
                     
-                    // ✅ Use stored category type
+                    // FIX: Always show preview controls with proper visibility
                     this.previewControls.style.display = 'flex';
                     this.previewControls.style.position = 'absolute';
                     this.previewControls.style.bottom = '80px';
+                    this.previewControls.style.opacity = '1';
+                    this.previewControls.style.visibility = 'visible';
                     
+                    // FIX: Explicitly show motion controls
                     if (this.currentCategoryType === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.style.opacity = '1';
+                        this.videoControlsGroup.style.visibility = 'visible';
+                        // Make sure all child elements are visible
                         this.videoControlsGroup.querySelectorAll('*').forEach(el => {
                             el.style.display = '';
+                            el.style.opacity = '1';
+                            el.style.visibility = 'visible';
                         });
                         this.webControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
@@ -4620,7 +4625,7 @@
                 }
             }
 
-            // ✅ FULLY FIXED: setupVideoControls with proper fullscreen handling
+            // ========== FIXED: Video controls with fullscreen ==========
             setupVideoControls() {
                 const video = this.currentVideo;
                 if (!video) return;
@@ -4643,7 +4648,6 @@
                 
                 this.videoFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
-                        // ✅ CRITICAL FIX: Set category type BEFORE going fullscreen
                         if (this.currentProject) {
                             this.currentCategoryType = this.currentProject.category;
                         }
@@ -4653,7 +4657,6 @@
                             container.requestFullscreen()
                                 .then(() => {
                                     setTimeout(() => {
-                                        // Style video for fullscreen
                                         if (video) {
                                             video.style.maxHeight = '100vh';
                                             video.style.width = '100%';
@@ -4667,26 +4670,28 @@
                                             container.style.background = '#000';
                                         }
                                         
-                                        // Hide overlay in fullscreen
                                         this.previewOverlay.style.display = 'none';
                                         
-                                        // ✅ KEEP video controls visible
+                                        // FIX: Keep controls visible
                                         this.videoControlsGroup.style.display = 'flex';
+                                        this.videoControlsGroup.style.opacity = '1';
+                                        this.videoControlsGroup.style.visibility = 'visible';
                                         this.videoControlsGroup.querySelectorAll('*').forEach(el => {
                                             el.style.display = '';
+                                            el.style.opacity = '1';
+                                            el.style.visibility = 'visible';
                                         });
                                         this.webControlsGroup.style.display = 'none';
                                         this.graphicControlsGroup.style.display = 'none';
                                         
-                                        // Keep preview controls visible
                                         this.previewControls.style.display = 'flex';
                                         this.previewControls.style.position = 'fixed';
                                         this.previewControls.style.bottom = '40px';
+                                        this.previewControls.style.opacity = '1';
+                                        this.previewControls.style.visibility = 'visible';
                                         
-                                        // Update fullscreen button
                                         const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
                                         if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-compress"></i>';
-                                        
                                     }, 100);
                                 })
                                 .catch(() => {
@@ -4700,61 +4705,11 @@
                     }
                 };
                 
-                // ✅ FIXED: Fullscreen change handler properly restores controls
-                const fullscreenChangeHandler = () => {
-                    if (!document.fullscreenElement) {
-                        // Restore video styles
-                        if (video) {
-                            video.style.maxHeight = '550px';
-                            video.style.width = '100%';
-                            video.style.height = '100%';
-                            video.style.objectFit = 'contain';
-                        }
-                        if (this.preview) {
-                            this.preview.style.display = 'flex';
-                            this.preview.style.alignItems = 'center';
-                            this.preview.style.justifyContent = 'center';
-                            this.preview.style.background = '';
-                            this.preview.style.position = 'relative';
-                        }
-                        
-                        // Show overlay again
-                        this.previewOverlay.style.display = 'block';
-                        
-                        // ✅ Restore controls using stored category type
-                        this.previewControls.style.display = 'flex';
-                        this.previewControls.style.position = 'absolute';
-                        this.previewControls.style.bottom = '80px';
-                        
-                        // ✅ Use currentCategoryType (which is now guaranteed to be set)
-                        if (this.currentCategoryType === 'motion') {
-                            this.videoControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                                el.style.display = '';
-                            });
-                            this.webControlsGroup.style.display = 'none';
-                            this.graphicControlsGroup.style.display = 'none';
-                        } else if (this.currentCategoryType === 'web') {
-                            this.webControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.style.display = 'none';
-                            this.graphicControlsGroup.style.display = 'none';
-                        } else if (this.currentCategoryType === 'graphic') {
-                            this.graphicControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.style.display = 'none';
-                            this.webControlsGroup.style.display = 'none';
-                        }
-                        
-                        // Reset fullscreen button
-                        const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
-                        if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-expand"></i>';
-                    }
-                };
-                
-                // Remove old handler if exists
+                // Fullscreen change handler
                 if (this._fullscreenChangeHandler) {
                     document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
                 }
-                this._fullscreenChangeHandler = fullscreenChangeHandler;
+                this._fullscreenChangeHandler = this._handleFullscreenChange.bind(this);
                 document.addEventListener('fullscreenchange', this._fullscreenChangeHandler);
             }
 
@@ -4855,9 +4810,7 @@
                 };
             }
 
-            // ✅ FIX: Reset category type when clearing preview
             clearPreview() {
-                // Clean up event listeners
                 if (this.currentVideo) {
                     this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
                     this.currentVideo = null;
@@ -4875,7 +4828,6 @@
                     this._graphicKeyHandler = null;
                 }
                 
-                // ✅ Reset category type
                 this.currentCategoryType = null;
                 
                 const existingMedia = this.preview.querySelector('.preview-media');
