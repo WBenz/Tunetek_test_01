@@ -3726,7 +3726,7 @@
         }
 
         // =====================================================================
-        // SPLIT SCREEN MANAGER
+        // SPLIT SCREEN MANAGER - FULLY FIXED
         // =====================================================================
         class SplitScreenManager {
             constructor() {
@@ -3744,6 +3744,9 @@
                 this.isVideoMuted = true;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
+                
+                // ✅ FIX: Store category separately for fullscreen restore
+                this.currentCategoryType = null;
                 
                 this.currentPage = 0;
                 this.itemsPerPage = PROJECTS_PER_PAGE;
@@ -3781,7 +3784,7 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
-                // Bind methods to avoid memory leaks
+                // Bind methods
                 this._updateVideoProgress = this._updateVideoProgress.bind(this);
                 this._handleFullscreenChange = this._handleFullscreenChange.bind(this);
                 this._handleFullscreenChangeWeb = this._handleFullscreenChangeWeb.bind(this);
@@ -4038,8 +4041,10 @@
                 return div;
             }
 
+            // ✅ FIX: Store category type when selecting project
             selectProject(item, index) {
                 this.currentProject = item;
+                this.currentCategoryType = item.category; // ← STORE IT!
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = item.files || [];
                 this.isWebFit = false;
@@ -4062,6 +4067,7 @@
                 if (currentEl) currentEl.textContent = formatTime(video.currentTime);
             }
 
+            // ✅ FIX: Use stored category type for restoring controls
             _handleFullscreenChange() {
                 const video = this.currentVideo;
                 if (!document.fullscreenElement) {
@@ -4083,23 +4089,23 @@
                     // Show overlay again
                     this.previewOverlay.style.display = 'block';
                     
-                    // ✅ Restore controls
+                    // ✅ FIX: Use stored category type instead of currentProject
                     this.previewControls.style.display = 'flex';
                     this.previewControls.style.position = 'absolute';
                     this.previewControls.style.bottom = '80px';
                     
-                    if (this.currentProject && this.currentProject.category === 'motion') {
+                    if (this.currentCategoryType === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.querySelectorAll('*').forEach(el => {
                             el.style.display = '';
                         });
                         this.webControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
-                    } else if (this.currentProject && this.currentProject.category === 'web') {
+                    } else if (this.currentCategoryType === 'web') {
                         this.webControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
-                    } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                    } else if (this.currentCategoryType === 'graphic') {
                         this.graphicControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.display = 'none';
                         this.webControlsGroup.style.display = 'none';
@@ -4689,7 +4695,7 @@
                     }
                 };
                 
-                // ✅ FIXED: Fullscreen change handler properly restores controls
+                // ✅ FIXED: Fullscreen change handler using stored category
                 const fullscreenChangeHandler = () => {
                     if (!document.fullscreenElement) {
                         // Restore video styles
@@ -4710,23 +4716,23 @@
                         // Show overlay again
                         this.previewOverlay.style.display = 'block';
                         
-                        // ✅ Restore controls
+                        // ✅ FIX: Use stored category type
                         this.previewControls.style.display = 'flex';
                         this.previewControls.style.position = 'absolute';
                         this.previewControls.style.bottom = '80px';
                         
-                        if (this.currentProject && this.currentProject.category === 'motion') {
+                        if (this.currentCategoryType === 'motion') {
                             this.videoControlsGroup.style.display = 'flex';
                             this.videoControlsGroup.querySelectorAll('*').forEach(el => {
                                 el.style.display = '';
                             });
                             this.webControlsGroup.style.display = 'none';
                             this.graphicControlsGroup.style.display = 'none';
-                        } else if (this.currentProject && this.currentProject.category === 'web') {
+                        } else if (this.currentCategoryType === 'web') {
                             this.webControlsGroup.style.display = 'flex';
                             this.videoControlsGroup.style.display = 'none';
                             this.graphicControlsGroup.style.display = 'none';
-                        } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                        } else if (this.currentCategoryType === 'graphic') {
                             this.graphicControlsGroup.style.display = 'flex';
                             this.videoControlsGroup.style.display = 'none';
                             this.webControlsGroup.style.display = 'none';
@@ -4843,6 +4849,7 @@
                 };
             }
 
+            // ✅ FIX: Reset category type when clearing preview
             clearPreview() {
                 // Clean up event listeners
                 if (this.currentVideo) {
@@ -4861,6 +4868,9 @@
                     document.removeEventListener('keydown', this._graphicKeyHandler);
                     this._graphicKeyHandler = null;
                 }
+                
+                // ✅ Reset category type
+                this.currentCategoryType = null;
                 
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) existingMedia.remove();
