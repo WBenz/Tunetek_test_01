@@ -21,9 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
-        /* ============================================================
-           CSS VARIABLES & THEMING
-           ============================================================ */
+        /* ===================== CSS VARIABLES ===================== */
         :root {
             --primary-color: #1a73e8;
             --secondary-color: #ff6b00;
@@ -46,14 +44,17 @@
             --font-heading: 'Space Grotesk', 'Inter', sans-serif;
             --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             
+            /* Service colors */
             --graphic-color: #ff6b00;
             --motion-color: #6c5ce7;
             --web-color: #00b894;
             
+            /* Loading constants */
             --loading-timeout: 300ms;
             --fade-timeout: 400ms;
         }
 
+        /* ===================== DARK THEME ===================== */
         [data-theme="dark"] {
             --primary-color: #5b9aff;
             --secondary-color: #ff8c42;
@@ -68,14 +69,13 @@
             --accent-color: #1e1e1e;
             --label-color: #e0e0e0;
             --border-light: rgba(255,255,255,0.06);
+            
             --graphic-color: #ff8c42;
             --motion-color: #a29bfe;
             --web-color: #55efc4;
         }
 
-        /* ============================================================
-           RESET & BASE
-           ============================================================ */
+        /* ===================== RESET & BASE ===================== */
         * {
             margin: 0;
             padding: 0;
@@ -113,9 +113,7 @@
             display: block;
         }
 
-        /* ============================================================
-           UTILITY
-           ============================================================ */
+        /* ===================== UTILITY ===================== */
         .container {
             max-width: var(--max-width);
             margin: 0 auto;
@@ -144,9 +142,7 @@
             }
         }
 
-        /* ============================================================
-           SECTION TITLES
-           ============================================================ */
+        /* ===================== SECTION TITLES ===================== */
         .section-header {
             text-align: center;
             margin-bottom: 48px;
@@ -190,9 +186,7 @@
             margin: 20px auto 0;
         }
 
-        /* ============================================================
-           LOADING OVERLAY
-           ============================================================ */
+        /* ===================== LOADING OVERLAY ===================== */
         #loading-overlay {
             position: fixed;
             top: 0;
@@ -299,9 +293,7 @@
             }
         }
 
-        /* ============================================================
-           HEADER
-           ============================================================ */
+        /* ===================== HEADER ===================== */
         header {
             position: fixed;
             top: 0;
@@ -651,625 +643,106 @@
             }
         }
 
-        /* ============================================================
-           HERO - SCROLL-TRIGGERED DESK
-           ============================================================ */
+        /* ===================== HERO SECTION ===================== */
         #hero {
             position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
             padding-top: var(--header-height);
             overflow: hidden;
-            background: var(--tertiary-color);
-            transition: background 0.6s ease;
+            background: transparent;
         }
 
-        .hero-container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 40px 30px;
-            position: relative;
-            z-index: 2;
-            min-height: calc(100vh - var(--header-height));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-top-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 10;
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: none;
-        }
-
-        .hero-top-content .hero-logo-img {
-            height: 80px;
-            width: auto;
-            display: block;
-        }
-
-        .hero-top-content .brand-name {
-            font-family: var(--font-heading);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            color: var(--secondary-color);
-            letter-spacing: 4px;
-            line-height: 1.1;
-            text-align: center;
-        }
-
-        .hero-top-content .brand-name .sub {
-            font-size: 0.35em;
-            font-weight: 400;
-            color: var(--text-color);
-            opacity: 0.5;
-            letter-spacing: 6px;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .hero-top-content .hero-slogan {
-            font-family: var(--font-heading);
-            font-size: clamp(1.2rem, 2vw, 1.6rem);
-            font-weight: 600;
-            color: var(--secondary-color);
-            letter-spacing: 3px;
-            margin-top: 4px;
-            text-align: center;
-            opacity: 0.8;
-        }
-
-        .hero-top-content .hero-slogan .highlight {
-            color: var(--secondary-color);
-        }
-
-        .hero-scroll-hint {
+        .hero-video-container {
             position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: var(--text-color);
-            opacity: 0.3;
-            letter-spacing: 2px;
-            animation: bounce-hint 2s infinite;
-            z-index: 5;
-            transition: opacity 0.6s ease;
-        }
-
-        @keyframes bounce-hint {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-8px); }
-        }
-
-        .desk-surface {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .desk-surface-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-height: 600px;
-            background: linear-gradient(180deg, 
-                rgba(139, 119, 101, 0.10) 0%,
-                rgba(139, 119, 101, 0.05) 60%,
-                rgba(139, 119, 101, 0.02) 100%
-            );
-            border-radius: 30px;
-            border: 1px solid var(--border-light);
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.04),
-                inset 0 2px 0 rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .desk-item {
-            position: absolute;
-            opacity: 0 !important;
-            pointer-events: none;
-            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            will-change: transform, opacity;
-        }
-
-        .desk-item.visible {
-            opacity: 1 !important;
-            pointer-events: none;
-        }
-
-        .desk-item .item-label {
-            position: absolute;
-            bottom: -28px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: var(--text-color);
-            opacity: 0;
-            transition: all 0.4s ease;
-            white-space: nowrap;
-            background: var(--card-bg);
-            padding: 2px 10px;
-            border-radius: 10px;
-            border: 1px solid var(--border-light);
-        }
-
-        .desk-item.visible .item-label {
-            opacity: 0.4;
-        }
-
-        .desk-item.visible:hover .item-label {
-            opacity: 1;
-        }
-
-        .desk-item.laptop {
-            top: 22%;
-            left: 6%;
-            width: 200px;
-            transform: translateX(-120px) rotate(-12deg) scale(0.6);
-        }
-
-        .desk-item.laptop.visible {
-            transform: translateX(0) rotate(-5deg) scale(1) !important;
-        }
-
-        .laptop-screen {
-            width: 100%;
-            height: 130px;
-            background: #1a1a2e;
-            border-radius: 12px 12px 0 0;
-            padding: 12px;
-            border: 2px solid #2d2d44;
-            border-bottom: none;
-        }
-
-        .laptop-content {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #16213e, #0f3460);
-            border-radius: 6px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .laptop-bar {
-            width: 60%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-        }
-
-        .laptop-lines {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-
-        .laptop-lines span {
-            height: 3px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 2px;
-        }
-
-        .laptop-lines span:nth-child(1) { width: 80%; }
-        .laptop-lines span:nth-child(2) { width: 60%; }
-        .laptop-lines span:nth-child(3) { width: 70%; }
-
-        .laptop-preview {
-            display: flex;
-            gap: 4px;
-            margin-top: 4px;
-        }
-
-        .preview-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-        }
-
-        .preview-dot:nth-child(2) {
-            background: var(--web-color);
-            animation: pulse-dot 2s infinite;
-        }
-
-        .laptop-base {
-            width: 80%;
-            height: 6px;
-            background: linear-gradient(180deg, #2d2d44, #1a1a2e);
-            margin: 0 auto;
-            border-radius: 0 0 4px 4px;
-        }
-
-        .desk-item.sketchbook {
-            top: 48%;
-            left: 28%;
-            width: 150px;
-            transform: translateX(120px) rotate(18deg) scale(0.6);
-        }
-
-        .desk-item.sketchbook.visible {
-            transform: translateX(0) rotate(8deg) scale(1) !important;
-        }
-
-        .sketchbook-cover {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(135deg, #e8d5b5, #d4b896);
-            border-radius: 4px 12px 12px 4px;
-            padding: 8px 12px;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border-left: 3px solid #b8956e;
-        }
-
-        .sketchbook-spine {
-            position: absolute;
-            left: -3px;
-            top: 0;
-            width: 6px;
-            height: 100%;
-            background: #b8956e;
-            border-radius: 2px 0 0 2px;
-        }
-
-        .sketchbook-pages {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-top: 6px;
-        }
-
-        .page-line {
-            height: 3px;
-            background: rgba(0,0,0,0.06);
-            border-radius: 2px;
-        }
-
-        .page-line:nth-child(1) { width: 80%; }
-        .page-line:nth-child(2) { width: 60%; }
-        .page-line:nth-child(3) { width: 70%; }
-        .page-line:nth-child(4) { width: 50%; }
-
-        .sketchbook-icon {
-            position: absolute;
-            bottom: 8px;
-            right: 12px;
-            font-size: 1.4rem;
-            opacity: 0.4;
-        }
-
-        .desk-item.palette {
-            top: 65%;
-            left: 3%;
-            width: 140px;
-            transform: translateY(80px) rotate(-8deg) scale(0.6);
-        }
-
-        .desk-item.palette.visible {
-            transform: translateY(0) rotate(-3deg) scale(1) !important;
-        }
-
-        .palette-colors {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            padding: 10px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
-
-        .palette-colors span {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .palette-colors span:hover {
-            transform: scale(1.2);
-        }
-
-        .desk-item.coffee {
-            top: 12%;
-            right: 8%;
-            width: 70px;
-            transform: translateY(-60px) rotate(12deg) scale(0.6);
-        }
-
-        .desk-item.coffee.visible {
-            transform: translateY(0) rotate(5deg) scale(1) !important;
-        }
-
-        .coffee-cup {
-            position: relative;
-            width: 100%;
-        }
-
-        .coffee-body {
-            width: 100%;
-            height: 60px;
-            background: linear-gradient(180deg, #f5f0eb, #e8e0d8);
-            border-radius: 0 0 16px 16px;
-            border: 2px solid #d4c8bc;
-            border-top: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .coffee-liquid {
-            position: absolute;
-            bottom: 0;
+            top: var(--header-height);
             left: 0;
             right: 0;
-            height: 70%;
-            background: linear-gradient(180deg, #6d4c2a, #4a3220);
-            border-radius: 0 0 14px 14px;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 0;
         }
 
-        .coffee-handle {
-            position: absolute;
-            right: -16px;
-            top: 8px;
-            width: 16px;
-            height: 30px;
-            border: 3px solid #d4c8bc;
-            border-left: none;
-            border-radius: 0 20px 20px 0;
-        }
-
-        .coffee-steam {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-        }
-
-        .coffee-steam span {
-            width: 3px;
-            height: 16px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-            animation: steam 2s infinite ease-in-out;
-        }
-
-        .coffee-steam span:nth-child(1) { animation-delay: 0s; height: 12px; }
-        .coffee-steam span:nth-child(2) { animation-delay: 0.6s; height: 18px; }
-        .coffee-steam span:nth-child(3) { animation-delay: 1.2s; height: 14px; }
-
-        .desk-item.ruler {
-            bottom: 18%;
-            right: 4%;
-            width: 180px;
-            transform: translateX(100px) rotate(-10deg) scale(0.6);
-        }
-
-        .desk-item.ruler.visible {
-            transform: translateX(0) rotate(-4deg) scale(1) !important;
-        }
-
-        .ruler-body {
+        .hero-video-container video {
             width: 100%;
-            height: 20px;
-            background: linear-gradient(180deg, #f5e6c8, #e8d5b5);
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            padding: 0 8px;
-            gap: 6px;
-            border: 1px solid #d4b896;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            height: 100%;
+            object-fit: cover;
         }
 
-        .ruler-mark {
-            width: 2px;
-            height: 12px;
-            background: #8a7a6a;
-            flex-shrink: 0;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 40px 0;
         }
 
-        .ruler-mark:nth-child(5) { height: 16px; }
-        .ruler-mark:nth-child(8) { height: 16px; }
-        .ruler-mark:nth-child(3) { height: 14px; }
-
-        .desk-item.brush {
-            bottom: 30%;
-            left: 10%;
-            width: 140px;
-            transform: translateX(-80px) rotate(20deg) scale(0.6);
-        }
-
-        .desk-item.brush.visible {
-            transform: translateX(0) rotate(12deg) scale(1) !important;
-        }
-
-        .brush-body {
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-
-        .brush-handle {
-            width: 100px;
-            height: 8px;
-            background: linear-gradient(180deg, #d4a574, #b8834a);
-            border-radius: 4px 0 0 4px;
-        }
-
-        .brush-tip {
-            width: 16px;
-            height: 12px;
-            background: linear-gradient(180deg, #6c5ce7, #a29bfe);
-            border-radius: 0 50% 50% 0;
-            flex-shrink: 0;
-            animation: brush-glow 2s ease-in-out infinite;
-        }
-
-        .hero-actions-wrapper {
+        .hero-actions-bottom {
             position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            opacity: 0;
-            transition: opacity 1.2s ease 0.8s;
-            pointer-events: none;
-        }
-
-        .hero-actions-wrapper.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .hero-actions {
+            bottom: 40px;
+            left: 40px;
+            z-index: 2;
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        @keyframes steam {
-            0%, 100% {
-                transform: translateY(0) scaleY(1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translateY(-8px) scaleY(1.2);
-                opacity: 0.6;
-            }
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes brush-glow {
-            0%, 100% { 
-                box-shadow: 0 0 10px rgba(108, 92, 231, 0.2);
-            }
-            50% { 
-                box-shadow: 0 0 25px rgba(108, 92, 231, 0.4);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .desk-item.laptop { width: 150px; top: 18%; left: 4%; }
-            .laptop-screen { height: 100px; }
-            .desk-item.sketchbook { width: 120px; top: 44%; left: 24%; }
-            .sketchbook-cover { height: 80px; }
-            .desk-item.palette { width: 110px; top: 60%; left: 2%; }
-            .desk-item.coffee { width: 55px; top: 10%; right: 4%; }
-            .coffee-body { height: 48px; }
-            .desk-item.ruler { width: 140px; bottom: 15%; right: 3%; }
-            .desk-item.brush { width: 110px; bottom: 28%; left: 6%; }
-            .brush-handle { width: 80px; }
-            .hero-top-content .hero-logo-img { height: 60px; }
-            .hero-top-content .brand-name { font-size: 2.8rem; }
-            .hero-top-content .hero-slogan { font-size: 1.2rem; }
+            gap: 12px;
         }
 
         @media (max-width: 768px) {
-            .desk-item.laptop { width: 120px; top: 15%; left: 3%; }
-            .laptop-screen { height: 80px; padding: 8px; }
-            .laptop-content { padding: 6px; gap: 3px; }
-            .laptop-bar { height: 3px; }
-            .laptop-lines span { height: 2px; }
-            .laptop-base { height: 4px; }
-            .desk-item.sketchbook { width: 100px; top: 38%; left: 18%; }
-            .sketchbook-cover { height: 65px; padding: 4px 8px; }
-            .sketchbook-pages { gap: 2px; margin-top: 4px; }
-            .page-line { height: 2px; }
-            .sketchbook-icon { font-size: 1rem; }
-            .desk-item.palette { width: 90px; top: 55%; left: 1%; }
-            .palette-colors { gap: 4px; padding: 6px; }
-            .desk-item.coffee { width: 45px; top: 8%; right: 3%; }
-            .coffee-body { height: 38px; }
-            .coffee-handle { right: -12px; width: 12px; height: 22px; }
-            .desk-item.ruler { width: 110px; bottom: 12%; right: 2%; }
-            .ruler-body { height: 16px; padding: 0 6px; gap: 4px; }
-            .ruler-mark { height: 10px; }
-            .ruler-mark:nth-child(5) { height: 12px; }
-            .ruler-mark:nth-child(8) { height: 12px; }
-            .desk-item.brush { width: 90px; bottom: 22%; left: 4%; }
-            .brush-handle { width: 65px; height: 6px; }
-            .brush-tip { width: 14px; height: 10px; }
-            .hero-top-content .hero-logo-img { height: 50px; }
-            .hero-top-content .brand-name { font-size: 2.2rem; }
-            .hero-top-content .hero-slogan { font-size: 1rem; letter-spacing: 2px; }
-            .hero-actions .btn { padding: 10px 20px; font-size: 0.8rem; }
-            .hero-scroll-hint { bottom: 30px; font-size: 0.6rem; }
+            .hero-actions-bottom {
+                bottom: 20px;
+                left: 20px;
+                gap: 8px;
+            }
+            .hero-actions-bottom .btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .desk-item.laptop { width: 90px; top: 12%; left: 2%; }
-            .laptop-screen { height: 60px; padding: 4px; }
-            .laptop-content { padding: 4px; gap: 2px; }
-            .laptop-bar { height: 2px; }
-            .laptop-lines span { height: 2px; }
-            .laptop-base { height: 3px; }
-            .desk-item.sketchbook { width: 75px; top: 32%; left: 14%; }
-            .sketchbook-cover { height: 50px; padding: 4px 6px; }
-            .sketchbook-pages { gap: 2px; margin-top: 3px; }
-            .page-line { height: 2px; }
-            .sketchbook-icon { font-size: 0.8rem; bottom: 4px; right: 6px; }
-            .desk-item.palette { width: 70px; top: 48%; left: 1%; }
-            .palette-colors { gap: 3px; padding: 4px; }
-            .desk-item.coffee { width: 35px; top: 6%; right: 2%; }
-            .coffee-body { height: 30px; }
-            .coffee-handle { right: -10px; width: 10px; height: 18px; border-width: 2px; }
-            .coffee-steam span { width: 2px; height: 10px; }
-            .coffee-steam span:nth-child(2) { height: 14px; }
-            .desk-item.ruler { width: 80px; bottom: 10%; right: 1%; }
-            .ruler-body { height: 14px; padding: 0 4px; gap: 3px; }
-            .ruler-mark { height: 8px; }
-            .ruler-mark:nth-child(5) { height: 10px; }
-            .ruler-mark:nth-child(8) { height: 10px; }
-            .desk-item.brush { width: 70px; bottom: 18%; left: 2%; }
-            .brush-handle { width: 50px; height: 5px; }
-            .brush-tip { width: 12px; height: 8px; }
-            .hero-top-content .hero-logo-img { height: 40px; }
-            .hero-top-content .brand-name { font-size: 1.8rem; letter-spacing: 2px; }
-            .hero-top-content .brand-name .sub { font-size: 0.3em; letter-spacing: 4px; }
-            .hero-top-content .hero-slogan { font-size: 0.85rem; letter-spacing: 1px; }
-            .hero-actions { flex-direction: column; align-items: center; gap: 10px; }
-            .hero-actions .btn { padding: 8px 20px; font-size: 0.7rem; width: 100%; max-width: 220px; justify-content: center; }
-            .hero-scroll-hint { bottom: 20px; font-size: 0.5rem; }
-            .desk-item .item-label { font-size: 0.4rem; bottom: -20px; padding: 1px 6px; }
-            .desk-item.visible .item-label { opacity: 0; }
-            .desk-item.visible:hover .item-label { opacity: 0.4; }
+            .hero-actions-bottom {
+                bottom: 16px;
+                left: 16px;
+                gap: 6px;
+                flex-direction: column;
+                width: calc(100% - 32px);
+            }
+            .hero-actions-bottom .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
         }
 
-        /* ============================================================
-           BUTTONS
-           ============================================================ */
+        .video-controls {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2;
+        }
+
+        .video-controls button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-controls button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        /* ===================== BUTTONS ===================== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -1299,32 +772,32 @@
         }
 
         .btn-secondary {
-            background: rgba(0, 0, 0, 0.06);
-            color: var(--text-color);
-            border: 2px solid var(--border-light);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
-            background: rgba(0, 0, 0, 0.1);
-            border-color: var(--secondary-color);
-            color: var(--text-color);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            color: white;
         }
 
         [data-theme="dark"] .btn-secondary {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
             color: white;
         }
 
         [data-theme="dark"] .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--secondary-color);
+            background: rgba(255, 255, 255, 0.25);
         }
 
-        /* ============================================================
-           SERVICES
-           ============================================================ */
+        /* ===================== SERVICES ===================== */
         #services {
             background-color: var(--accent-color);
         }
@@ -1373,10 +846,12 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
+        /* Service-specific accent colors */
         .service-card:nth-child(1)::before { background: linear-gradient(90deg, var(--graphic-color), #ff9a44); }
         .service-card:nth-child(2)::before { background: linear-gradient(90deg, var(--motion-color), #a29bfe); }
         .service-card:nth-child(3)::before { background: linear-gradient(90deg, var(--web-color), #55efc4); }
 
+        /* Service icon wrapper */
         .service-icon-wrapper {
             display: inline-flex;
             align-items: center;
@@ -1393,6 +868,7 @@
             transform: scale(1.05) rotate(-5deg);
         }
 
+        /* Individual service icon styles */
         .service-card:nth-child(1) .service-icon-wrapper {
             background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
             color: var(--graphic-color);
@@ -1420,6 +896,7 @@
             background: linear-gradient(135deg, rgba(0, 184, 148, 0.25), rgba(0, 184, 148, 0.05));
         }
 
+        /* Service icon */
         .service-icon {
             font-size: 2.2rem;
             transition: all 0.4s ease;
@@ -1430,10 +907,12 @@
             transform: scale(1.1);
         }
 
+        /* Service title with color */
         .service-card:nth-child(1) .service-title { color: var(--graphic-color); }
         .service-card:nth-child(2) .service-title { color: var(--motion-color); }
         .service-card:nth-child(3) .service-title { color: var(--web-color); }
 
+        /* Service description */
         .service-desc {
             color: var(--text-color);
             line-height: 1.8;
@@ -1443,6 +922,7 @@
             text-justify: inter-word;
         }
 
+        /* Service image - subtle border */
         .service-image {
             width: 100%;
             border-radius: 12px;
@@ -1459,8 +939,8 @@
         }
 
         /* ============================================================
-           PORTFOLIO (Split Screen)
-           ============================================================ */
+                   PORTFOLIO - SPLIT SCREEN WITH SEARCH
+                   ============================================================ */
         #portfolio {
             background-color: var(--accent-color);
             overflow: hidden;
@@ -1664,6 +1144,7 @@
             margin-bottom: 16px;
         }
 
+        /* ===================== OVERLAY - ALWAYS VISIBLE IN PREVIEW ===================== */
         .split-preview .preview-overlay {
             position: absolute;
             bottom: 0;
@@ -1682,6 +1163,7 @@
             box-sizing: border-box !important;
         }
 
+        /* Hide overlay in fullscreen */
         .split-preview:fullscreen .preview-overlay {
             display: none !important;
         }
@@ -1716,6 +1198,7 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
+        /* ===================== WEB FIT MODE ===================== */
         .split-preview.web-fit-mode {
             overflow: auto !important;
             align-items: flex-start !important;
@@ -1756,6 +1239,7 @@
             top: auto !important;
         }
 
+        /* ===================== FULLSCREEN OVERRIDES ===================== */
         .split-preview:fullscreen {
             max-height: 100vh !important;
             min-height: 100vh !important;
@@ -1794,6 +1278,7 @@
             display: none !important;
         }
 
+        /* ===================== CONTROLS ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -2279,9 +1764,7 @@
             }
         }
 
-        /* ============================================================
-           GRAPHIC SLIDESHOW NAVIGATION
-           ============================================================ */
+        /* ===================== GRAPHIC SLIDESHOW NAVIGATION ===================== */
         .graphic-slide-nav {
             position: absolute;
             top: 50%;
@@ -2345,9 +1828,7 @@
             margin-bottom: 10px;
         }
 
-        /* ============================================================
-           GRAPHIC LOADING OVERLAY
-           ============================================================ */
+        /* ===================== GRAPHIC LOADING OVERLAY ===================== */
         .graphic-loading-overlay {
             position: absolute;
             top: 0;
@@ -2420,9 +1901,7 @@
             }
         }
 
-        /* ============================================================
-           MODALS
-           ============================================================ */
+        /* ===================== MODALS ===================== */
         .modal {
             position: fixed;
             inset: 0;
@@ -2734,9 +2213,7 @@
             align-items: center;
         }
 
-        /* ============================================================
-           ABOUT
-           ============================================================ */
+        /* ===================== ABOUT - CENTERED LAYOUT ===================== */
         #about {
             background-color: var(--accent-color);
         }
@@ -2810,9 +2287,7 @@
             }
         }
 
-        /* ============================================================
-           CONTACT
-           ============================================================ */
+        /* ===================== CONTACT ===================== */
         #contact {
             text-align: center;
             background: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
@@ -2929,9 +2404,7 @@
             }
         }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
+        /* ===================== FOOTER ===================== */
         .site-footer {
             background-color: var(--footer-bg);
             color: white;
@@ -3079,6 +2552,7 @@
             }
         }
 
+        /* ===================== RESPONSIVE ===================== */
         @media (max-width: 768px) {
             .section-padding {
                 padding: 70px 0;
@@ -3142,6 +2616,7 @@
             }
         }
 
+        /* ===================== ANIMATIONS ===================== */
         .fade-in {
             opacity: 0;
             transform: translateY(20px);
@@ -3183,9 +2658,7 @@
     </style>
 </head>
 <body>
-    <!-- ============================================================
-    LOADING OVERLAY
-    ============================================================ -->
+    <!-- ==================== LOADING OVERLAY ==================== -->
     <div id="loading-overlay">
         <div class="loading-content">
             <img src="tunetek_loading.gif" alt="Loading animation" class="loading-gif">
@@ -3197,9 +2670,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    HEADER
-    ============================================================ -->
+    <!-- ==================== HEADER ==================== -->
     <header id="main-header" role="banner">
         <div class="header-container">
             <a href="#hero" class="logo" aria-label="Tunetek Studio Design Home">
@@ -3237,132 +2708,36 @@
         </div>
     </header>
 
-    <!-- ============================================================
-    HERO
-    ============================================================ -->
+    <!-- ==================== HERO ==================== -->
     <section id="hero" aria-label="Hero">
-        <div class="hero-container">
-            <!-- Hero Logo & Slogan (Initial State) -->
-            <div class="hero-top-content" id="heroTopContent">
-                <img src="logo_transparent.png" alt="Tunetek Studio Design" class="hero-logo-img">
-                <div class="brand-name">
-                    Tunetek
-                    <span class="sub">Studio Design</span>
-                </div>
-                <div class="hero-slogan">✦ <span class="highlight">Crafting</span> Visual Excellence ✦</div>
-            </div>
+        <div class="hero-video-container">
+            <video class="hero-video" autoplay loop muted playsinline preload="metadata">
+                <source src="https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/hero-video.mp4" type="video/mp4">
+            </video>
+        </div>
 
-            <!-- Desk Surface (Hidden initially) -->
-            <div class="desk-surface" id="deskSurface">
-                <div class="desk-surface-inner">
-                    <!-- Laptop -->
-                    <div class="desk-item laptop" data-delay="0.1">
-                        <div class="laptop-screen">
-                            <div class="laptop-content">
-                                <div class="laptop-bar"></div>
-                                <div class="laptop-lines">
-                                    <span></span><span></span><span></span>
-                                </div>
-                                <div class="laptop-preview">
-                                    <span class="preview-dot"></span>
-                                    <span class="preview-dot"></span>
-                                    <span class="preview-dot"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="laptop-base"></div>
-                        <span class="item-label">Web Design</span>
-                    </div>
+        <div class="video-controls">
+            <button id="mute-btn" aria-label="Toggle sound">
+                <i class="fas fa-volume-mute"></i>
+            </button>
+        </div>
 
-                    <!-- Sketchbook -->
-                    <div class="desk-item sketchbook" data-delay="0.3">
-                        <div class="sketchbook-cover">
-                            <div class="sketchbook-spine"></div>
-                            <div class="sketchbook-pages">
-                                <span class="page-line"></span>
-                                <span class="page-line"></span>
-                                <span class="page-line"></span>
-                                <span class="page-line"></span>
-                            </div>
-                            <div class="sketchbook-icon">✏️</div>
-                        </div>
-                        <span class="item-label">Graphic Design</span>
-                    </div>
+        <div class="container">
+            <div class="hero-content"></div>
+        </div>
 
-                    <!-- Color Palette -->
-                    <div class="desk-item palette" data-delay="0.5">
-                        <div class="palette-colors">
-                            <span style="background:#ff6b00;"></span>
-                            <span style="background:#6c5ce7;"></span>
-                            <span style="background:#00b894;"></span>
-                            <span style="background:#fdcb6e;"></span>
-                            <span style="background:#e17055;"></span>
-                            <span style="background:#0984e3;"></span>
-                        </div>
-                        <span class="item-label">Brand Identity</span>
-                    </div>
-
-                    <!-- Coffee Cup -->
-                    <div class="desk-item coffee" data-delay="0.7">
-                        <div class="coffee-cup">
-                            <div class="coffee-body">
-                                <div class="coffee-liquid"></div>
-                            </div>
-                            <div class="coffee-handle"></div>
-                            <div class="coffee-steam">
-                                <span></span><span></span><span></span>
-                            </div>
-                        </div>
-                        <span class="item-label">Creativity Fuel</span>
-                    </div>
-
-                    <!-- Ruler -->
-                    <div class="desk-item ruler" data-delay="0.4">
-                        <div class="ruler-body">
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                            <span class="ruler-mark"></span>
-                        </div>
-                        <span class="item-label">Precision</span>
-                    </div>
-
-                    <!-- Paint Brush -->
-                    <div class="desk-item brush" data-delay="0.2">
-                        <div class="brush-body">
-                            <div class="brush-handle"></div>
-                            <div class="brush-tip"></div>
-                        </div>
-                        <span class="item-label">Motion Design</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Actions (Appears after desk assembles) -->
-            <div class="hero-actions-wrapper" id="heroActions">
-                <div class="hero-actions">
-                    <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
-                        <span>View Our Work</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <a href="#contact" class="btn btn-secondary" data-i18n="hero.cta.contact">
-                        <span>Let's Talk</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Scroll Hint -->
-            <div class="hero-scroll-hint" id="scrollHint">↓ Scroll to explore</div>
+        <div class="hero-actions-bottom">
+            <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
+                <span>View Our Work</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#contact" class="btn btn-secondary" data-i18n="hero.cta.contact">
+                <span>Let's Talk</span>
+            </a>
         </div>
     </section>
 
-    <!-- ============================================================
-    SERVICES
-    ============================================================ -->
+    <!-- ==================== SERVICES ==================== -->
     <section id="services" aria-label="Our Services">
         <div class="container section-padding">
             <div class="section-header">
@@ -3411,9 +2786,7 @@
         </div>
     </section>
 
-    <!-- ============================================================
-    PORTFOLIO
-    ============================================================ -->
+    <!-- ==================== PORTFOLIO ==================== -->
     <section id="portfolio" aria-label="Our Portfolio">
         <div class="container section-padding">
             <div class="section-header">
@@ -3468,6 +2841,7 @@
                     <div class="video-badge" id="previewVideoBadge"><i class="fas fa-play"></i> video</div>
                     
                     <div class="preview-controls" id="previewControls">
+                        <!-- Video controls (for motion) -->
                         <div class="video-controls-group" id="videoControlsGroup" style="display:none;">
                             <button class="video-play-btn" id="videoPlayBtn" aria-label="Play/Pause">
                                 <i class="fas fa-play"></i>
@@ -3487,6 +2861,7 @@
                             </button>
                         </div>
 
+                        <!-- Web controls -->
                         <div class="web-controls-group" id="webControlsGroup" style="display:none;">
                             <button class="web-fit-btn" id="webFitBtn" aria-label="Fit width">
                                 <i class="fas fa-arrows-alt-h"></i>
@@ -3497,6 +2872,7 @@
                             </button>
                         </div>
 
+                        <!-- Graphic controls (Fullscreen only) -->
                         <div class="graphic-controls-group" id="graphicControlsGroup" style="display:none;">
                             <button class="graphic-fullscreen-btn" id="graphicFullscreenBtn" aria-label="Fullscreen">
                                 <i class="fas fa-expand"></i>
@@ -3520,9 +2896,7 @@
         </div>
     </section>
 
-    <!-- ============================================================
-    ABOUT
-    ============================================================ -->
+    <!-- ==================== ABOUT ==================== -->
     <section id="about" aria-label="About the Founder">
         <div class="container section-padding">
             <div class="section-header">
@@ -3554,9 +2928,7 @@
         </div>
     </section>
 
-    <!-- ============================================================
-    CONTACT
-    ============================================================ -->
+    <!-- ==================== CONTACT ==================== -->
     <section id="contact" aria-label="Contact Us">
         <div class="container section-padding">
             <div class="section-header">
@@ -3615,9 +2987,7 @@
         </div>
     </section>
 
-    <!-- ============================================================
-    FOOTER
-    ============================================================ -->
+    <!-- ==================== FOOTER ==================== -->
     <footer class="site-footer" role="contentinfo">
         <div class="footer-grid">
             <div class="footer-col">
@@ -3679,9 +3049,7 @@
         </div>
     </footer>
 
-    <!-- ============================================================
-    MODALS
-    ============================================================ -->
+    <!-- ==================== MODALS ==================== -->
     <div class="modal" id="graphic-project-modal" role="dialog" aria-modal="true" aria-label="Graphic Design Project Detail">
         <div class="modal-content">
             <button class="modal-close" aria-label="Close modal"><i class="fas fa-times"></i></button>
@@ -3732,13 +3100,61 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    SCRIPTS
-    ============================================================ -->
+    <!-- ==================== SCRIPTS ==================== -->
     <script>
-        // ============================================================
+        // =====================================================================
         // CONSTANTS
-        // ============================================================
+        // =====================================================================
+        const LOADING_TIMEOUT = 300;
+        const FADE_TIMEOUT = 400;
+        const HEADER_HEIGHT = 72;
+
+        // =====================================================================
+        // PROGRESS TRACKING
+        // =====================================================================
+        const loadingItems = { total: 0, loaded: 0, progress: 0 };
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const progressBar = document.getElementById('loading-progress-bar');
+        const percentageDisplay = document.getElementById('loading-percentage');
+        const loadingText = document.getElementById('loading-text');
+
+        function updateLoadingProgress() {
+            const percent = Math.min(Math.round((loadingItems.loaded / loadingItems.total) * 100), 100);
+            loadingItems.progress = percent;
+            progressBar.style.width = percent + '%';
+            percentageDisplay.textContent = percent + '%';
+            
+            if (percent < 30) loadingText.textContent = 'Initializing...';
+            else if (percent < 60) loadingText.textContent = 'Loading resources...';
+            else if (percent < 85) loadingText.textContent = 'Preparing content...';
+            else if (percent < 100) loadingText.textContent = 'Almost ready...';
+            else loadingText.textContent = 'Complete!';
+
+            if (percent >= 100) {
+                setTimeout(() => loadingOverlay.classList.add('hidden'), FADE_TIMEOUT);
+            }
+        }
+
+        function trackLoadedItem() {
+            loadingItems.loaded++;
+            updateLoadingProgress();
+        }
+
+        // =====================================================================
+        // HEADER SCROLL
+        // =====================================================================
+        function handleHeaderScroll() {
+            const header = document.getElementById('main-header');
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // =====================================================================
+        // FILE MANIFEST
+        // =====================================================================
         const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/';
 
         const PROJECT_MANIFEST = {
@@ -3984,9 +3400,9 @@
             ]
         };
 
-        // ============================================================
+        // =====================================================================
         // TRANSLATIONS
-        // ============================================================
+        // =====================================================================
         const TRANSLATIONS = {
             en: {
                 'nav.home': 'Home',
@@ -4098,358 +3514,33 @@
             }
         };
 
-        // ============================================================
-        // SCROLL-TRIGGERED DESK ANIMATION
-        // ============================================================
-        (function() {
-            const hero = document.getElementById('hero');
-            const heroTopContent = document.getElementById('heroTopContent');
-            const deskSurface = document.getElementById('deskSurface');
-            const deskItems = document.querySelectorAll('.desk-item');
-            const heroActions = document.getElementById('heroActions');
-            const scrollHint = document.getElementById('scrollHint');
-
-            deskItems.forEach(item => {
-                item.classList.remove('visible');
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.8)';
-                item.style.pointerEvents = 'none';
-            });
-
-            if (heroActions) {
-                heroActions.classList.remove('visible');
-                heroActions.style.opacity = '0';
-                heroActions.style.pointerEvents = 'none';
-            }
-
-            if (deskSurface) {
-                deskSurface.style.opacity = '0';
-            }
-
-            let isComplete = false;
-
-            function updateHero() {
-                const rect = hero.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-                const scrollProgress = Math.max(0, Math.min(1, (windowHeight - rect.top) / (windowHeight * 1.3)));
-
-                if (heroTopContent) {
-                    const scale = Math.max(0.3, 1 - scrollProgress * 0.7);
-                    const opacity = Math.max(0, 1 - scrollProgress * 1.3);
-                    heroTopContent.style.transform = `scale(${scale})`;
-                    heroTopContent.style.opacity = opacity;
-                    heroTopContent.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-                }
-
-                if (deskSurface) {
-                    const deskOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.1) * 4));
-                    deskSurface.style.opacity = deskOpacity;
-                    deskSurface.style.transition = 'opacity 0.5s ease';
-                }
-
-                deskItems.forEach((item) => {
-                    const delay = parseFloat(item.dataset.delay) || 0;
-                    const startThreshold = 0.15 + delay * 0.1;
-                    const endThreshold = 0.15 + delay * 0.1 + 0.4;
-                    
-                    let itemProgress = 0;
-                    if (scrollProgress > startThreshold) {
-                        itemProgress = Math.min(1, (scrollProgress - startThreshold) / (endThreshold - startThreshold));
-                    }
-                    
-                    if (itemProgress > 0.05) {
-                        item.classList.add('visible');
-                        item.style.opacity = Math.min(1, itemProgress * 1.5);
-                        item.style.pointerEvents = 'none';
-                        const scale = 0.7 + itemProgress * 0.3;
-                        const currentTransform = window.getComputedStyle(item).transform;
-                        if (currentTransform === 'none') {
-                            item.style.transform = `scale(${scale})`;
-                        } else {
-                            const match = currentTransform.match(/rotate\(([^)]+)\)/);
-                            if (match) {
-                                const rotation = match[1];
-                                item.style.transform = `rotate(${rotation}) scale(${scale})`;
-                            } else {
-                                item.style.transform = `scale(${scale})`;
-                            }
-                        }
-                    } else {
-                        item.classList.remove('visible');
-                        item.style.opacity = '0';
-                        item.style.pointerEvents = 'none';
-                    }
-                });
-
-                if (scrollProgress > 0.7 && !isComplete) {
-                    isComplete = true;
-                    if (heroActions) {
-                        heroActions.classList.add('visible');
-                        heroActions.style.opacity = '1';
-                        heroActions.style.pointerEvents = 'auto';
-                        heroActions.style.transition = 'opacity 0.8s ease';
-                    }
-                    if (scrollHint) {
-                        scrollHint.style.opacity = '0';
-                        scrollHint.style.transition = 'opacity 0.6s ease';
-                    }
-                }
-
-                if (scrollHint && scrollProgress > 0.1) {
-                    const hintOpacity = Math.max(0, 1 - (scrollProgress - 0.1) * 5);
-                    scrollHint.style.opacity = hintOpacity;
-                }
-            }
-
-            let ticking = false;
-            let animationId = null;
-
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(() => {
-                        updateHero();
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-
-            window.addEventListener('resize', () => {
-                if (animationId) cancelAnimationFrame(animationId);
-                animationId = requestAnimationFrame(updateHero);
-            });
-
-            window.addEventListener('orientationchange', () => {
-                setTimeout(updateHero, 300);
-            });
-
-            setTimeout(updateHero, 100);
-            setTimeout(updateHero, 300);
-            setTimeout(updateHero, 600);
-
-            const themeObserver = new MutationObserver(() => {
-                setTimeout(updateHero, 100);
-            });
-            themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-        })();
-
-        // ============================================================
-        // LOADING PROGRESS
-        // ============================================================
-        const loadingItems = { total: 0, loaded: 0, progress: 0 };
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const progressBar = document.getElementById('loading-progress-bar');
-        const percentageDisplay = document.getElementById('loading-percentage');
-        const loadingText = document.getElementById('loading-text');
-
-        function updateLoadingProgress() {
-            const percent = Math.min(Math.round((loadingItems.loaded / loadingItems.total) * 100), 100);
-            loadingItems.progress = percent;
-            progressBar.style.width = percent + '%';
-            percentageDisplay.textContent = percent + '%';
-            
-            if (percent < 30) loadingText.textContent = 'Initializing...';
-            else if (percent < 60) loadingText.textContent = 'Loading resources...';
-            else if (percent < 85) loadingText.textContent = 'Preparing content...';
-            else if (percent < 100) loadingText.textContent = 'Almost ready...';
-            else loadingText.textContent = 'Complete!';
-
-            if (percent >= 100) {
-                setTimeout(() => loadingOverlay.classList.add('hidden'), 400);
-            }
+        // =====================================================================
+        // UTILITY FUNCTIONS
+        // =====================================================================
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '00:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
-        function trackLoadedItem() {
-            loadingItems.loaded++;
-            updateLoadingProgress();
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
         }
 
-        // ============================================================
-        // HEADER SCROLL
-        // ============================================================
-        function handleHeaderScroll() {
-            const header = document.getElementById('main-header');
-            if (window.pageYOffset > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
+        function getFileUrl(filename) {
+            const parts = filename.split('/');
+            const encodedParts = parts.map(part => encodeURIComponent(part));
+            return GITHUB_BASE + encodedParts.join('/');
         }
 
-        window.addEventListener('scroll', () => {
-            handleHeaderScroll();
-        });
-
-        // ============================================================
-        // THEME MANAGER
-        // ============================================================
-        class ThemeManager {
-            constructor() {
-                this.btn = document.getElementById('theme-toggle');
-                this.currentTheme = localStorage.getItem('theme') || 'light';
-                this.applyTheme(this.currentTheme);
-                this.btn.addEventListener('click', () => this.toggleTheme());
-            }
-
-            toggleTheme() {
-                const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-                this.applyTheme(newTheme);
-                localStorage.setItem('theme', newTheme);
-                this.currentTheme = newTheme;
-            }
-
-            applyTheme(theme) {
-                if (theme === 'dark') {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    this.btn.innerHTML = '<i class="fas fa-sun"></i>';
-                } else {
-                    document.documentElement.removeAttribute('data-theme');
-                    this.btn.innerHTML = '<i class="fas fa-moon"></i>';
-                }
-            }
-        }
-
-        // ============================================================
-        // LANGUAGE MANAGER
-        // ============================================================
-        class LanguageManager {
-            constructor() {
-                this.currentLang = localStorage.getItem('language') || 'en';
-                this.elements = document.querySelectorAll('[data-i18n]');
-                this.langEnBtn = document.getElementById('lang-en');
-                this.langFrBtn = document.getElementById('lang-fr');
-                this.setupListeners();
-                this.applyLanguage(this.currentLang);
-            }
-
-            setupListeners() {
-                this.langEnBtn.addEventListener('click', () => this.setLanguage('en'));
-                this.langFrBtn.addEventListener('click', () => this.setLanguage('fr'));
-            }
-
-            setLanguage(lang) {
-                this.currentLang = lang;
-                localStorage.setItem('language', lang);
-                this.applyLanguage(lang);
-                this.langEnBtn.classList.toggle('active', lang === 'en');
-                this.langFrBtn.classList.toggle('active', lang === 'fr');
-            }
-
-            applyLanguage(lang) {
-                this.elements.forEach(el => {
-                    const key = el.dataset.i18n;
-                    if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
-                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                            el.placeholder = TRANSLATIONS[lang][key];
-                        } else {
-                            el.innerHTML = TRANSLATIONS[lang][key];
-                        }
-                    }
-                });
-            }
-        }
-
-        // ============================================================
-        // SCROLL ANIMATIONS (Fade In)
-        // ============================================================
-        function setupScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-            
-            document.querySelectorAll('.fade-in, .service-card, .about-grid .fade-in, .contact-info, .contact-form').forEach(el => {
-                observer.observe(el);
-            });
-        }
-
-        // ============================================================
-        // SMOOTH NAVIGATION
-        // ============================================================
-        function setupSmoothNavigation() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        const headerHeight = document.getElementById('main-header').offsetHeight;
-                        window.scrollTo({
-                            top: target.getBoundingClientRect().top + window.pageYOffset - headerHeight,
-                            behavior: 'smooth'
-                        });
-                        document.getElementById('nav-container').classList.remove('active');
-                        document.getElementById('hamburger').innerHTML = '<i class="fas fa-bars"></i>';
-                    }
-                });
-            });
-        }
-
-        // ============================================================
-        // CONTACT FORM
-        // ============================================================
-        function setupContactForm() {
-            const form = document.getElementById('contact-form');
-            if (!form) return;
-            
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = form.querySelector('button[type="submit"]');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                btn.disabled = true;
-                
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: new FormData(form),
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    
-                    if (response.ok) {
-                        btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-                        form.reset();
-                        setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                        }, 3000);
-                    } else {
-                        throw new Error('Form submission failed');
-                    }
-                } catch (error) {
-                    btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
-                    setTimeout(() => {
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    }, 3000);
-                }
-            });
-        }
-
-        // ============================================================
-        // HAMBURGER MENU
-        // ============================================================
-        function setupHamburgerMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const navContainer = document.getElementById('nav-container');
-            
-            if (hamburger && navContainer) {
-                hamburger.addEventListener('click', () => {
-                    navContainer.classList.toggle('active');
-                    hamburger.innerHTML = navContainer.classList.contains('active') ? 
-                        '<i class="fas fa-times"></i>' : 
-                        '<i class="fas fa-bars"></i>';
-                });
-            }
-        }
-
-        // ============================================================
-        // PROJECT MANAGER (Portfolio)
-        // ============================================================
+        // =====================================================================
+        // PROJECT MANAGER
+        // =====================================================================
         class ProjectManager {
             constructor() {
                 this.allProjects = { graphic: [], motion: [], web: [] };
@@ -4502,9 +3593,9 @@
             }
         }
 
-        // ============================================================
-        // SPLIT SCREEN MANAGER (Portfolio)
-        // ============================================================
+        // =====================================================================
+        // SPLIT SCREEN MANAGER
+        // =====================================================================
         class SplitScreenManager {
             constructor() {
                 this.projectManager = new ProjectManager();
@@ -5640,54 +4731,172 @@
             }
         }
 
-        // ============================================================
-        // UTILITY FUNCTIONS
-        // ============================================================
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return '00:00';
-            const m = Math.floor(seconds / 60);
-            const s = Math.floor(seconds % 60);
-            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        // =====================================================================
+        // LANGUAGE MANAGER
+        // =====================================================================
+        class LanguageManager {
+            constructor() {
+                this.currentLang = localStorage.getItem('language') || 'en';
+                this.elements = document.querySelectorAll('[data-i18n]');
+                this.langEnBtn = document.getElementById('lang-en');
+                this.langFrBtn = document.getElementById('lang-fr');
+                this.setupListeners();
+                this.applyLanguage(this.currentLang);
+            }
+
+            setupListeners() {
+                this.langEnBtn.addEventListener('click', () => this.setLanguage('en'));
+                this.langFrBtn.addEventListener('click', () => this.setLanguage('fr'));
+            }
+
+            setLanguage(lang) {
+                this.currentLang = lang;
+                localStorage.setItem('language', lang);
+                this.applyLanguage(lang);
+                this.langEnBtn.classList.toggle('active', lang === 'en');
+                this.langFrBtn.classList.toggle('active', lang === 'fr');
+            }
+
+            applyLanguage(lang) {
+                this.elements.forEach(el => {
+                    const key = el.dataset.i18n;
+                    if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = TRANSLATIONS[lang][key];
+                        else el.innerHTML = TRANSLATIONS[lang][key];
+                    }
+                });
+            }
         }
 
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
+        // =====================================================================
+        // THEME MANAGER
+        // =====================================================================
+        class ThemeManager {
+            constructor() {
+                this.btn = document.getElementById('theme-toggle');
+                this.currentTheme = localStorage.getItem('theme') || 'light';
+                this.applyTheme(this.currentTheme);
+                this.btn.addEventListener('click', () => this.toggleTheme());
+            }
+
+            toggleTheme() {
+                const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                this.applyTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
+                this.currentTheme = newTheme;
+            }
+
+            applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    this.btn.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    this.btn.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            }
         }
 
-        function getFileUrl(filename) {
-            const parts = filename.split('/');
-            const encodedParts = parts.map(part => encodeURIComponent(part));
-            return GITHUB_BASE + encodedParts.join('/');
+        // =====================================================================
+        // MAIN APP
+        // =====================================================================
+        class App {
+            constructor() {
+                this.theme = new ThemeManager();
+                this.language = new LanguageManager();
+                this.manager = null;
+                this.init();
+            }
+
+            async init() {
+                try {
+                    this.manager = new SplitScreenManager();
+                    this.setupScrollAnimations();
+                    this.setupHeaderScroll();
+                    this.setupSmoothNavigation();
+                    this.setupContactForm();
+                    this.setupHeroMute();
+                    this.setupHamburgerMenu();
+                } catch (error) {
+                    console.error('Failed to initialize app:', error);
+                    loadingOverlay.classList.add('hidden');
+                }
+            }
+
+            setupScrollAnimations() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+                document.querySelectorAll('.fade-in, .service-card, .about-grid .fade-in, .contact-info, .contact-form').forEach(el => observer.observe(el));
+            }
+
+            setupHeaderScroll() {
+                window.addEventListener('scroll', debounce(handleHeaderScroll, 10));
+                window.addEventListener('resize', debounce(handleHeaderScroll, 100));
+                setTimeout(handleHeaderScroll, 100);
+            }
+
+            setupSmoothNavigation() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+                        const target = document.querySelector(targetId);
+                        if (target) {
+                            e.preventDefault();
+                            const headerHeight = document.getElementById('main-header').offsetHeight;
+                            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - headerHeight, behavior: 'smooth' });
+                            document.getElementById('nav-container').classList.remove('active');
+                            document.getElementById('hamburger').innerHTML = '<i class="fas fa-bars"></i>';
+                        }
+                    });
+                });
+            }
+
+            setupContactForm() {
+                const form = document.getElementById('contact-form');
+                if (!form) return;
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = form.querySelector('button[type="submit"]');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    btn.disabled = true;
+                    try {
+                        const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+                        if (response.ok) { btn.innerHTML = '<i class="fas fa-check"></i> Sent!'; form.reset(); setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000); }
+                        else throw new Error('Form submission failed');
+                    } catch (error) { btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error'; setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000); }
+                });
+            }
+
+            setupHeroMute() {
+                const muteBtn = document.getElementById('mute-btn');
+                const video = document.querySelector('.hero-video');
+                if (muteBtn && video) {
+                    video.muted = true;
+                    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    muteBtn.addEventListener('click', () => { video.muted = !video.muted; muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>'; });
+                }
+            }
+
+            setupHamburgerMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const navContainer = document.getElementById('nav-container');
+                if (hamburger && navContainer) {
+                    hamburger.addEventListener('click', () => {
+                        navContainer.classList.toggle('active');
+                        hamburger.innerHTML = navContainer.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    });
+                }
+            }
         }
 
-        // ============================================================
+        // =====================================================================
         // INIT
-        // ============================================================
+        // =====================================================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize managers
-            const theme = new ThemeManager();
-            const language = new LanguageManager();
-            
-            // Setup features
-            setupScrollAnimations();
-            setupSmoothNavigation();
-            setupContactForm();
-            setupHamburgerMenu();
-            
-            // Initialize portfolio
-            const portfolio = new SplitScreenManager();
-            
-            // Initial loading progress
-            loadingItems.total = 3;
-            trackLoadedItem();
-            trackLoadedItem();
-            trackLoadedItem();
-            
-            console.log('Tunetek Studio Design initialized successfully!');
+            window.app = new App();
         });
     </script>
 </body>
