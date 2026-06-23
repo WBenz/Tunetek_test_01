@@ -2387,7 +2387,7 @@
             text-align: center;
         }
 
-        /* ===== STAGGERED PARAGRAPH ANIMATIONS ===== */
+        /* ===== STAGGERED PARAGRAPH ANIMATIONS - FIXED ===== */
         .about-content .about-paragraph {
             opacity: 0;
             transform: translateY(30px);
@@ -2407,11 +2407,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* Stagger delays */
-        .about-content .about-paragraph:nth-child(1) { transition-delay: 0s; }
-        .about-content .about-paragraph:nth-child(2) { transition-delay: 0.3s; }
-        .about-content .about-paragraph:nth-child(3) { transition-delay: 0.6s; }
 
         .about-content .about-paragraph:last-of-type {
             margin-bottom: 0;
@@ -5047,28 +5042,45 @@
         }
 
         // =====================================================================
-        // ABOUT SECTION - STAGGERED ANIMATION
+        // ABOUT SECTION - STAGGERED LUXURY ANIMATION (FIXED)
         // =====================================================================
         function initAboutStaggeredAnimation() {
             const paragraphs = document.querySelectorAll('.about-paragraph');
             if (!paragraphs.length) return;
 
+            // Reset all paragraphs to hidden state
+            paragraphs.forEach(p => {
+                p.classList.remove('visible');
+                p.style.opacity = '0';
+                p.style.transform = 'translateY(30px)';
+            });
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Animate each paragraph with delay
-                        const paragraph = entry.target;
-                        const allParagraphs = paragraph.parentElement.querySelectorAll('.about-paragraph');
+                        const allParagraphs = entry.target.querySelectorAll('.about-paragraph');
+                        
+                        // Animate each paragraph one by one with delay
                         allParagraphs.forEach((p, index) => {
+                            // Calculate delay: 0ms, 400ms, 800ms for 3 paragraphs
+                            const delay = index * 400;
+                            
                             setTimeout(() => {
+                                p.style.transition = 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                                p.style.opacity = '1';
+                                p.style.transform = 'translateY(0)';
                                 p.classList.add('visible');
-                            }, index * 300); // 300ms delay between each
+                            }, delay);
                         });
+                        
                         // Unobserve after triggering
-                        observer.unobserve(paragraph.parentElement);
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.2 });
+            }, { 
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            });
 
             // Observe the parent container
             const container = paragraphs[0].parentElement;
