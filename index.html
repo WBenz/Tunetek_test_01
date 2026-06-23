@@ -12,7 +12,7 @@
     <link rel="icon" href="favicon-16x16.png" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
     
-    <!-- Fonts -->
+    <!-- Fonts with preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -48,10 +48,6 @@
             --graphic-color: #ff6b00;
             --motion-color: #6c5ce7;
             --web-color: #00b894;
-            
-            /* Loading constants */
-            --loading-timeout: 300ms;
-            --fade-timeout: 400ms;
         }
 
         /* ===================== DARK THEME ===================== */
@@ -307,7 +303,6 @@
             z-index: 9900;
             transition: all var(--transition);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            opacity: 1;
         }
 
         [data-theme="dark"] header {
@@ -677,7 +672,6 @@
             opacity: 1;
         }
 
-        /* Hero loading overlay */
         .hero-loading-overlay {
             position: absolute;
             top: 0;
@@ -714,13 +708,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            padding: 40px 0;
         }
 
         .hero-actions-bottom {
@@ -819,11 +806,10 @@
             color: white;
         }
 
-        /* ===== UPDATED: "Let's Talk" button with orange text ===== */
         .btn-secondary {
             background: rgba(0, 0, 0, 0.6);
-            color: var(--secondary-color); /* ← Orange text! */
-            border: 2px solid var(--secondary-color); /* ← Orange border */
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -896,12 +882,10 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
-        /* Service-specific accent colors */
         .service-card:nth-child(1)::before { background: linear-gradient(90deg, var(--graphic-color), #ff9a44); }
         .service-card:nth-child(2)::before { background: linear-gradient(90deg, var(--motion-color), #a29bfe); }
         .service-card:nth-child(3)::before { background: linear-gradient(90deg, var(--web-color), #55efc4); }
 
-        /* Service icon wrapper */
         .service-icon-wrapper {
             display: inline-flex;
             align-items: center;
@@ -918,7 +902,6 @@
             transform: scale(1.05) rotate(-5deg);
         }
 
-        /* Individual service icon styles */
         .service-card:nth-child(1) .service-icon-wrapper {
             background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
             color: var(--graphic-color);
@@ -946,7 +929,6 @@
             background: linear-gradient(135deg, rgba(0, 184, 148, 0.25), rgba(0, 184, 148, 0.05));
         }
 
-        /* Service icon */
         .service-icon {
             font-size: 2.2rem;
             transition: all 0.4s ease;
@@ -957,12 +939,10 @@
             transform: scale(1.1);
         }
 
-        /* Service title with color */
         .service-card:nth-child(1) .service-title { color: var(--graphic-color); }
         .service-card:nth-child(2) .service-title { color: var(--motion-color); }
         .service-card:nth-child(3) .service-title { color: var(--web-color); }
 
-        /* Service description */
         .service-desc {
             color: var(--text-color);
             line-height: 1.8;
@@ -972,7 +952,6 @@
             text-justify: inter-word;
         }
 
-        /* Service image - subtle border */
         .service-image {
             width: 100%;
             border-radius: 12px;
@@ -1200,7 +1179,6 @@
             margin-bottom: 16px;
         }
 
-        /* ===================== OVERLAY - ALWAYS VISIBLE IN PREVIEW ===================== */
         .split-preview .preview-overlay {
             position: absolute;
             bottom: 0;
@@ -1209,27 +1187,23 @@
             padding: 30px 40px;
             background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
             color: white;
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            transition: none;
             pointer-events: none;
             z-index: 2;
-            width: 100% !important;
-            min-width: 100% !important;
-            box-sizing: border-box !important;
+            width: 100%;
+            min-width: 100%;
+            box-sizing: border-box;
         }
 
-        /* Hide overlay in fullscreen */
         .split-preview:fullscreen .preview-overlay {
-            display: none !important;
+            display: none;
         }
 
         .split-preview:-webkit-full-screen .preview-overlay {
-            display: none !important;
+            display: none;
         }
 
         .split-preview:-moz-full-screen .preview-overlay {
-            display: none !important;
+            display: none;
         }
 
         .split-preview .preview-overlay h3 {
@@ -1254,7 +1228,6 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* ===================== WEB FIT MODE ===================== */
         .split-preview.web-fit-mode {
             overflow: auto !important;
             align-items: flex-start !important;
@@ -1283,8 +1256,6 @@
             left: 0 !important;
             right: 0 !important;
             z-index: 10 !important;
-            opacity: 1 !important;
-            transform: translateY(0) !important;
             pointer-events: none;
             flex-shrink: 0 !important;
             margin-top: auto !important;
@@ -1295,7 +1266,6 @@
             top: auto !important;
         }
 
-        /* ===================== FULLSCREEN OVERRIDES ===================== */
         .split-preview:fullscreen {
             max-height: 100vh !important;
             min-height: 100vh !important;
@@ -1334,7 +1304,6 @@
             display: none !important;
         }
 
-        /* ===================== CONTROLS ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1343,7 +1312,6 @@
             z-index: 5;
             display: flex;
             gap: 10px;
-            opacity: 1 !important;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
             padding: 8px 16px;
@@ -1358,13 +1326,11 @@
             left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 15 !important;
-            opacity: 1 !important;
             margin-top: auto !important;
         }
 
         .split-preview:fullscreen .preview-controls {
             display: flex !important;
-            opacity: 1 !important;
             position: fixed !important;
             bottom: 40px !important;
             left: 50% !important;
@@ -1941,7 +1907,6 @@
             margin-bottom: 10px;
         }
 
-        /* ===================== GRAPHIC LOADING OVERLAY ===================== */
         .graphic-loading-overlay {
             position: absolute;
             top: 0;
@@ -1983,11 +1948,6 @@
             background: rgba(0, 0, 0, 0.4);
             padding: 2px 12px;
             border-radius: 12px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -2389,7 +2349,6 @@
             text-align: center;
         }
 
-        /* ===== STAGGERED PARAGRAPH ANIMATIONS - FIXED ===== */
         .about-content .about-paragraph {
             opacity: 0;
             transform: translateY(30px);
@@ -2414,7 +2373,6 @@
             margin-bottom: 0;
         }
 
-        /* ===== MOBILE TEXT OPTIMIZATION ===== */
         @media (max-width: 768px) {
             .about-content .about-paragraph {
                 font-size: 0.9rem;
@@ -2873,9 +2831,7 @@
             </button>
         </div>
 
-        <div class="container">
-            <div class="hero-content"></div>
-        </div>
+        <div class="container"></div>
 
         <div class="hero-actions-bottom">
             <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
@@ -3699,10 +3655,8 @@
             
             if (!video || !loadingOverlay) return;
             
-            // Show loading overlay initially
             loadingOverlay.classList.remove('hidden');
             
-            // When video can play through, hide loading overlay
             const handleCanPlay = () => {
                 video.classList.add('loaded');
                 setTimeout(() => {
@@ -3713,7 +3667,6 @@
             
             video.addEventListener('canplaythrough', handleCanPlay);
             
-            // Fallback: if video takes too long, show after 5 seconds
             setTimeout(() => {
                 if (!video.classList.contains('loaded')) {
                     video.classList.add('loaded');
@@ -3721,7 +3674,6 @@
                 }
             }, 5000);
             
-            // Handle errors
             video.addEventListener('error', () => {
                 video.classList.add('loaded');
                 loadingOverlay.classList.add('hidden');
@@ -3803,11 +3755,9 @@
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
                 
-                // Pagination
                 this.currentPage = 0;
                 this.itemsPerPage = PROJECTS_PER_PAGE;
                 this.totalPages = 0;
-                this.displayedItems = [];
                 this.isLoadingMore = false;
                 
                 this.preview = document.getElementById('splitPreview');
@@ -3841,13 +3791,20 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
+                // Bind methods to avoid memory leaks
+                this._updateVideoProgress = this._updateVideoProgress.bind(this);
+                this._handleFullscreenChange = this._handleFullscreenChange.bind(this);
+                this._handleFullscreenChangeWeb = this._handleFullscreenChangeWeb.bind(this);
+                this._graphicKeyHandler = null;
+                this._fullscreenChangeHandler = null;
+                this._fullscreenChangeHandlerWeb = null;
+                
                 this.init();
             }
 
             async init() {
-                // Calculate total projects for loading
                 const totalProjects = Object.values(PROJECT_MANIFEST).reduce((sum, arr) => sum + arr.length, 0);
-                loadingItems.total = Math.min(totalProjects + 5, 100); // +5 for other resources
+                loadingItems.total = Math.min(totalProjects + 5, 100);
                 updateLoadingProgress();
                 
                 this.allProjects = this.projectManager.loadAllProjects();
@@ -3856,16 +3813,15 @@
                 this.setupSearch();
                 this.buildList('all');
                 
-                // Track loading progress
                 const totalToTrack = Math.min(Object.values(PROJECT_MANIFEST).reduce((sum, arr) => sum + arr.length, 0), 95);
                 for (let i = 0; i < totalToTrack; i++) {
                     trackLoadedItem();
                 }
-                trackLoadedItem(); // For styles
-                trackLoadedItem(); // For scripts
-                trackLoadedItem(); // For fonts
-                trackLoadedItem(); // For hero video
-                trackLoadedItem(); // Buffer
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
                 updateLoadingProgress();
             }
 
@@ -3993,7 +3949,6 @@
                 }
                 
                 const fragment = document.createDocumentFragment();
-                const totalItems = this.filteredItems.length;
                 const globalStart = start;
                 
                 pageItems.forEach((item, index) => {
@@ -4003,15 +3958,11 @@
                 });
                 
                 this.listContainer.appendChild(fragment);
-                
-                // Update count
                 this.listCount.textContent = `${this.filteredItems.length} projects`;
                 
-                // Update search clear button
                 if (this.currentSearch) this.clearSearch.classList.add('visible');
                 else this.clearSearch.classList.remove('visible');
                 
-                // Show load more button if needed
                 if (end < this.filteredItems.length) {
                     const loadMoreContainer = document.createElement('div');
                     loadMoreContainer.className = 'load-more-container';
@@ -4026,7 +3977,6 @@
                     this.listContainer.appendChild(loadMoreContainer);
                 }
                 
-                // Select first item if no selection
                 if (this.filteredItems.length > 0 && !this.currentProject) {
                     this.selectProject(this.filteredItems[0], 0);
                 } else if (this.currentProject) {
@@ -4114,6 +4064,97 @@
                 this.updatePreview(item);
             }
 
+            _updateVideoProgress() {
+                const video = this.currentVideo;
+                if (!video || isNaN(video.duration)) return;
+                this.videoProgressFill.style.width = `${(video.currentTime / video.duration) * 100}%`;
+                const currentEl = this.videoControlsGroup.querySelector('.current-time');
+                if (currentEl) currentEl.textContent = formatTime(video.currentTime);
+            }
+
+            _handleFullscreenChange() {
+                const video = this.currentVideo;
+                if (!document.fullscreenElement) {
+                    if (video) {
+                        video.style.maxHeight = '550px';
+                        video.style.width = '100%';
+                        video.style.height = '100%';
+                        video.style.objectFit = 'contain';
+                    }
+                    if (this.preview) {
+                        this.preview.style.display = 'flex';
+                        this.preview.style.alignItems = 'center';
+                        this.preview.style.justifyContent = 'center';
+                        this.preview.style.background = '';
+                    }
+                    this.previewOverlay.style.display = 'block';
+                    this.previewControls.style.display = 'flex';
+                    if (this.currentProject && this.currentProject.category === 'motion') {
+                        this.videoControlsGroup.style.display = 'flex';
+                        this.webControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                    } else if (this.currentProject && this.currentProject.category === 'web') {
+                        this.webControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'inline-block';
+                        this.webFitBtn.style.display = 'inline-flex';
+                    } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                        this.graphicControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.webControlsGroup.style.display = 'none';
+                    }
+                }
+            }
+
+            _handleFullscreenChangeWeb() {
+                const img = this.preview.querySelector('.preview-media');
+                const isFullscreen = !!document.fullscreenElement;
+                if (isFullscreen) {
+                    this.previewOverlay.style.display = 'none';
+                    this.previewControls.style.display = 'flex';
+                    this.webFitBtn.style.display = 'none';
+                    const divider = this.webControlsGroup.querySelector('.divider');
+                    if (divider) divider.style.display = 'none';
+                    this.videoControlsGroup.style.display = 'none';
+                    this.graphicControlsGroup.style.display = 'none';
+                } else {
+                    this.previewOverlay.style.display = 'block';
+                    this.previewControls.style.display = 'flex';
+                    this.webFitBtn.style.display = 'inline-flex';
+                    const divider = this.webControlsGroup.querySelector('.divider');
+                    if (divider) divider.style.display = 'inline-block';
+                    this.videoControlsGroup.style.display = 'none';
+                    this.graphicControlsGroup.style.display = 'none';
+                    if (this.isWebFit) {
+                        this.preview.classList.add('web-fit-mode');
+                        if (img) {
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = 'auto';
+                            img.style.maxHeight = 'none';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = '100%';
+                        }
+                        this.webFitBtn.classList.add('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                    } else {
+                        this.preview.classList.remove('web-fit-mode');
+                        if (img) {
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                        }
+                        this.webFitBtn.classList.remove('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                    }
+                }
+            }
+
             updatePreview(item) {
                 const filePath = getFileUrl(item.file);
                 
@@ -4132,6 +4173,17 @@
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
                 this.preview.classList.remove('web-fit-mode');
+                
+                // Clean up old event listeners
+                if (this.currentVideo) {
+                    this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
+                }
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
+                }
+                if (this._fullscreenChangeHandlerWeb) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
+                }
                 
                 const oldNav = this.preview.querySelector('.graphic-slide-nav');
                 if (oldNav) oldNav.remove();
@@ -4165,13 +4217,7 @@
                     
                     this.createLoadingOverlay(mediaElement, 'video');
                     
-                    mediaElement.addEventListener('timeupdate', () => {
-                        if (!isNaN(mediaElement.duration)) {
-                            this.videoProgressFill.style.width = `${(mediaElement.currentTime / mediaElement.duration) * 100}%`;
-                            const currentEl = this.videoControlsGroup.querySelector('.current-time');
-                            if (currentEl) currentEl.textContent = formatTime(mediaElement.currentTime);
-                        }
-                    });
+                    mediaElement.addEventListener('timeupdate', this._updateVideoProgress);
                     mediaElement.addEventListener('play', () => {
                         this.isVideoPlaying = true;
                         this.videoPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -4632,49 +4678,8 @@
                     }
                 };
                 
-                const fullscreenChangeHandler = () => {
-                    if (!document.fullscreenElement) {
-                        if (video) {
-                            video.style.maxHeight = '550px';
-                            video.style.width = '100%';
-                            video.style.height = '100%';
-                            video.style.objectFit = 'contain';
-                        }
-                        if (this.preview) {
-                            this.preview.style.display = 'flex';
-                            this.preview.style.alignItems = 'center';
-                            this.preview.style.justifyContent = 'center';
-                            this.preview.style.background = '';
-                        }
-                        this.previewOverlay.style.display = 'block';
-                        this.previewControls.style.display = 'flex';
-                        if (this.currentProject && this.currentProject.category === 'motion') {
-                            this.videoControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                                el.style.display = '';
-                            });
-                            this.webControlsGroup.style.display = 'none';
-                            this.graphicControlsGroup.style.display = 'none';
-                        } else if (this.currentProject && this.currentProject.category === 'web') {
-                            this.webControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.style.display = 'none';
-                            this.graphicControlsGroup.style.display = 'none';
-                            const divider = this.webControlsGroup.querySelector('.divider');
-                            if (divider) divider.style.display = 'inline-block';
-                            this.webFitBtn.style.display = 'inline-flex';
-                        } else if (this.currentProject && this.currentProject.category === 'graphic') {
-                            this.graphicControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.style.display = 'none';
-                            this.webControlsGroup.style.display = 'none';
-                        }
-                    }
-                };
-                
-                if (this._fullscreenChangeHandler) {
-                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
-                }
-                this._fullscreenChangeHandler = fullscreenChangeHandler;
-                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+                this._fullscreenChangeHandler = this._handleFullscreenChange.bind(this);
+                document.addEventListener('fullscreenchange', this._fullscreenChangeHandler);
             }
 
             setupWebControls() {
@@ -4720,53 +4725,8 @@
                     }
                 };
                 
-                const fullscreenChangeHandler = () => {
-                    const isFullscreen = !!document.fullscreenElement;
-                    if (isFullscreen) {
-                        this.previewOverlay.style.display = 'none';
-                        this.previewControls.style.display = 'flex';
-                        this.webFitBtn.style.display = 'none';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'none';
-                        this.videoControlsGroup.style.display = 'none';
-                        this.graphicControlsGroup.style.display = 'none';
-                    } else {
-                        this.previewOverlay.style.display = 'block';
-                        this.previewControls.style.display = 'flex';
-                        this.webFitBtn.style.display = 'inline-flex';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'inline-block';
-                        this.videoControlsGroup.style.display = 'none';
-                        this.graphicControlsGroup.style.display = 'none';
-                        if (this.isWebFit) {
-                            this.preview.classList.add('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = 'auto';
-                            img.style.maxHeight = 'none';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = '100%';
-                            this.webFitBtn.classList.add('active');
-                            this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
-                        } else {
-                            this.preview.classList.remove('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.maxHeight = '550px';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = 'auto';
-                            this.webFitBtn.classList.remove('active');
-                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
-                        }
-                    }
-                };
-                
-                if (this._fullscreenChangeHandlerWeb) {
-                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
-                }
-                this._fullscreenChangeHandlerWeb = fullscreenChangeHandler;
-                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+                this._fullscreenChangeHandlerWeb = this._handleFullscreenChangeWeb.bind(this);
+                document.addEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
                 
                 this.webFitBtn.onclick = () => {
                     if (document.fullscreenElement) return;
@@ -4820,6 +4780,24 @@
             }
 
             clearPreview() {
+                // Clean up event listeners
+                if (this.currentVideo) {
+                    this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
+                    this.currentVideo = null;
+                }
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
+                    this._fullscreenChangeHandler = null;
+                }
+                if (this._fullscreenChangeHandlerWeb) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
+                    this._fullscreenChangeHandlerWeb = null;
+                }
+                if (this._graphicKeyHandler) {
+                    document.removeEventListener('keydown', this._graphicKeyHandler);
+                    this._graphicKeyHandler = null;
+                }
+                
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) existingMedia.remove();
                 const placeholder = this.preview.querySelector('.preview-placeholder');
@@ -4830,10 +4808,6 @@
                 if (counter) counter.remove();
                 const loadingOverlay = this.preview.querySelector('.graphic-loading-overlay');
                 if (loadingOverlay) loadingOverlay.remove();
-                if (this._graphicKeyHandler) {
-                    document.removeEventListener('keydown', this._graphicKeyHandler);
-                    this._graphicKeyHandler = null;
-                }
                 
                 this.previewTitle.textContent = 'Select a project';
                 this.previewCat.textContent = 'Category';
@@ -5056,13 +5030,12 @@
         }
 
         // =====================================================================
-        // ABOUT SECTION - STAGGERED LUXURY ANIMATION (FIXED)
+        // ABOUT SECTION - STAGGERED LUXURY ANIMATION
         // =====================================================================
         function initAboutStaggeredAnimation() {
             const paragraphs = document.querySelectorAll('.about-paragraph');
             if (!paragraphs.length) return;
 
-            // Reset all paragraphs to hidden state
             paragraphs.forEach(p => {
                 p.classList.remove('visible');
                 p.style.opacity = '0';
@@ -5074,9 +5047,7 @@
                     if (entry.isIntersecting) {
                         const allParagraphs = entry.target.querySelectorAll('.about-paragraph');
                         
-                        // Animate each paragraph one by one with delay
                         allParagraphs.forEach((p, index) => {
-                            // Calculate delay: 0ms, 400ms, 800ms for 3 paragraphs
                             const delay = index * 400;
                             
                             setTimeout(() => {
@@ -5087,7 +5058,6 @@
                             }, delay);
                         });
                         
-                        // Unobserve after triggering
                         observer.unobserve(entry.target);
                     }
                 });
@@ -5096,7 +5066,6 @@
                 rootMargin: '0px 0px -50px 0px'
             });
 
-            // Observe the parent container
             const container = paragraphs[0].parentElement;
             if (container) {
                 observer.observe(container);
@@ -5116,10 +5085,7 @@
 
             async init() {
                 try {
-                    // Initialize hero video lazy loading
                     initHeroVideo();
-                    
-                    // Initialize about staggered animation
                     initAboutStaggeredAnimation();
                     
                     this.manager = new SplitScreenManager();
