@@ -1347,9 +1347,13 @@
             visibility: visible !important;
         }
 
-        /* ✅ FIX: Video controls stay visible in fullscreen */
-        .split-preview:fullscreen .video-controls-group {
+        /* ✅ FIX: Only show video controls in fullscreen for motion projects */
+        .split-preview:fullscreen.video-active .video-controls-group {
             display: flex !important;
+        }
+        
+        .split-preview:fullscreen:not(.video-active) .video-controls-group {
+            display: none !important;
         }
 
         /* Hide other controls in fullscreen */
@@ -2752,10 +2756,17 @@
             color: white;
         }
 
-        /* ===================== FIX: Only force controls visible when needed ===================== */
-        /* This rule ONLY applies when the preview has a video (motion project) */
+        /* ===================== FIX: Only show video controls when a video is present ===================== */
+        .split-preview:has(video.preview-media) {
+            /* This class is used to indicate video is active */
+        }
+        
         .split-preview:has(video.preview-media) .video-controls-group {
             display: flex !important;
+        }
+        
+        .split-preview:not(:has(video.preview-media)) .video-controls-group {
+            display: none !important;
         }
 
         /* Force controls to be visible and clickable when in fullscreen */
@@ -2766,17 +2777,15 @@
             pointer-events: auto !important;
         }
 
-        /* Ensure video controls are always visible when a video is playing in fullscreen */
+        /* Only show video controls in fullscreen if there's a video */
         .split-preview:fullscreen:has(video.preview-media) .video-controls-group {
             display: flex !important;
             opacity: 1 !important;
             visibility: visible !important;
         }
-
-        /* Keep controls visible after exiting fullscreen for motion projects */
-        .split-preview:has(video.preview-media) .preview-controls {
-            opacity: 1 !important;
-            visibility: visible !important;
+        
+        .split-preview:fullscreen:not(:has(video.preview-media)) .video-controls-group {
+            display: none !important;
         }
     </style>
 </head>
@@ -4113,14 +4122,14 @@
                     // Show overlay again
                     this.previewOverlay.style.display = 'block';
                     
-                    // FIX: Always show preview controls with proper visibility
+                    // Always show preview controls
                     this.previewControls.style.display = 'flex';
                     this.previewControls.style.position = 'absolute';
                     this.previewControls.style.bottom = '80px';
                     this.previewControls.style.opacity = '1';
                     this.previewControls.style.visibility = 'visible';
                     
-                    // FIX: Only show motion controls if this is a motion project
+                    // Only show video controls if this is a motion project
                     if (this.currentCategoryType === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.opacity = '1';
@@ -4717,7 +4726,7 @@
                                         
                                         this.previewOverlay.style.display = 'none';
                                         
-                                        // FIX: Keep controls visible with !important via inline styles
+                                        // Keep controls visible
                                         this.previewControls.style.setProperty('display', 'flex', 'important');
                                         this.previewControls.style.setProperty('position', 'fixed', 'important');
                                         this.previewControls.style.setProperty('bottom', '40px', 'important');
@@ -4725,12 +4734,22 @@
                                         this.previewControls.style.setProperty('visibility', 'visible', 'important');
                                         this.previewControls.style.setProperty('z-index', '99999', 'important');
                                         
-                                        this.videoControlsGroup.style.setProperty('display', 'flex', 'important');
-                                        this.videoControlsGroup.style.setProperty('opacity', '1', 'important');
-                                        this.videoControlsGroup.style.setProperty('visibility', 'visible', 'important');
-                                        
-                                        this.webControlsGroup.style.display = 'none';
-                                        this.graphicControlsGroup.style.display = 'none';
+                                        // Only show video controls for motion
+                                        if (this.currentCategoryType === 'motion') {
+                                            this.videoControlsGroup.style.setProperty('display', 'flex', 'important');
+                                            this.videoControlsGroup.style.setProperty('opacity', '1', 'important');
+                                            this.videoControlsGroup.style.setProperty('visibility', 'visible', 'important');
+                                            this.webControlsGroup.style.display = 'none';
+                                            this.graphicControlsGroup.style.display = 'none';
+                                        } else if (this.currentCategoryType === 'web') {
+                                            this.webControlsGroup.style.display = 'flex';
+                                            this.videoControlsGroup.style.display = 'none';
+                                            this.graphicControlsGroup.style.display = 'none';
+                                        } else if (this.currentCategoryType === 'graphic') {
+                                            this.graphicControlsGroup.style.display = 'flex';
+                                            this.videoControlsGroup.style.display = 'none';
+                                            this.webControlsGroup.style.display = 'none';
+                                        }
                                         
                                         const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
                                         if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-compress"></i>';
