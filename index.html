@@ -1319,8 +1319,6 @@
             border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.1);
             pointer-events: auto;
-            opacity: 1 !important;
-            visibility: visible !important;
         }
 
         .split-preview.web-fit-mode .preview-controls {
@@ -2754,31 +2752,31 @@
             color: white;
         }
 
-        /* ===================== FIX: Force controls visible ===================== */
-        .preview-controls,
-        .preview-controls * {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
-            z-index: 9999 !important;
-        }
-
-        .split-preview .video-controls-group,
-        .split-preview .video-controls-group * {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
+        /* ===================== FIX: Only force controls visible when needed ===================== */
+        /* This rule ONLY applies when the preview has a video (motion project) */
+        .split-preview:has(video.preview-media) .video-controls-group {
             display: flex !important;
         }
 
-        /* Hide the small circle that appears - this is likely the fullscreen button */
-        .split-preview:not(:fullscreen) .video-fullscreen-btn {
-            display: flex !important;
+        /* Force controls to be visible and clickable when in fullscreen */
+        .split-preview:fullscreen .preview-controls,
+        .split-preview:fullscreen .preview-controls * {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
         }
 
-        .split-preview .preview-controls button {
-            cursor: pointer !important;
-            pointer-events: auto !important;
+        /* Ensure video controls are always visible when a video is playing in fullscreen */
+        .split-preview:fullscreen:has(video.preview-media) .video-controls-group {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Keep controls visible after exiting fullscreen for motion projects */
+        .split-preview:has(video.preview-media) .preview-controls {
+            opacity: 1 !important;
+            visibility: visible !important;
         }
     </style>
 </head>
@@ -4122,17 +4120,11 @@
                     this.previewControls.style.opacity = '1';
                     this.previewControls.style.visibility = 'visible';
                     
-                    // FIX: Explicitly show motion controls
+                    // FIX: Only show motion controls if this is a motion project
                     if (this.currentCategoryType === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.opacity = '1';
                         this.videoControlsGroup.style.visibility = 'visible';
-                        // Make sure all child elements are visible
-                        this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                            el.style.display = '';
-                            el.style.opacity = '1';
-                            el.style.visibility = 'visible';
-                        });
                         this.webControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
                     } else if (this.currentCategoryType === 'web') {
@@ -4206,9 +4198,20 @@
                 this.previewYear.textContent = item.year;
                 this.previewVideoBadge.style.display = item.isVideo ? 'flex' : 'none';
                 
-                this.videoControlsGroup.style.display = item.category === 'motion' ? 'flex' : 'none';
-                this.webControlsGroup.style.display = item.category === 'web' ? 'flex' : 'none';
-                this.graphicControlsGroup.style.display = item.category === 'graphic' ? 'flex' : 'none';
+                // Only show video controls for motion projects
+                if (item.category === 'motion') {
+                    this.videoControlsGroup.style.display = 'flex';
+                    this.webControlsGroup.style.display = 'none';
+                    this.graphicControlsGroup.style.display = 'none';
+                } else if (item.category === 'web') {
+                    this.webControlsGroup.style.display = 'flex';
+                    this.videoControlsGroup.style.display = 'none';
+                    this.graphicControlsGroup.style.display = 'none';
+                } else if (item.category === 'graphic') {
+                    this.graphicControlsGroup.style.display = 'flex';
+                    this.videoControlsGroup.style.display = 'none';
+                    this.webControlsGroup.style.display = 'none';
+                }
                 
                 this.isVideoPlaying = false;
                 this.videoPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
@@ -4659,10 +4662,17 @@
                 const video = this.currentVideo;
                 if (!video) return;
                 
-                // Ensure controls are always visible
+                // Only show video controls for motion projects
+                if (this.currentCategoryType !== 'motion') {
+                    this.videoControlsGroup.style.display = 'none';
+                    return;
+                }
+                
+                // Ensure controls are always visible for motion projects
                 this.previewControls.style.display = 'flex';
                 this.previewControls.style.opacity = '1';
                 this.previewControls.style.visibility = 'visible';
+                this.videoControlsGroup.style.display = 'flex';
                 
                 this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
@@ -4748,6 +4758,12 @@
             setupWebControls() {
                 const img = this.preview.querySelector('.preview-media');
                 if (!img) return;
+                
+                // Only show web controls for web projects
+                if (this.currentCategoryType !== 'web') {
+                    this.webControlsGroup.style.display = 'none';
+                    return;
+                }
                 
                 const updateWebButtons = () => {
                     const isFullscreen = !!document.fullscreenElement;
@@ -4837,6 +4853,12 @@
             }
 
             setupGraphicControls() {
+                // Only show graphic controls for graphic projects
+                if (this.currentCategoryType !== 'graphic') {
+                    this.graphicControlsGroup.style.display = 'none';
+                    return;
+                }
+                
                 this.graphicFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         this.preview.requestFullscreen().catch(()=>{});
