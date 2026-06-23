@@ -3254,41 +3254,32 @@
         const PROJECTS_PER_PAGE = 12;
 
         // =====================================================================
-        // REAL LOADING TRACKER - ONLY FOR INITIAL LOADING SCREEN
+        // REAL LOADING TRACKER - SIMPLIFIED (ONLY TRACKS ESSENTIAL RESOURCES)
         // =====================================================================
         class LoadingTracker {
             constructor() {
-                // Track these resources:
-                this.totalResources = 0;
+                // ONLY track essential resources
+                this.totalResources = 4; // CSS, Font Awesome, Fonts, Hero Video
                 this.loadedResources = 0;
-                this.resources = {};
                 this.isComplete = false;
                 this.onProgress = null;
                 this.onComplete = null;
-                this.safetyTimeout = 8000; // 8 seconds max
+                this.safetyTimeout = 6000; // 6 seconds max
                 
-                // Track specific resources
                 this.heroVideoReady = false;
                 this.fontsReady = false;
-                this.logoLoaded = false;
-                this.serviceImagesLoaded = 0;
-                this.totalServiceImages = 3;
-                this.profileImageLoaded = false;
+                this.resources = {};
                 
                 // Start tracking
                 this.init();
                 
-                // Safety timeout - force complete after 8 seconds
+                // Safety timeout - force complete after 6 seconds
                 setTimeout(() => {
                     if (!this.isComplete) {
                         console.warn('⚠️ Loading safety timeout - forcing complete');
-                        // Mark all remaining as loaded
-                        const remaining = this.totalResources - this.loadedResources;
-                        if (remaining > 0) {
-                            this.loadedResources = this.totalResources;
-                            this.updateProgress();
-                        }
+                        this.loadedResources = this.totalResources;
                         this.isComplete = true;
+                        this.updateProgress();
                         if (this.onComplete) {
                             this.onComplete();
                         }
@@ -3326,15 +3317,9 @@
             }
 
             getDetailStatus() {
-                const status = [];
-                if (!this.heroVideoReady) status.push('🎬 Loading hero video...');
-                if (!this.fontsReady) status.push('🔤 Loading fonts...');
-                if (this.serviceImagesLoaded < this.totalServiceImages) {
-                    status.push(`📸 Loading images (${this.serviceImagesLoaded}/${this.totalServiceImages})...`);
-                }
-                if (!this.logoLoaded) status.push('🖼️ Loading logo...');
-                if (status.length === 0) status.push('✨ All resources loaded');
-                return status[0] || 'Loading...';
+                if (!this.heroVideoReady) return '🎬 Loading hero video...';
+                if (!this.fontsReady) return '🔤 Loading fonts...';
+                return '✨ All resources loaded';
             }
 
             getStatusText() {
@@ -3359,49 +3344,11 @@
                 this.registerResource('fontawesome');
                 this.markResourceLoaded('fontawesome');
                 
-                // Track Logo
-                this.trackLogo();
-                
                 // Track Google Fonts
                 this.trackFonts();
                 
                 // Track Hero Video
                 this.trackHeroVideo();
-                
-                // Track Service Images
-                this.trackServiceImages();
-                
-                // Track Profile Image
-                this.trackProfileImage();
-            }
-
-            trackLogo() {
-                this.registerResource('logo');
-                const logo = document.querySelector('.logo img');
-                if (logo) {
-                    if (logo.complete && logo.naturalWidth > 0) {
-                        this.logoLoaded = true;
-                        this.markResourceLoaded('logo');
-                        return;
-                    }
-                    logo.addEventListener('load', () => {
-                        this.logoLoaded = true;
-                        this.markResourceLoaded('logo');
-                    });
-                    logo.addEventListener('error', () => {
-                        this.logoLoaded = true;
-                        this.markResourceLoaded('logo');
-                    });
-                    setTimeout(() => {
-                        if (!this.logoLoaded) {
-                            this.logoLoaded = true;
-                            this.markResourceLoaded('logo');
-                        }
-                    }, 3000);
-                } else {
-                    this.logoLoaded = true;
-                    this.markResourceLoaded('logo');
-                }
             }
 
             trackFonts() {
@@ -3414,13 +3361,13 @@
                         setTimeout(() => {
                             this.fontsReady = true;
                             this.markResourceLoaded('fonts');
-                        }, 2000);
+                        }, 1000);
                     });
                 } else {
                     setTimeout(() => {
                         this.fontsReady = true;
                         this.markResourceLoaded('fonts');
-                    }, 1000);
+                    }, 500);
                 }
             }
 
@@ -3451,81 +3398,10 @@
                             this.markResourceLoaded('heroVideo');
                             console.warn('Hero video timeout - marking as loaded');
                         }
-                    }, 6000);
+                    }, 4000);
                 } else {
                     this.heroVideoReady = true;
                     this.markResourceLoaded('heroVideo');
-                }
-            }
-
-            trackServiceImages() {
-                this.registerResource('serviceImages');
-                const serviceImages = document.querySelectorAll('.service-image');
-                const total = serviceImages.length || 3;
-                
-                if (serviceImages.length === 0) {
-                    this.serviceImagesLoaded = total;
-                    this.markResourceLoaded('serviceImages');
-                    return;
-                }
-                
-                serviceImages.forEach(img => {
-                    if (img.complete && img.naturalWidth > 0) {
-                        this.serviceImagesLoaded++;
-                        if (this.serviceImagesLoaded >= total) {
-                            this.markResourceLoaded('serviceImages');
-                        }
-                        return;
-                    }
-                    
-                    const onLoad = () => {
-                        this.serviceImagesLoaded++;
-                        if (this.serviceImagesLoaded >= total) {
-                            this.markResourceLoaded('serviceImages');
-                        }
-                        img.removeEventListener('load', onLoad);
-                        img.removeEventListener('error', onLoad);
-                    };
-                    
-                    img.addEventListener('load', onLoad);
-                    img.addEventListener('error', onLoad);
-                });
-                
-                // Fallback
-                setTimeout(() => {
-                    if (!this.resources.serviceImages) {
-                        this.serviceImagesLoaded = total;
-                        this.markResourceLoaded('serviceImages');
-                    }
-                }, 5000);
-            }
-
-            trackProfileImage() {
-                this.registerResource('profileImage');
-                const profileImg = document.querySelector('.about-image img');
-                if (profileImg) {
-                    if (profileImg.complete && profileImg.naturalWidth > 0) {
-                        this.profileImageLoaded = true;
-                        this.markResourceLoaded('profileImage');
-                        return;
-                    }
-                    profileImg.addEventListener('load', () => {
-                        this.profileImageLoaded = true;
-                        this.markResourceLoaded('profileImage');
-                    });
-                    profileImg.addEventListener('error', () => {
-                        this.profileImageLoaded = true;
-                        this.markResourceLoaded('profileImage');
-                    });
-                    setTimeout(() => {
-                        if (!this.profileImageLoaded) {
-                            this.profileImageLoaded = true;
-                            this.markResourceLoaded('profileImage');
-                        }
-                    }, 5000);
-                } else {
-                    this.profileImageLoaded = true;
-                    this.markResourceLoaded('profileImage');
                 }
             }
         }
