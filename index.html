@@ -1304,6 +1304,7 @@
             display: none !important;
         }
 
+        /* ===================== PREVIEW CONTROLS ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1329,6 +1330,7 @@
             margin-top: auto !important;
         }
 
+        /* ✅ FIX: Keep controls visible in fullscreen */
         .split-preview:fullscreen .preview-controls {
             display: flex !important;
             position: fixed !important;
@@ -1336,30 +1338,29 @@
             left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 99999 !important;
-            background: rgba(0,0,0,0.5) !important;
+            background: rgba(0,0,0,0.6) !important;
             backdrop-filter: blur(10px) !important;
             padding: 8px 16px !important;
             border-radius: 50px !important;
             border: 1px solid rgba(255,255,255,0.1) !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
-        .split-preview:fullscreen .preview-controls .video-controls-group,
-        .split-preview:fullscreen .preview-controls .web-controls-group .divider,
-        .split-preview:fullscreen .preview-controls .web-controls-group .web-fit-btn,
-        .split-preview:fullscreen .preview-controls .graphic-controls-group {
+        /* ✅ FIX: Video controls stay visible in fullscreen */
+        .split-preview:fullscreen .video-controls-group {
+            display: flex !important;
+        }
+
+        /* Hide other controls in fullscreen */
+        .split-preview:fullscreen .web-controls-group,
+        .split-preview:fullscreen .graphic-controls-group {
             display: none !important;
         }
 
-        .split-preview:fullscreen .preview-controls .web-controls-group {
-            display: flex !important;
-            gap: 0 !important;
-            align-items: center !important;
-        }
-
-        .split-preview:fullscreen .preview-controls .web-fullscreen-btn,
-        .split-preview:fullscreen .preview-controls .video-fullscreen-btn,
-        .split-preview:fullscreen .preview-controls .graphic-fullscreen-btn {
-            display: flex !important;
+        /* Hide overlay in fullscreen */
+        .split-preview:fullscreen .preview-overlay {
+            display: none !important;
         }
 
         .preview-controls button {
@@ -1677,17 +1678,6 @@
             .split-controls {
                 flex-direction: column;
                 gap: 12px;
-            }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 30px !important;
-                padding: 6px 12px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 30px;
-                height: 30px;
-                font-size: 0.75rem;
-                min-width: 30px;
-                min-height: 30px;
             }
         }
 
@@ -4075,6 +4065,7 @@
             _handleFullscreenChange() {
                 const video = this.currentVideo;
                 if (!document.fullscreenElement) {
+                    // Restore video styles
                     if (video) {
                         video.style.maxHeight = '550px';
                         video.style.width = '100%';
@@ -4086,25 +4077,37 @@
                         this.preview.style.alignItems = 'center';
                         this.preview.style.justifyContent = 'center';
                         this.preview.style.background = '';
+                        this.preview.style.position = 'relative';
                     }
+                    
+                    // Show overlay again
                     this.previewOverlay.style.display = 'block';
+                    
+                    // ✅ Restore controls
                     this.previewControls.style.display = 'flex';
+                    this.previewControls.style.position = 'absolute';
+                    this.previewControls.style.bottom = '80px';
+                    
                     if (this.currentProject && this.currentProject.category === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                            el.style.display = '';
+                        });
                         this.webControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
                     } else if (this.currentProject && this.currentProject.category === 'web') {
                         this.webControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'inline-block';
-                        this.webFitBtn.style.display = 'inline-flex';
                     } else if (this.currentProject && this.currentProject.category === 'graphic') {
                         this.graphicControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.display = 'none';
                         this.webControlsGroup.style.display = 'none';
                     }
+                    
+                    // Reset fullscreen button
+                    const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
+                    if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-expand"></i>';
                 }
             }
 
@@ -4611,6 +4614,7 @@
                 }
             }
 
+            // ✅ FIXED: setupVideoControls with proper fullscreen handling
             setupVideoControls() {
                 const video = this.currentVideo;
                 if (!video) return;
@@ -4635,40 +4639,47 @@
                     if (!document.fullscreenElement) {
                         const container = this.preview;
                         if (container) {
-                            video.style.maxHeight = '100vh';
-                            video.style.width = '100%';
-                            video.style.height = '100%';
-                            video.style.objectFit = 'contain';
-                            
                             container.requestFullscreen()
                                 .then(() => {
                                     setTimeout(() => {
-                                        video.style.maxHeight = '100vh';
-                                        video.style.width = '100%';
-                                        video.style.height = '100%';
-                                        video.style.objectFit = 'contain';
-                                        container.style.display = 'flex';
-                                        container.style.alignItems = 'center';
-                                        container.style.justifyContent = 'center';
-                                        container.style.background = '#000';
+                                        // Style video for fullscreen
+                                        if (video) {
+                                            video.style.maxHeight = '100vh';
+                                            video.style.width = '100%';
+                                            video.style.height = '100%';
+                                            video.style.objectFit = 'contain';
+                                        }
+                                        if (container) {
+                                            container.style.display = 'flex';
+                                            container.style.alignItems = 'center';
+                                            container.style.justifyContent = 'center';
+                                            container.style.background = '#000';
+                                        }
+                                        
+                                        // Hide overlay in fullscreen
                                         this.previewOverlay.style.display = 'none';
-                                        this.videoControlsGroup.style.display = 'none';
+                                        
+                                        // ✅ KEEP video controls visible
+                                        this.videoControlsGroup.style.display = 'flex';
+                                        this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                                            el.style.display = '';
+                                        });
                                         this.webControlsGroup.style.display = 'none';
                                         this.graphicControlsGroup.style.display = 'none';
+                                        
+                                        // Keep preview controls visible
                                         this.previewControls.style.display = 'flex';
-                                        const videoFullscreenBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
-                                        if (videoFullscreenBtn) {
-                                            this.videoControlsGroup.style.display = 'flex';
-                                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                                                if (!el.classList.contains('video-fullscreen-btn')) {
-                                                    el.style.display = 'none';
-                                                }
-                                            });
-                                        }
-                                    }, 50);
+                                        this.previewControls.style.position = 'fixed';
+                                        this.previewControls.style.bottom = '40px';
+                                        
+                                        // Update fullscreen button
+                                        const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
+                                        if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                                        
+                                    }, 100);
                                 })
                                 .catch(() => {
-                                    if (video.requestFullscreen) {
+                                    if (video && video.requestFullscreen) {
                                         video.requestFullscreen().catch(() => {});
                                     }
                                 });
@@ -4678,7 +4689,60 @@
                     }
                 };
                 
-                this._fullscreenChangeHandler = this._handleFullscreenChange.bind(this);
+                // ✅ FIXED: Fullscreen change handler properly restores controls
+                const fullscreenChangeHandler = () => {
+                    if (!document.fullscreenElement) {
+                        // Restore video styles
+                        if (video) {
+                            video.style.maxHeight = '550px';
+                            video.style.width = '100%';
+                            video.style.height = '100%';
+                            video.style.objectFit = 'contain';
+                        }
+                        if (this.preview) {
+                            this.preview.style.display = 'flex';
+                            this.preview.style.alignItems = 'center';
+                            this.preview.style.justifyContent = 'center';
+                            this.preview.style.background = '';
+                            this.preview.style.position = 'relative';
+                        }
+                        
+                        // Show overlay again
+                        this.previewOverlay.style.display = 'block';
+                        
+                        // ✅ Restore controls
+                        this.previewControls.style.display = 'flex';
+                        this.previewControls.style.position = 'absolute';
+                        this.previewControls.style.bottom = '80px';
+                        
+                        if (this.currentProject && this.currentProject.category === 'motion') {
+                            this.videoControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                                el.style.display = '';
+                            });
+                            this.webControlsGroup.style.display = 'none';
+                            this.graphicControlsGroup.style.display = 'none';
+                        } else if (this.currentProject && this.currentProject.category === 'web') {
+                            this.webControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.style.display = 'none';
+                            this.graphicControlsGroup.style.display = 'none';
+                        } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                            this.graphicControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.style.display = 'none';
+                            this.webControlsGroup.style.display = 'none';
+                        }
+                        
+                        // Reset fullscreen button
+                        const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
+                        if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                    }
+                };
+                
+                // Remove old handler if exists
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
+                }
+                this._fullscreenChangeHandler = fullscreenChangeHandler;
                 document.addEventListener('fullscreenchange', this._fullscreenChangeHandler);
             }
 
