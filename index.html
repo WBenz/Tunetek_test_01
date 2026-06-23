@@ -4044,7 +4044,7 @@
             // ✅ FIX: Store category type when selecting project
             selectProject(item, index) {
                 this.currentProject = item;
-                this.currentCategoryType = item.category; // ← STORE IT!
+                this.currentCategoryType = item.category;
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = item.files || [];
                 this.isWebFit = false;
@@ -4089,7 +4089,7 @@
                     // Show overlay again
                     this.previewOverlay.style.display = 'block';
                     
-                    // ✅ FIX: Use stored category type instead of currentProject
+                    // ✅ Use stored category type
                     this.previewControls.style.display = 'flex';
                     this.previewControls.style.position = 'absolute';
                     this.previewControls.style.bottom = '80px';
@@ -4620,7 +4620,7 @@
                 }
             }
 
-            // ✅ FIXED: setupVideoControls with proper fullscreen handling
+            // ✅ FULLY FIXED: setupVideoControls with proper fullscreen handling
             setupVideoControls() {
                 const video = this.currentVideo;
                 if (!video) return;
@@ -4643,6 +4643,11 @@
                 
                 this.videoFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
+                        // ✅ CRITICAL FIX: Set category type BEFORE going fullscreen
+                        if (this.currentProject) {
+                            this.currentCategoryType = this.currentProject.category;
+                        }
+                        
                         const container = this.preview;
                         if (container) {
                             container.requestFullscreen()
@@ -4695,7 +4700,7 @@
                     }
                 };
                 
-                // ✅ FIXED: Fullscreen change handler using stored category
+                // ✅ FIXED: Fullscreen change handler properly restores controls
                 const fullscreenChangeHandler = () => {
                     if (!document.fullscreenElement) {
                         // Restore video styles
@@ -4716,11 +4721,12 @@
                         // Show overlay again
                         this.previewOverlay.style.display = 'block';
                         
-                        // ✅ FIX: Use stored category type
+                        // ✅ Restore controls using stored category type
                         this.previewControls.style.display = 'flex';
                         this.previewControls.style.position = 'absolute';
                         this.previewControls.style.bottom = '80px';
                         
+                        // ✅ Use currentCategoryType (which is now guaranteed to be set)
                         if (this.currentCategoryType === 'motion') {
                             this.videoControlsGroup.style.display = 'flex';
                             this.videoControlsGroup.querySelectorAll('*').forEach(el => {
