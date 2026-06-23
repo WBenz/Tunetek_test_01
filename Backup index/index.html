@@ -12,7 +12,7 @@
     <link rel="icon" href="favicon-16x16.png" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
     
-    <!-- Fonts -->
+    <!-- Fonts with preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -48,10 +48,6 @@
             --graphic-color: #ff6b00;
             --motion-color: #6c5ce7;
             --web-color: #00b894;
-            
-            /* Loading constants */
-            --loading-timeout: 300ms;
-            --fade-timeout: 400ms;
         }
 
         /* ===================== DARK THEME ===================== */
@@ -307,7 +303,6 @@
             z-index: 9900;
             transition: all var(--transition);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            opacity: 1;
         }
 
         [data-theme="dark"] header {
@@ -662,19 +657,57 @@
             bottom: 0;
             overflow: hidden;
             z-index: 0;
+            background: #000;
         }
 
         .hero-video-container video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
         }
 
-        .hero-content {
-            position: relative;
+        .hero-video-container video.loaded {
+            opacity: 1;
+        }
+
+        .hero-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--tertiary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 1;
-            max-width: 800px;
-            padding: 40px 0;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        [data-theme="dark"] .hero-loading-overlay {
+            background: var(--tertiary-color);
+        }
+
+        .hero-loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hero-loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 107, 0, 0.1);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .hero-actions-bottom {
@@ -702,10 +735,12 @@
         @media (max-width: 480px) {
             .hero-actions-bottom {
                 bottom: 16px;
-                left: 16px;
+                left: 50%;
+                transform: translateX(-50%);
                 gap: 6px;
                 flex-direction: column;
                 width: calc(100% - 32px);
+                align-items: center;
             }
             .hero-actions-bottom .btn {
                 width: 100%;
@@ -773,28 +808,29 @@
 
         .btn-secondary {
             background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--secondary-color);
+            color: white !important;
             transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
-            color: white;
+            box-shadow: 0 15px 25px rgba(255, 107, 0, 0.4);
         }
 
         [data-theme="dark"] .btn-secondary {
             background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: white;
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
         }
 
         [data-theme="dark"] .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--secondary-color);
+            color: white !important;
         }
 
         /* ===================== SERVICES ===================== */
@@ -846,12 +882,10 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
-        /* Service-specific accent colors */
         .service-card:nth-child(1)::before { background: linear-gradient(90deg, var(--graphic-color), #ff9a44); }
         .service-card:nth-child(2)::before { background: linear-gradient(90deg, var(--motion-color), #a29bfe); }
         .service-card:nth-child(3)::before { background: linear-gradient(90deg, var(--web-color), #55efc4); }
 
-        /* Service icon wrapper */
         .service-icon-wrapper {
             display: inline-flex;
             align-items: center;
@@ -868,7 +902,6 @@
             transform: scale(1.05) rotate(-5deg);
         }
 
-        /* Individual service icon styles */
         .service-card:nth-child(1) .service-icon-wrapper {
             background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
             color: var(--graphic-color);
@@ -896,7 +929,6 @@
             background: linear-gradient(135deg, rgba(0, 184, 148, 0.25), rgba(0, 184, 148, 0.05));
         }
 
-        /* Service icon */
         .service-icon {
             font-size: 2.2rem;
             transition: all 0.4s ease;
@@ -907,12 +939,10 @@
             transform: scale(1.1);
         }
 
-        /* Service title with color */
         .service-card:nth-child(1) .service-title { color: var(--graphic-color); }
         .service-card:nth-child(2) .service-title { color: var(--motion-color); }
         .service-card:nth-child(3) .service-title { color: var(--web-color); }
 
-        /* Service description */
         .service-desc {
             color: var(--text-color);
             line-height: 1.8;
@@ -922,7 +952,6 @@
             text-justify: inter-word;
         }
 
-        /* Service image - subtle border */
         .service-image {
             width: 100%;
             border-radius: 12px;
@@ -977,6 +1006,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            min-height: 44px;
         }
 
         .split-filter-btn:hover {
@@ -1026,6 +1056,7 @@
             font-size: 0.9rem;
             transition: all var(--transition);
             outline: none;
+            min-height: 44px;
         }
 
         .search-wrapper input:focus {
@@ -1059,9 +1090,12 @@
             opacity: 0.3;
             cursor: pointer;
             font-size: 0.8rem;
-            padding: 4px;
+            padding: 8px;
             display: none;
             transition: opacity var(--transition);
+            min-height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
         }
 
         .search-wrapper .clear-search.visible {
@@ -1070,6 +1104,7 @@
 
         .search-wrapper .clear-search:hover {
             opacity: 0.8;
+            background: rgba(0,0,0,0.05);
         }
 
         .split-container {
@@ -1144,7 +1179,6 @@
             margin-bottom: 16px;
         }
 
-        /* ===================== OVERLAY - ALWAYS VISIBLE IN PREVIEW ===================== */
         .split-preview .preview-overlay {
             position: absolute;
             bottom: 0;
@@ -1153,27 +1187,23 @@
             padding: 30px 40px;
             background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
             color: white;
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            transition: none;
             pointer-events: none;
             z-index: 2;
-            width: 100% !important;
-            min-width: 100% !important;
-            box-sizing: border-box !important;
+            width: 100%;
+            min-width: 100%;
+            box-sizing: border-box;
         }
 
-        /* Hide overlay in fullscreen */
         .split-preview:fullscreen .preview-overlay {
-            display: none !important;
+            display: none;
         }
 
         .split-preview:-webkit-full-screen .preview-overlay {
-            display: none !important;
+            display: none;
         }
 
         .split-preview:-moz-full-screen .preview-overlay {
-            display: none !important;
+            display: none;
         }
 
         .split-preview .preview-overlay h3 {
@@ -1198,7 +1228,6 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* ===================== WEB FIT MODE ===================== */
         .split-preview.web-fit-mode {
             overflow: auto !important;
             align-items: flex-start !important;
@@ -1227,8 +1256,6 @@
             left: 0 !important;
             right: 0 !important;
             z-index: 10 !important;
-            opacity: 1 !important;
-            transform: translateY(0) !important;
             pointer-events: none;
             flex-shrink: 0 !important;
             margin-top: auto !important;
@@ -1239,7 +1266,6 @@
             top: auto !important;
         }
 
-        /* ===================== FULLSCREEN OVERRIDES ===================== */
         .split-preview:fullscreen {
             max-height: 100vh !important;
             min-height: 100vh !important;
@@ -1278,7 +1304,6 @@
             display: none !important;
         }
 
-        /* ===================== CONTROLS ===================== */
         .preview-controls {
             position: absolute;
             bottom: 80px;
@@ -1287,7 +1312,6 @@
             z-index: 5;
             display: flex;
             gap: 10px;
-            opacity: 1 !important;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
             padding: 8px 16px;
@@ -1302,13 +1326,11 @@
             left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 15 !important;
-            opacity: 1 !important;
             margin-top: auto !important;
         }
 
         .split-preview:fullscreen .preview-controls {
             display: flex !important;
-            opacity: 1 !important;
             position: fixed !important;
             bottom: 40px !important;
             left: 50% !important;
@@ -1353,6 +1375,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 36px;
+            min-height: 36px;
         }
 
         .preview-controls button:hover {
@@ -1381,6 +1405,7 @@
             border-radius: 2px;
             cursor: pointer;
             position: relative;
+            min-height: 20px;
         }
 
         .preview-controls .video-progress .progress-bar .fill {
@@ -1572,6 +1597,32 @@
             margin-bottom: 12px;
         }
 
+        .split-list .load-more-container {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .split-list .load-more-btn {
+            padding: 10px 30px;
+            border: 2px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+            min-height: 44px;
+        }
+
+        .split-list .load-more-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.2);
+        }
+
         .split-list::-webkit-scrollbar {
             width: 4px;
         }
@@ -1612,9 +1663,12 @@
                 width: 30px;
                 height: 30px;
                 font-size: 0.75rem;
+                min-width: 30px;
+                min-height: 30px;
             }
             .preview-controls .video-progress .progress-bar {
                 width: 60px;
+                min-height: 16px;
             }
             .search-wrapper {
                 min-width: 150px;
@@ -1632,6 +1686,8 @@
                 width: 30px;
                 height: 30px;
                 font-size: 0.75rem;
+                min-width: 30px;
+                min-height: 30px;
             }
         }
 
@@ -1642,6 +1698,7 @@
             .split-filter-btn {
                 padding: 8px 14px;
                 font-size: 0.75rem;
+                min-height: 36px;
             }
             .split-preview {
                 min-height: 280px;
@@ -1666,6 +1723,7 @@
             .search-wrapper input {
                 padding: 8px 16px 8px 36px;
                 font-size: 0.8rem;
+                min-height: 36px;
             }
             .preview-controls .divider {
                 height: 20px;
@@ -1685,6 +1743,13 @@
                 width: 26px;
                 height: 26px;
                 font-size: 0.65rem;
+                min-width: 26px;
+                min-height: 26px;
+            }
+            .split-list .load-more-btn {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+                min-height: 36px;
             }
         }
 
@@ -1692,6 +1757,7 @@
             .split-filter-btn {
                 padding: 6px 10px;
                 font-size: 0.65rem;
+                min-height: 32px;
             }
             .split-filter-btn .count {
                 display: none;
@@ -1728,6 +1794,7 @@
             .search-wrapper input {
                 padding: 6px 12px 6px 32px;
                 font-size: 0.7rem;
+                min-height: 32px;
             }
             .preview-controls {
                 bottom: 60px;
@@ -1741,9 +1808,12 @@
                 width: 26px;
                 height: 26px;
                 font-size: 0.65rem;
+                min-width: 26px;
+                min-height: 26px;
             }
             .preview-controls .video-progress .progress-bar {
                 width: 40px;
+                min-height: 14px;
             }
             .preview-controls .divider {
                 height: 16px;
@@ -1761,6 +1831,13 @@
                 width: 22px;
                 height: 22px;
                 font-size: 0.55rem;
+                min-width: 22px;
+                min-height: 22px;
+            }
+            .split-list .load-more-btn {
+                padding: 6px 16px;
+                font-size: 0.7rem;
+                min-height: 32px;
             }
         }
 
@@ -1793,6 +1870,8 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(4px);
+            min-width: 44px;
+            min-height: 44px;
         }
 
         .graphic-slide-nav button:hover {
@@ -1828,7 +1907,6 @@
             margin-bottom: 10px;
         }
 
-        /* ===================== GRAPHIC LOADING OVERLAY ===================== */
         .graphic-loading-overlay {
             position: absolute;
             top: 0;
@@ -1872,16 +1950,13 @@
             border-radius: 12px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         @media (max-width: 768px) {
             .graphic-slide-nav button {
                 width: 32px;
                 height: 32px;
                 font-size: 0.8rem;
+                min-width: 32px;
+                min-height: 32px;
             }
             .graphic-slide-counter {
                 bottom: 120px;
@@ -1958,6 +2033,8 @@
             transition: all var(--transition);
             z-index: 10;
             margin: 12px;
+            min-width: 40px;
+            min-height: 40px;
         }
 
         .modal-close:hover {
@@ -2033,6 +2110,8 @@
             cursor: pointer;
             transition: all var(--transition);
             opacity: 0;
+            min-width: 40px;
+            min-height: 40px;
         }
 
         .graphic-gallery .main-view:hover .nav-btn {
@@ -2109,6 +2188,8 @@
             align-items: center;
             justify-content: center;
             transition: all var(--transition);
+            min-width: 32px;
+            min-height: 32px;
         }
 
         .motion-player .video-controls button:hover {
@@ -2123,6 +2204,7 @@
             border-radius: 2px;
             cursor: pointer;
             position: relative;
+            min-height: 20px;
         }
 
         .motion-player .video-controls .progress .progress-bar {
@@ -2171,6 +2253,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 40px;
+            min-height: 40px;
         }
 
         .web-viewer .view-toggle:hover {
@@ -2190,6 +2274,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 36px;
+            min-height: 36px;
         }
 
         .web-fit-btn:hover {
@@ -2263,7 +2349,11 @@
             text-align: center;
         }
 
-        .about-content p {
+        .about-content .about-paragraph {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-color);
             line-height: 1.8;
             margin-bottom: 16px;
@@ -2274,16 +2364,32 @@
             margin-right: auto;
         }
 
-        .about-content p:last-of-type {
+        .about-content .about-paragraph.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-content .about-paragraph:last-of-type {
             margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .about-content .about-paragraph {
+                font-size: 0.9rem;
+                line-height: 1.6;
+                padding: 0 4px;
+                max-width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
             .about-image {
                 max-width: 200px;
             }
-            .about-content p {
-                max-width: 100%;
+            .about-content .about-paragraph {
+                font-size: 0.85rem;
+                line-height: 1.5;
+                padding: 0 2px;
             }
         }
 
@@ -2711,7 +2817,10 @@
     <!-- ==================== HERO ==================== -->
     <section id="hero" aria-label="Hero">
         <div class="hero-video-container">
-            <video class="hero-video" autoplay loop muted playsinline preload="metadata">
+            <div class="hero-loading-overlay" id="heroLoadingOverlay">
+                <div class="hero-loading-spinner"></div>
+            </div>
+            <video class="hero-video" autoplay loop muted playsinline preload="metadata" id="heroVideo">
                 <source src="https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/hero-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -2722,9 +2831,7 @@
             </button>
         </div>
 
-        <div class="container">
-            <div class="hero-content"></div>
-        </div>
+        <div class="container"></div>
 
         <div class="hero-actions-bottom">
             <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta.portfolio">
@@ -2820,7 +2927,7 @@
 
                 <div class="search-wrapper">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="Search projects..." data-i18n="portfolio.search">
+                    <input type="text" id="searchInput" placeholder="Search projects..." data-i18n="portfolio.search" aria-label="Search projects">
                     <button class="clear-search" id="clearSearch" aria-label="Clear search">
                         <i class="fas fa-times"></i>
                     </button>
@@ -2848,7 +2955,7 @@
                             </button>
                             <div class="video-progress">
                                 <span class="time current-time">00:00</span>
-                                <div class="progress-bar">
+                                <div class="progress-bar" aria-label="Video progress">
                                     <div class="fill" id="videoProgressFill"></div>
                                 </div>
                                 <span class="time duration">00:00</span>
@@ -2914,13 +3021,13 @@
                     <h3 data-i18n="about.name">Wassef Ben Slimane</h3>
                     <span class="role" data-i18n="about.role">Lead Designer & Creative Director</span>
                     
-                    <p data-i18n="about.desc1">
+                    <p class="about-paragraph" data-i18n="about.desc1">
                         A polyvalent creative with over 10 years of experience bridging design, gaming, and AI. Based in Tunisia, I've had the privilege of working with clients across France, Germany, Japan, USA, Hong Kong, and Malaysia — bringing a global perspective to every project.
                     </p>
-                    <p data-i18n="about.desc2">
+                    <p class="about-paragraph" data-i18n="about.desc2">
                         My journey has been shaped by diverse roles: I'm a proud Capcom Ambassador in the gaming industry, a certified Adobe Trainer, a certified Unreal Engine 5 Game Designer, and a Google Certified Generative AI Engineer. These experiences allow me to blend traditional design with cutting-edge technology.
                     </p>
-                    <p data-i18n="about.desc3">
+                    <p class="about-paragraph" data-i18n="about.desc3">
                         Beyond design, I'm deeply committed to giving back. I've served in numerous charitable volunteer initiatives and currently act as Treasurer in a sports association — because I believe great design is about more than aesthetics; it's about making a positive impact.
                     </p>
                 </div>
@@ -3075,7 +3182,7 @@
                     <div class="video-controls">
                         <button class="play-btn" aria-label="Play"><i class="fas fa-play"></i></button>
                         <button class="pause-btn" aria-label="Pause" style="display:none;"><i class="fas fa-pause"></i></button>
-                        <div class="progress">
+                        <div class="progress" aria-label="Video progress">
                             <div class="progress-bar" id="motion-progress-bar"></div>
                         </div>
                         <span class="time current-time">00:00</span>
@@ -3108,6 +3215,7 @@
         const LOADING_TIMEOUT = 300;
         const FADE_TIMEOUT = 400;
         const HEADER_HEIGHT = 72;
+        const PROJECTS_PER_PAGE = 12;
 
         // =====================================================================
         // PROGRESS TRACKING
@@ -3539,6 +3647,40 @@
         }
 
         // =====================================================================
+        // HERO VIDEO LAZY LOADING
+        // =====================================================================
+        function initHeroVideo() {
+            const video = document.getElementById('heroVideo');
+            const loadingOverlay = document.getElementById('heroLoadingOverlay');
+            
+            if (!video || !loadingOverlay) return;
+            
+            loadingOverlay.classList.remove('hidden');
+            
+            const handleCanPlay = () => {
+                video.classList.add('loaded');
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                }, 300);
+                video.removeEventListener('canplaythrough', handleCanPlay);
+            };
+            
+            video.addEventListener('canplaythrough', handleCanPlay);
+            
+            setTimeout(() => {
+                if (!video.classList.contains('loaded')) {
+                    video.classList.add('loaded');
+                    loadingOverlay.classList.add('hidden');
+                }
+            }, 5000);
+            
+            video.addEventListener('error', () => {
+                video.classList.add('loaded');
+                loadingOverlay.classList.add('hidden');
+            });
+        }
+
+        // =====================================================================
         // PROJECT MANAGER
         // =====================================================================
         class ProjectManager {
@@ -3613,6 +3755,11 @@
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
                 
+                this.currentPage = 0;
+                this.itemsPerPage = PROJECTS_PER_PAGE;
+                this.totalPages = 0;
+                this.isLoadingMore = false;
+                
                 this.preview = document.getElementById('splitPreview');
                 this.previewTitle = document.getElementById('previewTitle');
                 this.previewCat = document.getElementById('previewCat');
@@ -3644,11 +3791,20 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
+                // Bind methods to avoid memory leaks
+                this._updateVideoProgress = this._updateVideoProgress.bind(this);
+                this._handleFullscreenChange = this._handleFullscreenChange.bind(this);
+                this._handleFullscreenChangeWeb = this._handleFullscreenChangeWeb.bind(this);
+                this._graphicKeyHandler = null;
+                this._fullscreenChangeHandler = null;
+                this._fullscreenChangeHandlerWeb = null;
+                
                 this.init();
             }
 
             async init() {
-                loadingItems.total = 3;
+                const totalProjects = Object.values(PROJECT_MANIFEST).reduce((sum, arr) => sum + arr.length, 0);
+                loadingItems.total = Math.min(totalProjects + 5, 100);
                 updateLoadingProgress();
                 
                 this.allProjects = this.projectManager.loadAllProjects();
@@ -3657,9 +3813,16 @@
                 this.setupSearch();
                 this.buildList('all');
                 
+                const totalToTrack = Math.min(Object.values(PROJECT_MANIFEST).reduce((sum, arr) => sum + arr.length, 0), 95);
+                for (let i = 0; i < totalToTrack; i++) {
+                    trackLoadedItem();
+                }
                 trackLoadedItem();
                 trackLoadedItem();
                 trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+                updateLoadingProgress();
             }
 
             setupCounts() {
@@ -3701,6 +3864,7 @@
                         this.filterButtons.forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
                         this.currentCategory = btn.dataset.category;
+                        this.currentPage = 0;
                         this.buildList(this.currentCategory);
                     });
                 });
@@ -3709,6 +3873,7 @@
             setupSearch() {
                 const searchFn = debounce(() => {
                     this.currentSearch = this.searchInput.value.toLowerCase().trim();
+                    this.currentPage = 0;
                     this.filterList();
                 }, 300);
 
@@ -3717,6 +3882,7 @@
                     this.searchInput.value = '';
                     this.currentSearch = '';
                     this.clearSearch.classList.remove('visible');
+                    this.currentPage = 0;
                     this.filterList();
                     this.searchInput.focus();
                 });
@@ -3733,8 +3899,11 @@
             filterList() {
                 const search = this.currentSearch;
                 this.filteredItems = search ? this.allItems.filter(item => 
-                    item.title.toLowerCase().includes(search) || item.category.toLowerCase().includes(search)
+                    item.title.toLowerCase().includes(search) || 
+                    item.category.toLowerCase().includes(search)
                 ) : this.allItems;
+                this.totalPages = Math.ceil(this.filteredItems.length / this.itemsPerPage);
+                this.currentPage = 0;
                 this.renderList();
             }
 
@@ -3749,6 +3918,8 @@
                 setTimeout(() => {
                     this.allItems = this.getProjectsForCategory(category);
                     this.filteredItems = this.allItems;
+                    this.totalPages = Math.ceil(this.filteredItems.length / this.itemsPerPage);
+                    this.currentPage = 0;
                     this.listLoading.style.display = 'none';
                     
                     if (this.filteredItems.length === 0) {
@@ -3763,31 +3934,67 @@
             }
 
             renderList() {
-                const items = this.filteredItems;
-                if (items.length === 0) {
+                const start = this.currentPage * this.itemsPerPage;
+                const end = Math.min(start + this.itemsPerPage, this.filteredItems.length);
+                const pageItems = this.filteredItems.slice(start, end);
+                
+                if (this.currentPage === 0) {
+                    this.listContainer.innerHTML = '';
+                }
+                
+                if (pageItems.length === 0 && this.currentPage === 0) {
                     this.listContainer.innerHTML = `<div class="list-empty"><i class="fas fa-search"></i><p>No projects match your search.</p></div>`;
                     this.listCount.textContent = '0 projects';
                     return;
                 }
                 
                 const fragment = document.createDocumentFragment();
-                items.forEach((item, index) => {
-                    const listItem = this.createListItem(item, index);
+                const globalStart = start;
+                
+                pageItems.forEach((item, index) => {
+                    const globalIndex = globalStart + index;
+                    const listItem = this.createListItem(item, globalIndex);
                     fragment.appendChild(listItem);
                 });
-                this.listContainer.innerHTML = '';
+                
                 this.listContainer.appendChild(fragment);
-                this.listCount.textContent = `${items.length} projects`;
+                this.listCount.textContent = `${this.filteredItems.length} projects`;
                 
                 if (this.currentSearch) this.clearSearch.classList.add('visible');
                 else this.clearSearch.classList.remove('visible');
                 
-                if (items.length > 0 && !this.currentProject) {
-                    this.selectProject(items[0], 0);
-                } else if (this.currentProject) {
-                    const stillExists = items.some(item => item.id === this.currentProject.id);
-                    if (!stillExists && items.length > 0) this.selectProject(items[0], 0);
+                if (end < this.filteredItems.length) {
+                    const loadMoreContainer = document.createElement('div');
+                    loadMoreContainer.className = 'load-more-container';
+                    const loadMoreBtn = document.createElement('button');
+                    loadMoreBtn.className = 'load-more-btn';
+                    const remaining = this.filteredItems.length - end;
+                    loadMoreBtn.textContent = `Load ${Math.min(remaining, this.itemsPerPage)} more projects (${remaining} remaining)`;
+                    loadMoreBtn.addEventListener('click', () => {
+                        this.loadMore();
+                    });
+                    loadMoreContainer.appendChild(loadMoreBtn);
+                    this.listContainer.appendChild(loadMoreContainer);
                 }
+                
+                if (this.filteredItems.length > 0 && !this.currentProject) {
+                    this.selectProject(this.filteredItems[0], 0);
+                } else if (this.currentProject) {
+                    const stillExists = this.filteredItems.some(item => item.id === this.currentProject.id);
+                    if (!stillExists && this.filteredItems.length > 0) {
+                        this.selectProject(this.filteredItems[0], 0);
+                    }
+                }
+            }
+
+            loadMore() {
+                if (this.isLoadingMore) return;
+                this.isLoadingMore = true;
+                this.currentPage++;
+                this.renderList();
+                setTimeout(() => {
+                    this.isLoadingMore = false;
+                }, 300);
             }
 
             createListItem(item, index) {
@@ -3806,6 +4013,7 @@
                     vid.muted = true;
                     vid.playsInline = true;
                     vid.preload = 'metadata';
+                    vid.loading = 'lazy';
                     vid.addEventListener('mouseenter', () => vid.play().catch(()=>{}));
                     vid.addEventListener('mouseleave', () => vid.pause());
                     thumb.appendChild(vid);
@@ -3856,6 +4064,97 @@
                 this.updatePreview(item);
             }
 
+            _updateVideoProgress() {
+                const video = this.currentVideo;
+                if (!video || isNaN(video.duration)) return;
+                this.videoProgressFill.style.width = `${(video.currentTime / video.duration) * 100}%`;
+                const currentEl = this.videoControlsGroup.querySelector('.current-time');
+                if (currentEl) currentEl.textContent = formatTime(video.currentTime);
+            }
+
+            _handleFullscreenChange() {
+                const video = this.currentVideo;
+                if (!document.fullscreenElement) {
+                    if (video) {
+                        video.style.maxHeight = '550px';
+                        video.style.width = '100%';
+                        video.style.height = '100%';
+                        video.style.objectFit = 'contain';
+                    }
+                    if (this.preview) {
+                        this.preview.style.display = 'flex';
+                        this.preview.style.alignItems = 'center';
+                        this.preview.style.justifyContent = 'center';
+                        this.preview.style.background = '';
+                    }
+                    this.previewOverlay.style.display = 'block';
+                    this.previewControls.style.display = 'flex';
+                    if (this.currentProject && this.currentProject.category === 'motion') {
+                        this.videoControlsGroup.style.display = 'flex';
+                        this.webControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                    } else if (this.currentProject && this.currentProject.category === 'web') {
+                        this.webControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'inline-block';
+                        this.webFitBtn.style.display = 'inline-flex';
+                    } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                        this.graphicControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.webControlsGroup.style.display = 'none';
+                    }
+                }
+            }
+
+            _handleFullscreenChangeWeb() {
+                const img = this.preview.querySelector('.preview-media');
+                const isFullscreen = !!document.fullscreenElement;
+                if (isFullscreen) {
+                    this.previewOverlay.style.display = 'none';
+                    this.previewControls.style.display = 'flex';
+                    this.webFitBtn.style.display = 'none';
+                    const divider = this.webControlsGroup.querySelector('.divider');
+                    if (divider) divider.style.display = 'none';
+                    this.videoControlsGroup.style.display = 'none';
+                    this.graphicControlsGroup.style.display = 'none';
+                } else {
+                    this.previewOverlay.style.display = 'block';
+                    this.previewControls.style.display = 'flex';
+                    this.webFitBtn.style.display = 'inline-flex';
+                    const divider = this.webControlsGroup.querySelector('.divider');
+                    if (divider) divider.style.display = 'inline-block';
+                    this.videoControlsGroup.style.display = 'none';
+                    this.graphicControlsGroup.style.display = 'none';
+                    if (this.isWebFit) {
+                        this.preview.classList.add('web-fit-mode');
+                        if (img) {
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = 'auto';
+                            img.style.maxHeight = 'none';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = '100%';
+                        }
+                        this.webFitBtn.classList.add('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                    } else {
+                        this.preview.classList.remove('web-fit-mode');
+                        if (img) {
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                        }
+                        this.webFitBtn.classList.remove('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                    }
+                }
+            }
+
             updatePreview(item) {
                 const filePath = getFileUrl(item.file);
                 
@@ -3874,6 +4173,17 @@
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
                 this.preview.classList.remove('web-fit-mode');
+                
+                // Clean up old event listeners
+                if (this.currentVideo) {
+                    this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
+                }
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
+                }
+                if (this._fullscreenChangeHandlerWeb) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
+                }
                 
                 const oldNav = this.preview.querySelector('.graphic-slide-nav');
                 if (oldNav) oldNav.remove();
@@ -3907,13 +4217,7 @@
                     
                     this.createLoadingOverlay(mediaElement, 'video');
                     
-                    mediaElement.addEventListener('timeupdate', () => {
-                        if (!isNaN(mediaElement.duration)) {
-                            this.videoProgressFill.style.width = `${(mediaElement.currentTime / mediaElement.duration) * 100}%`;
-                            const currentEl = this.videoControlsGroup.querySelector('.current-time');
-                            if (currentEl) currentEl.textContent = formatTime(mediaElement.currentTime);
-                        }
-                    });
+                    mediaElement.addEventListener('timeupdate', this._updateVideoProgress);
                     mediaElement.addEventListener('play', () => {
                         this.isVideoPlaying = true;
                         this.videoPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -4374,49 +4678,8 @@
                     }
                 };
                 
-                const fullscreenChangeHandler = () => {
-                    if (!document.fullscreenElement) {
-                        if (video) {
-                            video.style.maxHeight = '550px';
-                            video.style.width = '100%';
-                            video.style.height = '100%';
-                            video.style.objectFit = 'contain';
-                        }
-                        if (this.preview) {
-                            this.preview.style.display = 'flex';
-                            this.preview.style.alignItems = 'center';
-                            this.preview.style.justifyContent = 'center';
-                            this.preview.style.background = '';
-                        }
-                        this.previewOverlay.style.display = 'block';
-                        this.previewControls.style.display = 'flex';
-                        if (this.currentProject && this.currentProject.category === 'motion') {
-                            this.videoControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                                el.style.display = '';
-                            });
-                            this.webControlsGroup.style.display = 'none';
-                            this.graphicControlsGroup.style.display = 'none';
-                        } else if (this.currentProject && this.currentProject.category === 'web') {
-                            this.webControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.style.display = 'none';
-                            this.graphicControlsGroup.style.display = 'none';
-                            const divider = this.webControlsGroup.querySelector('.divider');
-                            if (divider) divider.style.display = 'inline-block';
-                            this.webFitBtn.style.display = 'inline-flex';
-                        } else if (this.currentProject && this.currentProject.category === 'graphic') {
-                            this.graphicControlsGroup.style.display = 'flex';
-                            this.videoControlsGroup.style.display = 'none';
-                            this.webControlsGroup.style.display = 'none';
-                        }
-                    }
-                };
-                
-                if (this._fullscreenChangeHandler) {
-                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
-                }
-                this._fullscreenChangeHandler = fullscreenChangeHandler;
-                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+                this._fullscreenChangeHandler = this._handleFullscreenChange.bind(this);
+                document.addEventListener('fullscreenchange', this._fullscreenChangeHandler);
             }
 
             setupWebControls() {
@@ -4462,53 +4725,8 @@
                     }
                 };
                 
-                const fullscreenChangeHandler = () => {
-                    const isFullscreen = !!document.fullscreenElement;
-                    if (isFullscreen) {
-                        this.previewOverlay.style.display = 'none';
-                        this.previewControls.style.display = 'flex';
-                        this.webFitBtn.style.display = 'none';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'none';
-                        this.videoControlsGroup.style.display = 'none';
-                        this.graphicControlsGroup.style.display = 'none';
-                    } else {
-                        this.previewOverlay.style.display = 'block';
-                        this.previewControls.style.display = 'flex';
-                        this.webFitBtn.style.display = 'inline-flex';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'inline-block';
-                        this.videoControlsGroup.style.display = 'none';
-                        this.graphicControlsGroup.style.display = 'none';
-                        if (this.isWebFit) {
-                            this.preview.classList.add('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = 'auto';
-                            img.style.maxHeight = 'none';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = '100%';
-                            this.webFitBtn.classList.add('active');
-                            this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
-                        } else {
-                            this.preview.classList.remove('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.maxHeight = '550px';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = 'auto';
-                            this.webFitBtn.classList.remove('active');
-                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
-                        }
-                    }
-                };
-                
-                if (this._fullscreenChangeHandlerWeb) {
-                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
-                }
-                this._fullscreenChangeHandlerWeb = fullscreenChangeHandler;
-                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+                this._fullscreenChangeHandlerWeb = this._handleFullscreenChangeWeb.bind(this);
+                document.addEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
                 
                 this.webFitBtn.onclick = () => {
                     if (document.fullscreenElement) return;
@@ -4562,6 +4780,24 @@
             }
 
             clearPreview() {
+                // Clean up event listeners
+                if (this.currentVideo) {
+                    this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
+                    this.currentVideo = null;
+                }
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
+                    this._fullscreenChangeHandler = null;
+                }
+                if (this._fullscreenChangeHandlerWeb) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
+                    this._fullscreenChangeHandlerWeb = null;
+                }
+                if (this._graphicKeyHandler) {
+                    document.removeEventListener('keydown', this._graphicKeyHandler);
+                    this._graphicKeyHandler = null;
+                }
+                
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) existingMedia.remove();
                 const placeholder = this.preview.querySelector('.preview-placeholder');
@@ -4572,10 +4808,6 @@
                 if (counter) counter.remove();
                 const loadingOverlay = this.preview.querySelector('.graphic-loading-overlay');
                 if (loadingOverlay) loadingOverlay.remove();
-                if (this._graphicKeyHandler) {
-                    document.removeEventListener('keydown', this._graphicKeyHandler);
-                    this._graphicKeyHandler = null;
-                }
                 
                 this.previewTitle.textContent = 'Select a project';
                 this.previewCat.textContent = 'Category';
@@ -4798,6 +5030,49 @@
         }
 
         // =====================================================================
+        // ABOUT SECTION - STAGGERED LUXURY ANIMATION
+        // =====================================================================
+        function initAboutStaggeredAnimation() {
+            const paragraphs = document.querySelectorAll('.about-paragraph');
+            if (!paragraphs.length) return;
+
+            paragraphs.forEach(p => {
+                p.classList.remove('visible');
+                p.style.opacity = '0';
+                p.style.transform = 'translateY(30px)';
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const allParagraphs = entry.target.querySelectorAll('.about-paragraph');
+                        
+                        allParagraphs.forEach((p, index) => {
+                            const delay = index * 400;
+                            
+                            setTimeout(() => {
+                                p.style.transition = 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                                p.style.opacity = '1';
+                                p.style.transform = 'translateY(0)';
+                                p.classList.add('visible');
+                            }, delay);
+                        });
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { 
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            const container = paragraphs[0].parentElement;
+            if (container) {
+                observer.observe(container);
+            }
+        }
+
+        // =====================================================================
         // MAIN APP
         // =====================================================================
         class App {
@@ -4810,6 +5085,9 @@
 
             async init() {
                 try {
+                    initHeroVideo();
+                    initAboutStaggeredAnimation();
+                    
                     this.manager = new SplitScreenManager();
                     this.setupScrollAnimations();
                     this.setupHeaderScroll();
