@@ -2412,12 +2412,24 @@
             margin-bottom: 0;
         }
 
+        /* ===== MOBILE TEXT OPTIMIZATION ===== */
+        @media (max-width: 768px) {
+            .about-content .about-paragraph {
+                font-size: 0.9rem;
+                line-height: 1.6;
+                padding: 0 4px;
+                max-width: 100%;
+            }
+        }
+
         @media (max-width: 480px) {
             .about-image {
                 max-width: 200px;
             }
             .about-content .about-paragraph {
-                max-width: 100%;
+                font-size: 0.85rem;
+                line-height: 1.5;
+                padding: 0 2px;
             }
         }
 
