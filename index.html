@@ -215,8 +215,6 @@
             text-align: center;
             gap: 20px;
             padding: 20px;
-            max-width: 400px;
-            width: 100%;
         }
 
         .loading-gif {
@@ -226,26 +224,8 @@
             display: block;
         }
 
-        .loading-gif-error {
-            display: none;
-            width: 80px;
-            height: 80px;
-            border: 4px solid rgba(255, 107, 0, 0.1);
-            border-top: 4px solid var(--secondary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        .loading-gif[src=""] + .loading-gif-error {
-            display: block;
-        }
-
-        .loading-gif[src=""] {
-            display: none;
-        }
-
         .loading-progress-container {
-            width: 280px;
+            width: 250px;
             height: 8px;
             background: rgba(0, 0, 0, 0.1);
             border-radius: 4px;
@@ -271,7 +251,6 @@
             opacity: 0.6;
             font-weight: 500;
             letter-spacing: 1px;
-            min-height: 24px;
         }
 
         .loading-percentage {
@@ -279,15 +258,6 @@
             font-weight: 700;
             color: var(--secondary-color);
             font-family: var(--font-heading);
-            min-width: 60px;
-        }
-
-        .loading-status-detail {
-            font-size: 0.7rem;
-            color: var(--text-color);
-            opacity: 0.4;
-            font-weight: 400;
-            min-height: 20px;
         }
 
         @media (max-width: 768px) {
@@ -296,13 +266,10 @@
                 height: 100px;
             }
             .loading-progress-container {
-                width: 220px;
+                width: 200px;
             }
             .loading-percentage {
                 font-size: 1rem;
-            }
-            .loading-text {
-                font-size: 0.8rem;
             }
         }
 
@@ -312,7 +279,7 @@
                 height: 80px;
             }
             .loading-progress-container {
-                width: 180px;
+                width: 160px;
             }
             .loading-percentage {
                 font-size: 0.9rem;
@@ -320,11 +287,6 @@
             .loading-text {
                 font-size: 0.75rem;
             }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* ===================== HEADER ===================== */
@@ -2805,14 +2767,12 @@
     <!-- ==================== LOADING OVERLAY ==================== -->
     <div id="loading-overlay">
         <div class="loading-content">
-            <img src="tunetek_loading.gif" alt="Loading animation" class="loading-gif" onerror="this.style.display='none'; document.querySelector('.loading-gif-error').style.display='block';">
-            <div class="loading-gif-error"></div>
+            <img src="tunetek_loading.gif" alt="Loading animation" class="loading-gif">
             <div class="loading-percentage" id="loading-percentage">0%</div>
             <div class="loading-progress-container">
                 <div class="loading-progress-bar" id="loading-progress-bar"></div>
             </div>
-            <div class="loading-text" id="loading-text">Initializing...</div>
-            <div class="loading-status-detail" id="loading-status-detail">Loading resources...</div>
+            <div class="loading-text" id="loading-text">Loading...</div>
         </div>
     </div>
 
@@ -3256,316 +3216,36 @@
         const FADE_TIMEOUT = 400;
         const HEADER_HEIGHT = 72;
         const PROJECTS_PER_PAGE = 12;
-        const LOADING_SAFETY_TIMEOUT = 15000; // 15 seconds for slow connections
-
-        // =====================================================================
-        // REAL LOADING TRACKER - ONLY FOR INITIAL LOADING SCREEN
-        // =====================================================================
-        class LoadingTracker {
-            constructor() {
-                this.totalResources = 0;
-                this.loadedResources = 0;
-                this.resources = {};
-                this.isComplete = false;
-                this.onProgress = null;
-                this.onComplete = null;
-                
-                // Track specific resources
-                this.heroVideoReady = false;
-                this.fontsReady = false;
-                this.cssReady = false;
-                this.serviceImagesLoaded = 0;
-                this.totalServiceImages = 3;
-                this.profileImageLoaded = false;
-                this.logoLoaded = false;
-                
-                // Start tracking
-                this.init();
-            }
-
-            init() {
-                // Track CSS (always ready after parsing)
-                this.cssReady = true;
-                this.registerResource('css');
-                
-                // Track Font Awesome (always ready)
-                this.registerResource('fontawesome');
-                
-                // Track Logo
-                this.trackLogo();
-                
-                // Track Google Fonts
-                this.trackFonts();
-                
-                // Track Hero Video
-                this.trackHeroVideo();
-                
-                // Track Service Images
-                this.trackServiceImages();
-                
-                // Track Profile Image
-                this.trackProfileImage();
-                
-                // Start checking
-                this.checkCompletion();
-            }
-
-            registerResource(name) {
-                if (!this.resources[name]) {
-                    this.resources[name] = false;
-                    this.totalResources++;
-                }
-            }
-
-            markResourceLoaded(name) {
-                if (this.resources[name] === false) {
-                    this.resources[name] = true;
-                    this.loadedResources++;
-                    this.updateProgress();
-                }
-            }
-
-            updateProgress() {
-                const percent = Math.min(Math.round((this.loadedResources / this.totalResources) * 100), 100);
-                if (this.onProgress) {
-                    this.onProgress(percent, this.getStatusText());
-                }
-                
-                if (percent >= 100 && !this.isComplete) {
-                    this.isComplete = true;
-                    if (this.onComplete) {
-                        this.onComplete();
-                    }
-                }
-            }
-
-            getStatusText() {
-                const loaded = this.loadedResources;
-                const total = this.totalResources;
-                
-                if (loaded < total * 0.1) return 'Initializing...';
-                if (loaded < total * 0.3) return 'Loading resources...';
-                if (loaded < total * 0.5) return 'Preparing content...';
-                if (loaded < total * 0.7) return 'Optimizing experience...';
-                if (loaded < total * 0.9) return 'Almost there...';
-                if (loaded < total) return 'Finalizing...';
-                return 'Ready! ✨';
-            }
-
-            getDetailStatus() {
-                const status = [];
-                if (!this.heroVideoReady) status.push('🎬 Loading hero video...');
-                if (!this.fontsReady) status.push('🔤 Loading fonts...');
-                if (this.serviceImagesLoaded < this.totalServiceImages) {
-                    status.push(`📸 Loading images (${this.serviceImagesLoaded}/${this.totalServiceImages})...`);
-                }
-                if (!this.logoLoaded) status.push('🖼️ Loading logo...');
-                if (status.length === 0) status.push('✨ All resources loaded');
-                return status[0] || 'Loading...';
-            }
-
-            // Track Logo
-            trackLogo() {
-                this.registerResource('logo');
-                const logo = document.querySelector('.logo img');
-                if (logo) {
-                    if (logo.complete && logo.naturalWidth > 0) {
-                        this.logoLoaded = true;
-                        this.markResourceLoaded('logo');
-                        return;
-                    }
-                    logo.addEventListener('load', () => {
-                        this.logoLoaded = true;
-                        this.markResourceLoaded('logo');
-                    });
-                    logo.addEventListener('error', () => {
-                        this.logoLoaded = true;
-                        this.markResourceLoaded('logo');
-                    });
-                    setTimeout(() => {
-                        if (!this.logoLoaded) {
-                            this.logoLoaded = true;
-                            this.markResourceLoaded('logo');
-                        }
-                    }, 3000);
-                } else {
-                    this.logoLoaded = true;
-                    this.markResourceLoaded('logo');
-                }
-            }
-
-            // Track Google Fonts
-            trackFonts() {
-                this.registerResource('fonts');
-                if (document.fonts) {
-                    document.fonts.ready.then(() => {
-                        this.fontsReady = true;
-                        this.markResourceLoaded('fonts');
-                    }).catch(() => {
-                        setTimeout(() => {
-                            this.fontsReady = true;
-                            this.markResourceLoaded('fonts');
-                        }, 2000);
-                    });
-                } else {
-                    setTimeout(() => {
-                        this.fontsReady = true;
-                        this.markResourceLoaded('fonts');
-                    }, 1000);
-                }
-            }
-
-            // Track Hero Video
-            trackHeroVideo() {
-                this.registerResource('heroVideo');
-                const video = document.getElementById('heroVideo');
-                if (video) {
-                    if (video.readyState >= 3) {
-                        this.heroVideoReady = true;
-                        this.markResourceLoaded('heroVideo');
-                        return;
-                    }
-                    
-                    const onCanPlay = () => {
-                        this.heroVideoReady = true;
-                        this.markResourceLoaded('heroVideo');
-                        video.removeEventListener('canplaythrough', onCanPlay);
-                        video.removeEventListener('loadeddata', onCanPlay);
-                    };
-                    
-                    video.addEventListener('canplaythrough', onCanPlay);
-                    video.addEventListener('loadeddata', onCanPlay);
-                    
-                    setTimeout(() => {
-                        if (!this.heroVideoReady) {
-                            this.heroVideoReady = true;
-                            this.markResourceLoaded('heroVideo');
-                        }
-                    }, 8000);
-                } else {
-                    this.heroVideoReady = true;
-                    this.markResourceLoaded('heroVideo');
-                }
-            }
-
-            // Track Service Images
-            trackServiceImages() {
-                this.registerResource('serviceImages');
-                const serviceImages = document.querySelectorAll('.service-image');
-                let loaded = 0;
-                const total = serviceImages.length || 3;
-                
-                if (serviceImages.length === 0) {
-                    this.serviceImagesLoaded = total;
-                    this.markResourceLoaded('serviceImages');
-                    return;
-                }
-                
-                serviceImages.forEach(img => {
-                    if (img.complete && img.naturalWidth > 0) {
-                        loaded++;
-                        this.serviceImagesLoaded = loaded;
-                        if (loaded >= total) {
-                            this.markResourceLoaded('serviceImages');
-                        }
-                        return;
-                    }
-                    
-                    const onLoad = () => {
-                        loaded++;
-                        this.serviceImagesLoaded = loaded;
-                        if (loaded >= total) {
-                            this.markResourceLoaded('serviceImages');
-                        }
-                        img.removeEventListener('load', onLoad);
-                        img.removeEventListener('error', onLoad);
-                    };
-                    
-                    img.addEventListener('load', onLoad);
-                    img.addEventListener('error', onLoad);
-                });
-                
-                setTimeout(() => {
-                    if (!this.resources.serviceImages) {
-                        this.serviceImagesLoaded = total;
-                        this.markResourceLoaded('serviceImages');
-                    }
-                }, 5000);
-            }
-
-            // Track Profile Image
-            trackProfileImage() {
-                this.registerResource('profileImage');
-                const profileImg = document.querySelector('.about-image img');
-                if (profileImg) {
-                    if (profileImg.complete && profileImg.naturalWidth > 0) {
-                        this.profileImageLoaded = true;
-                        this.markResourceLoaded('profileImage');
-                        return;
-                    }
-                    profileImg.addEventListener('load', () => {
-                        this.profileImageLoaded = true;
-                        this.markResourceLoaded('profileImage');
-                    });
-                    profileImg.addEventListener('error', () => {
-                        this.profileImageLoaded = true;
-                        this.markResourceLoaded('profileImage');
-                    });
-                    setTimeout(() => {
-                        if (!this.profileImageLoaded) {
-                            this.profileImageLoaded = true;
-                            this.markResourceLoaded('profileImage');
-                        }
-                    }, 5000);
-                } else {
-                    this.profileImageLoaded = true;
-                    this.markResourceLoaded('profileImage');
-                }
-            }
-
-            checkCompletion() {
-                const interval = setInterval(() => {
-                    if (this.isComplete) {
-                        clearInterval(interval);
-                        return;
-                    }
-                    this.updateProgress();
-                }, 500);
-                
-                // Safety timeout: force complete after 15 seconds
-                setTimeout(() => {
-                    if (!this.isComplete) {
-                        // Mark all remaining resources as loaded
-                        Object.keys(this.resources).forEach(key => {
-                            if (!this.resources[key]) {
-                                this.resources[key] = true;
-                                this.loadedResources++;
-                            }
-                        });
-                        this.isComplete = true;
-                        this.updateProgress();
-                        if (this.onComplete) {
-                            this.onComplete();
-                        }
-                    }
-                }, LOADING_SAFETY_TIMEOUT);
-            }
-        }
 
         // =====================================================================
         // PROGRESS TRACKING
         // =====================================================================
+        const loadingItems = { total: 0, loaded: 0, progress: 0 };
         const loadingOverlay = document.getElementById('loading-overlay');
         const progressBar = document.getElementById('loading-progress-bar');
         const percentageDisplay = document.getElementById('loading-percentage');
         const loadingText = document.getElementById('loading-text');
-        const loadingStatusDetail = document.getElementById('loading-status-detail');
 
-        function updateLoadingUI(percent, statusText, detailText) {
+        function updateLoadingProgress() {
+            const percent = Math.min(Math.round((loadingItems.loaded / loadingItems.total) * 100), 100);
+            loadingItems.progress = percent;
             progressBar.style.width = percent + '%';
             percentageDisplay.textContent = percent + '%';
-            if (statusText) loadingText.textContent = statusText;
-            if (detailText) loadingStatusDetail.textContent = detailText;
+            
+            if (percent < 30) loadingText.textContent = 'Initializing...';
+            else if (percent < 60) loadingText.textContent = 'Loading resources...';
+            else if (percent < 85) loadingText.textContent = 'Preparing content...';
+            else if (percent < 100) loadingText.textContent = 'Almost ready...';
+            else loadingText.textContent = 'Complete!';
+
+            if (percent >= 100) {
+                setTimeout(() => loadingOverlay.classList.add('hidden'), FADE_TIMEOUT);
+            }
+        }
+
+        function trackLoadedItem() {
+            loadingItems.loaded++;
+            updateLoadingProgress();
         }
 
         // =====================================================================
@@ -3942,7 +3622,8 @@
             }
         };
 
-        // =====================================================================        // UTILITY FUNCTIONS
+        // =====================================================================
+        // UTILITY FUNCTIONS
         // =====================================================================
         function formatTime(seconds) {
             if (isNaN(seconds)) return '00:00';
@@ -4055,7 +3736,7 @@
         }
 
         // =====================================================================
-        // SPLIT SCREEN MANAGER - UNCHANGED
+        // SPLIT SCREEN MANAGER
         // =====================================================================
         class SplitScreenManager {
             constructor() {
@@ -4110,6 +3791,7 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
+                // Bind methods to avoid memory leaks
                 this._updateVideoProgress = this._updateVideoProgress.bind(this);
                 this._handleFullscreenChange = this._handleFullscreenChange.bind(this);
                 this._handleFullscreenChangeWeb = this._handleFullscreenChangeWeb.bind(this);
@@ -4121,11 +3803,26 @@
             }
 
             async init() {
+                const totalProjects = Object.values(PROJECT_MANIFEST).reduce((sum, arr) => sum + arr.length, 0);
+                loadingItems.total = Math.min(totalProjects + 5, 100);
+                updateLoadingProgress();
+                
                 this.allProjects = this.projectManager.loadAllProjects();
                 this.setupCounts();
                 this.setupFilters();
                 this.setupSearch();
                 this.buildList('all');
+                
+                const totalToTrack = Math.min(Object.values(PROJECT_MANIFEST).reduce((sum, arr) => sum + arr.length, 0), 95);
+                for (let i = 0; i < totalToTrack; i++) {
+                    trackLoadedItem();
+                }
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+                trackLoadedItem();
+                updateLoadingProgress();
             }
 
             setupCounts() {
@@ -4477,6 +4174,7 @@
                 this.preview.scrollLeft = 0;
                 this.preview.classList.remove('web-fit-mode');
                 
+                // Clean up old event listeners
                 if (this.currentVideo) {
                     this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
                 }
@@ -5082,6 +4780,7 @@
             }
 
             clearPreview() {
+                // Clean up event listeners
                 if (this.currentVideo) {
                     this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
                     this.currentVideo = null;
@@ -5381,25 +5080,15 @@
                 this.theme = new ThemeManager();
                 this.language = new LanguageManager();
                 this.manager = null;
-                this.loadingTracker = null;
                 this.init();
             }
 
             async init() {
                 try {
-                    // Initialize loading tracker first - ONLY FOR INITIAL LOADING SCREEN
-                    this.initLoadingTracker();
-                    
-                    // Initialize hero video
                     initHeroVideo();
-                    
-                    // Initialize about staggered animation
                     initAboutStaggeredAnimation();
                     
-                    // Initialize portfolio - UNCHANGED
                     this.manager = new SplitScreenManager();
-                    
-                    // Setup other features
                     this.setupScrollAnimations();
                     this.setupHeaderScroll();
                     this.setupSmoothNavigation();
@@ -5408,30 +5097,8 @@
                     this.setupHamburgerMenu();
                 } catch (error) {
                     console.error('Failed to initialize app:', error);
-                    setTimeout(() => {
-                        loadingOverlay.classList.add('hidden');
-                    }, 1000);
+                    loadingOverlay.classList.add('hidden');
                 }
-            }
-
-            initLoadingTracker() {
-                this.loadingTracker = new LoadingTracker();
-                
-                // Update UI on progress
-                this.loadingTracker.onProgress = (percent, statusText) => {
-                    const detailText = this.loadingTracker.getDetailStatus();
-                    updateLoadingUI(percent, statusText, detailText);
-                };
-                
-                // Hide loading when complete
-                this.loadingTracker.onComplete = () => {
-                    setTimeout(() => {
-                        loadingOverlay.classList.add('hidden');
-                    }, FADE_TIMEOUT);
-                };
-                
-                // Initial UI update
-                updateLoadingUI(0, 'Initializing...', 'Starting up...');
             }
 
             setupScrollAnimations() {
