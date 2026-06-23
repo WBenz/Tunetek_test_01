@@ -1319,6 +1319,8 @@
             border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.1);
             pointer-events: auto;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .split-preview.web-fit-mode .preview-controls {
@@ -2750,6 +2752,33 @@
         ::selection {
             background: var(--secondary-color);
             color: white;
+        }
+
+        /* ===================== FIX: Force controls visible ===================== */
+        .preview-controls,
+        .preview-controls * {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            z-index: 9999 !important;
+        }
+
+        .split-preview .video-controls-group,
+        .split-preview .video-controls-group * {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            display: flex !important;
+        }
+
+        /* Hide the small circle that appears - this is likely the fullscreen button */
+        .split-preview:not(:fullscreen) .video-fullscreen-btn {
+            display: flex !important;
+        }
+
+        .split-preview .preview-controls button {
+            cursor: pointer !important;
+            pointer-events: auto !important;
         }
     </style>
 </head>
@@ -4630,6 +4659,11 @@
                 const video = this.currentVideo;
                 if (!video) return;
                 
+                // Ensure controls are always visible
+                this.previewControls.style.display = 'flex';
+                this.previewControls.style.opacity = '1';
+                this.previewControls.style.visibility = 'visible';
+                
                 this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
                 
@@ -4646,6 +4680,7 @@
                     this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
                 };
                 
+                // FIX: Fullscreen button handler
                 this.videoFullscreenBtn.onclick = () => {
                     if (!document.fullscreenElement) {
                         if (this.currentProject) {
@@ -4672,23 +4707,20 @@
                                         
                                         this.previewOverlay.style.display = 'none';
                                         
-                                        // FIX: Keep controls visible
-                                        this.videoControlsGroup.style.display = 'flex';
-                                        this.videoControlsGroup.style.opacity = '1';
-                                        this.videoControlsGroup.style.visibility = 'visible';
-                                        this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                                            el.style.display = '';
-                                            el.style.opacity = '1';
-                                            el.style.visibility = 'visible';
-                                        });
+                                        // FIX: Keep controls visible with !important via inline styles
+                                        this.previewControls.style.setProperty('display', 'flex', 'important');
+                                        this.previewControls.style.setProperty('position', 'fixed', 'important');
+                                        this.previewControls.style.setProperty('bottom', '40px', 'important');
+                                        this.previewControls.style.setProperty('opacity', '1', 'important');
+                                        this.previewControls.style.setProperty('visibility', 'visible', 'important');
+                                        this.previewControls.style.setProperty('z-index', '99999', 'important');
+                                        
+                                        this.videoControlsGroup.style.setProperty('display', 'flex', 'important');
+                                        this.videoControlsGroup.style.setProperty('opacity', '1', 'important');
+                                        this.videoControlsGroup.style.setProperty('visibility', 'visible', 'important');
+                                        
                                         this.webControlsGroup.style.display = 'none';
                                         this.graphicControlsGroup.style.display = 'none';
-                                        
-                                        this.previewControls.style.display = 'flex';
-                                        this.previewControls.style.position = 'fixed';
-                                        this.previewControls.style.bottom = '40px';
-                                        this.previewControls.style.opacity = '1';
-                                        this.previewControls.style.visibility = 'visible';
                                         
                                         const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
                                         if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-compress"></i>';
@@ -4731,24 +4763,28 @@
                         this.previewOverlay.style.display = 'block';
                         if (this.isWebFit) {
                             this.preview.classList.add('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = 'auto';
-                            img.style.maxHeight = 'none';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = '100%';
+                            if (img) {
+                                img.style.objectFit = 'contain';
+                                img.style.width = '100%';
+                                img.style.height = 'auto';
+                                img.style.maxHeight = 'none';
+                                img.style.maxWidth = '100%';
+                                img.style.minHeight = '100%';
+                            }
                             this.webFitBtn.classList.add('active');
                             this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
                             this.webFitBtn.title = 'Reset view';
                             this.preview.scrollTop = 0;
                         } else {
                             this.preview.classList.remove('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.maxHeight = '550px';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = 'auto';
+                            if (img) {
+                                img.style.objectFit = 'contain';
+                                img.style.width = '100%';
+                                img.style.height = '100%';
+                                img.style.maxHeight = '550px';
+                                img.style.maxWidth = '100%';
+                                img.style.minHeight = 'auto';
+                            }
                             this.webFitBtn.classList.remove('active');
                             this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
                             this.webFitBtn.title = 'Fit width';
