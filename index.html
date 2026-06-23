@@ -819,30 +819,32 @@
             color: white;
         }
 
+        /* ===== UPDATED: "Let's Talk" button with orange text ===== */
         .btn-secondary {
             background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: var(--secondary-color); /* ← Orange text! */
+            border: 2px solid var(--secondary-color); /* ← Orange border */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--secondary-color);
+            color: white !important;
             transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
-            color: white;
+            box-shadow: 0 15px 25px rgba(255, 107, 0, 0.4);
         }
 
         [data-theme="dark"] .btn-secondary {
             background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: white;
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
         }
 
         [data-theme="dark"] .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--secondary-color);
+            color: white !important;
         }
 
         /* ===================== SERVICES ===================== */
