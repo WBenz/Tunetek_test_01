@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -741,11 +742,6 @@
             border-top: 4px solid var(--secondary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .hero-actions-bottom {
@@ -3256,58 +3252,48 @@
         const FADE_TIMEOUT = 400;
         const HEADER_HEIGHT = 72;
         const PROJECTS_PER_PAGE = 12;
-        const LOADING_SAFETY_TIMEOUT = 15000; // 15 seconds for slow connections
 
         // =====================================================================
         // REAL LOADING TRACKER - ONLY FOR INITIAL LOADING SCREEN
         // =====================================================================
         class LoadingTracker {
             constructor() {
+                // Track these resources:
                 this.totalResources = 0;
                 this.loadedResources = 0;
                 this.resources = {};
                 this.isComplete = false;
                 this.onProgress = null;
                 this.onComplete = null;
+                this.safetyTimeout = 8000; // 8 seconds max
                 
                 // Track specific resources
                 this.heroVideoReady = false;
                 this.fontsReady = false;
-                this.cssReady = false;
+                this.logoLoaded = false;
                 this.serviceImagesLoaded = 0;
                 this.totalServiceImages = 3;
                 this.profileImageLoaded = false;
-                this.logoLoaded = false;
                 
                 // Start tracking
                 this.init();
-            }
-
-            init() {
-                // Track CSS (always ready after parsing)
-                this.cssReady = true;
-                this.registerResource('css');
                 
-                // Track Font Awesome (always ready)
-                this.registerResource('fontawesome');
-                
-                // Track Logo
-                this.trackLogo();
-                
-                // Track Google Fonts
-                this.trackFonts();
-                
-                // Track Hero Video
-                this.trackHeroVideo();
-                
-                // Track Service Images
-                this.trackServiceImages();
-                
-                // Track Profile Image
-                this.trackProfileImage();
-                
-                // Start checking
-                this.checkCompletion();
+                // Safety timeout - force complete after 8 seconds
+                setTimeout(() => {
+                    if (!this.isComplete) {
+                        console.warn('⚠️ Loading safety timeout - forcing complete');
+                        // Mark all remaining as loaded
+                        const remaining = this.totalResources - this.loadedResources;
+                        if (remaining > 0) {
+                            this.loadedResources = this.totalResources;
+                            this.updateProgress();
+                        }
+                        this.isComplete = true;
+                        if (this.onComplete) {
+                            this.onComplete();
+                        }
+                    }
+                }, this.safetyTimeout);
             }
 
             registerResource(name) {
@@ -3328,7 +3314,7 @@
             updateProgress() {
                 const percent = Math.min(Math.round((this.loadedResources / this.totalResources) * 100), 100);
                 if (this.onProgress) {
-                    this.onProgress(percent, this.getStatusText());
+                    this.onProgress(percent);
                 }
                 
                 if (percent >= 100 && !this.isComplete) {
@@ -3337,6 +3323,18 @@
                         this.onComplete();
                     }
                 }
+            }
+
+            getDetailStatus() {
+                const status = [];
+                if (!this.heroVideoReady) status.push('🎬 Loading hero video...');
+                if (!this.fontsReady) status.push('🔤 Loading fonts...');
+                if (this.serviceImagesLoaded < this.totalServiceImages) {
+                    status.push(`📸 Loading images (${this.serviceImagesLoaded}/${this.totalServiceImages})...`);
+                }
+                if (!this.logoLoaded) status.push('🖼️ Loading logo...');
+                if (status.length === 0) status.push('✨ All resources loaded');
+                return status[0] || 'Loading...';
             }
 
             getStatusText() {
@@ -3352,19 +3350,31 @@
                 return 'Ready! ✨';
             }
 
-            getDetailStatus() {
-                const status = [];
-                if (!this.heroVideoReady) status.push('🎬 Loading hero video...');
-                if (!this.fontsReady) status.push('🔤 Loading fonts...');
-                if (this.serviceImagesLoaded < this.totalServiceImages) {
-                    status.push(`📸 Loading images (${this.serviceImagesLoaded}/${this.totalServiceImages})...`);
-                }
-                if (!this.logoLoaded) status.push('🖼️ Loading logo...');
-                if (status.length === 0) status.push('✨ All resources loaded');
-                return status[0] || 'Loading...';
+            init() {
+                // CSS is already loaded
+                this.registerResource('css');
+                this.markResourceLoaded('css');
+                
+                // Font Awesome is already loaded
+                this.registerResource('fontawesome');
+                this.markResourceLoaded('fontawesome');
+                
+                // Track Logo
+                this.trackLogo();
+                
+                // Track Google Fonts
+                this.trackFonts();
+                
+                // Track Hero Video
+                this.trackHeroVideo();
+                
+                // Track Service Images
+                this.trackServiceImages();
+                
+                // Track Profile Image
+                this.trackProfileImage();
             }
 
-            // Track Logo
             trackLogo() {
                 this.registerResource('logo');
                 const logo = document.querySelector('.logo img');
@@ -3394,7 +3404,6 @@
                 }
             }
 
-            // Track Google Fonts
             trackFonts() {
                 this.registerResource('fonts');
                 if (document.fonts) {
@@ -3415,7 +3424,6 @@
                 }
             }
 
-            // Track Hero Video
             trackHeroVideo() {
                 this.registerResource('heroVideo');
                 const video = document.getElementById('heroVideo');
@@ -3436,23 +3444,23 @@
                     video.addEventListener('canplaythrough', onCanPlay);
                     video.addEventListener('loadeddata', onCanPlay);
                     
+                    // Fallback if video takes too long
                     setTimeout(() => {
                         if (!this.heroVideoReady) {
                             this.heroVideoReady = true;
                             this.markResourceLoaded('heroVideo');
+                            console.warn('Hero video timeout - marking as loaded');
                         }
-                    }, 8000);
+                    }, 6000);
                 } else {
                     this.heroVideoReady = true;
                     this.markResourceLoaded('heroVideo');
                 }
             }
 
-            // Track Service Images
             trackServiceImages() {
                 this.registerResource('serviceImages');
                 const serviceImages = document.querySelectorAll('.service-image');
-                let loaded = 0;
                 const total = serviceImages.length || 3;
                 
                 if (serviceImages.length === 0) {
@@ -3463,18 +3471,16 @@
                 
                 serviceImages.forEach(img => {
                     if (img.complete && img.naturalWidth > 0) {
-                        loaded++;
-                        this.serviceImagesLoaded = loaded;
-                        if (loaded >= total) {
+                        this.serviceImagesLoaded++;
+                        if (this.serviceImagesLoaded >= total) {
                             this.markResourceLoaded('serviceImages');
                         }
                         return;
                     }
                     
                     const onLoad = () => {
-                        loaded++;
-                        this.serviceImagesLoaded = loaded;
-                        if (loaded >= total) {
+                        this.serviceImagesLoaded++;
+                        if (this.serviceImagesLoaded >= total) {
                             this.markResourceLoaded('serviceImages');
                         }
                         img.removeEventListener('load', onLoad);
@@ -3485,6 +3491,7 @@
                     img.addEventListener('error', onLoad);
                 });
                 
+                // Fallback
                 setTimeout(() => {
                     if (!this.resources.serviceImages) {
                         this.serviceImagesLoaded = total;
@@ -3493,7 +3500,6 @@
                 }, 5000);
             }
 
-            // Track Profile Image
             trackProfileImage() {
                 this.registerResource('profileImage');
                 const profileImg = document.querySelector('.about-image img');
@@ -3521,34 +3527,6 @@
                     this.profileImageLoaded = true;
                     this.markResourceLoaded('profileImage');
                 }
-            }
-
-            checkCompletion() {
-                const interval = setInterval(() => {
-                    if (this.isComplete) {
-                        clearInterval(interval);
-                        return;
-                    }
-                    this.updateProgress();
-                }, 500);
-                
-                // Safety timeout: force complete after 15 seconds
-                setTimeout(() => {
-                    if (!this.isComplete) {
-                        // Mark all remaining resources as loaded
-                        Object.keys(this.resources).forEach(key => {
-                            if (!this.resources[key]) {
-                                this.resources[key] = true;
-                                this.loadedResources++;
-                            }
-                        });
-                        this.isComplete = true;
-                        this.updateProgress();
-                        if (this.onComplete) {
-                            this.onComplete();
-                        }
-                    }
-                }, LOADING_SAFETY_TIMEOUT);
             }
         }
 
@@ -3942,7 +3920,8 @@
             }
         };
 
-        // =====================================================================        // UTILITY FUNCTIONS
+        // =====================================================================
+        // UTILITY FUNCTIONS
         // =====================================================================
         function formatTime(seconds) {
             if (isNaN(seconds)) return '00:00';
@@ -4055,7 +4034,7 @@
         }
 
         // =====================================================================
-        // SPLIT SCREEN MANAGER - UNCHANGED
+        // SPLIT SCREEN MANAGER - FIXED VIDEO CONTROLS
         // =====================================================================
         class SplitScreenManager {
             constructor() {
@@ -4111,11 +4090,7 @@
                 this.previewControls = document.getElementById('previewControls');
                 
                 this._updateVideoProgress = this._updateVideoProgress.bind(this);
-                this._handleFullscreenChange = this._handleFullscreenChange.bind(this);
-                this._handleFullscreenChangeWeb = this._handleFullscreenChangeWeb.bind(this);
                 this._graphicKeyHandler = null;
-                this._fullscreenChangeHandler = null;
-                this._fullscreenChangeHandlerWeb = null;
                 
                 this.init();
             }
@@ -4375,87 +4350,236 @@
                 if (currentEl) currentEl.textContent = formatTime(video.currentTime);
             }
 
-            _handleFullscreenChange() {
+            // ===== FIXED: Video Controls Fullscreen Handler =====
+            setupVideoControls() {
                 const video = this.currentVideo;
-                if (!document.fullscreenElement) {
-                    if (video) {
-                        video.style.maxHeight = '550px';
-                        video.style.width = '100%';
-                        video.style.height = '100%';
-                        video.style.objectFit = 'contain';
+                if (!video) return;
+                
+                this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
+                video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
+                
+                const progressBar = this.videoControlsGroup.querySelector('.progress-bar');
+                progressBar.onclick = (e) => {
+                    if (isNaN(video.duration)) return;
+                    const rect = progressBar.getBoundingClientRect();
+                    video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
+                };
+                
+                this.videoMuteBtn.onclick = () => {
+                    video.muted = !video.muted;
+                    this.isVideoMuted = video.muted;
+                    this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+                };
+                
+                // ===== FIXED FULLSCREEN =====
+                this.videoFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        const container = this.preview;
+                        if (container) {
+                            container.requestFullscreen()
+                                .then(() => {
+                                    // In fullscreen - show ALL controls
+                                    this.previewOverlay.style.display = 'none';
+                                    this.previewControls.style.display = 'flex';
+                                    this.videoControlsGroup.style.display = 'flex';
+                                    // Show ALL video controls elements
+                                    this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                                        el.style.display = '';
+                                    });
+                                    this.webControlsGroup.style.display = 'none';
+                                    this.graphicControlsGroup.style.display = 'none';
+                                })
+                                .catch(() => {});
+                        }
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
                     }
-                    if (this.preview) {
-                        this.preview.style.display = 'flex';
-                        this.preview.style.alignItems = 'center';
-                        this.preview.style.justifyContent = 'center';
-                        this.preview.style.background = '';
-                    }
-                    this.previewOverlay.style.display = 'block';
-                    this.previewControls.style.display = 'flex';
-                    if (this.currentProject && this.currentProject.category === 'motion') {
+                };
+
+                // ===== FIXED: Fullscreen change listener =====
+                const fullscreenChangeHandler = () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    if (isFullscreen) {
+                        // In fullscreen - show ALL controls
+                        this.previewOverlay.style.display = 'none';
+                        this.previewControls.style.display = 'flex';
                         this.videoControlsGroup.style.display = 'flex';
+                        this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                            el.style.display = '';
+                        });
                         this.webControlsGroup.style.display = 'none';
                         this.graphicControlsGroup.style.display = 'none';
-                    } else if (this.currentProject && this.currentProject.category === 'web') {
-                        this.webControlsGroup.style.display = 'flex';
-                        this.videoControlsGroup.style.display = 'none';
-                        this.graphicControlsGroup.style.display = 'none';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'inline-block';
-                        this.webFitBtn.style.display = 'inline-flex';
-                    } else if (this.currentProject && this.currentProject.category === 'graphic') {
-                        this.graphicControlsGroup.style.display = 'flex';
-                        this.videoControlsGroup.style.display = 'none';
-                        this.webControlsGroup.style.display = 'none';
+                    } else {
+                        // Exited fullscreen - restore normal controls
+                        this.previewOverlay.style.display = 'block';
+                        this.previewControls.style.display = 'flex';
+                        
+                        if (this.currentProject && this.currentProject.category === 'motion') {
+                            this.videoControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
+                                el.style.display = '';
+                            });
+                            this.webControlsGroup.style.display = 'none';
+                            this.graphicControlsGroup.style.display = 'none';
+                        } else if (this.currentProject && this.currentProject.category === 'web') {
+                            this.webControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.style.display = 'none';
+                            this.graphicControlsGroup.style.display = 'none';
+                        } else if (this.currentProject && this.currentProject.category === 'graphic') {
+                            this.graphicControlsGroup.style.display = 'flex';
+                            this.videoControlsGroup.style.display = 'none';
+                            this.webControlsGroup.style.display = 'none';
+                        }
                     }
+                };
+
+                if (this._fullscreenChangeHandler) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
                 }
+                this._fullscreenChangeHandler = fullscreenChangeHandler;
+                document.addEventListener('fullscreenchange', fullscreenChangeHandler);
             }
 
-            _handleFullscreenChangeWeb() {
+            setupWebControls() {
                 const img = this.preview.querySelector('.preview-media');
-                const isFullscreen = !!document.fullscreenElement;
-                if (isFullscreen) {
-                    this.previewOverlay.style.display = 'none';
-                    this.previewControls.style.display = 'flex';
-                    this.webFitBtn.style.display = 'none';
-                    const divider = this.webControlsGroup.querySelector('.divider');
-                    if (divider) divider.style.display = 'none';
-                    this.videoControlsGroup.style.display = 'none';
-                    this.graphicControlsGroup.style.display = 'none';
-                } else {
-                    this.previewOverlay.style.display = 'block';
-                    this.previewControls.style.display = 'flex';
-                    this.webFitBtn.style.display = 'inline-flex';
-                    const divider = this.webControlsGroup.querySelector('.divider');
-                    if (divider) divider.style.display = 'inline-block';
-                    this.videoControlsGroup.style.display = 'none';
-                    this.graphicControlsGroup.style.display = 'none';
-                    if (this.isWebFit) {
-                        this.preview.classList.add('web-fit-mode');
-                        if (img) {
+                if (!img) return;
+                
+                const updateWebButtons = () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    if (isFullscreen) {
+                        this.webFitBtn.style.display = 'none';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'none';
+                        this.previewOverlay.style.display = 'none';
+                    } else {
+                        this.webFitBtn.style.display = 'inline-flex';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'inline-block';
+                        this.previewOverlay.style.display = 'block';
+                        if (this.isWebFit) {
+                            this.preview.classList.add('web-fit-mode');
                             img.style.objectFit = 'contain';
                             img.style.width = '100%';
                             img.style.height = 'auto';
                             img.style.maxHeight = 'none';
                             img.style.maxWidth = '100%';
                             img.style.minHeight = '100%';
-                        }
-                        this.webFitBtn.classList.add('active');
-                        this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
-                    } else {
-                        this.preview.classList.remove('web-fit-mode');
-                        if (img) {
+                            this.webFitBtn.classList.add('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                            this.webFitBtn.title = 'Reset view';
+                            this.preview.scrollTop = 0;
+                        } else {
+                            this.preview.classList.remove('web-fit-mode');
                             img.style.objectFit = 'contain';
                             img.style.width = '100%';
                             img.style.height = '100%';
                             img.style.maxHeight = '550px';
                             img.style.maxWidth = '100%';
                             img.style.minHeight = 'auto';
+                            this.webFitBtn.classList.remove('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                            this.webFitBtn.title = 'Fit width';
                         }
+                    }
+                };
+                
+                const fullscreenChangeHandlerWeb = () => {
+                    const isFullscreen = !!document.fullscreenElement;
+                    if (isFullscreen) {
+                        this.previewOverlay.style.display = 'none';
+                        this.previewControls.style.display = 'flex';
+                        this.webFitBtn.style.display = 'none';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'none';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                    } else {
+                        this.previewOverlay.style.display = 'block';
+                        this.previewControls.style.display = 'flex';
+                        this.webFitBtn.style.display = 'inline-flex';
+                        const divider = this.webControlsGroup.querySelector('.divider');
+                        if (divider) divider.style.display = 'inline-block';
+                        this.videoControlsGroup.style.display = 'none';
+                        this.graphicControlsGroup.style.display = 'none';
+                        if (this.isWebFit) {
+                            this.preview.classList.add('web-fit-mode');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = 'auto';
+                            img.style.maxHeight = 'none';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = '100%';
+                            this.webFitBtn.classList.add('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                        } else {
+                            this.preview.classList.remove('web-fit-mode');
+                            img.style.objectFit = 'contain';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.maxHeight = '550px';
+                            img.style.maxWidth = '100%';
+                            img.style.minHeight = 'auto';
+                            this.webFitBtn.classList.remove('active');
+                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        }
+                    }
+                };
+
+                if (this._fullscreenChangeHandlerWeb) {
+                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
+                }
+                this._fullscreenChangeHandlerWeb = fullscreenChangeHandlerWeb;
+                document.addEventListener('fullscreenchange', fullscreenChangeHandlerWeb);
+                
+                this.webFitBtn.onclick = () => {
+                    if (document.fullscreenElement) return;
+                    this.isWebFit = !this.isWebFit;
+                    if (this.isWebFit) {
+                        img.style.objectFit = 'contain';
+                        img.style.width = '100%';
+                        img.style.height = 'auto';
+                        img.style.maxHeight = 'none';
+                        img.style.maxWidth = '100%';
+                        img.style.minHeight = '100%';
+                        this.preview.classList.add('web-fit-mode');
+                        this.webFitBtn.classList.add('active');
+                        this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                        this.webFitBtn.title = 'Reset view';
+                        this.preview.scrollTop = 0;
+                        void this.preview.offsetHeight;
+                    } else {
+                        img.style.objectFit = 'contain';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.maxHeight = '550px';
+                        img.style.maxWidth = '100%';
+                        img.style.minHeight = 'auto';
+                        this.preview.classList.remove('web-fit-mode');
+                        this.preview.scrollTop = 0;
+                        this.preview.scrollLeft = 0;
                         this.webFitBtn.classList.remove('active');
                         this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
+                        this.webFitBtn.title = 'Fit width';
                     }
-                }
+                };
+                
+                this.webFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(()=>{});
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
+                    }
+                };
+            }
+
+            setupGraphicControls() {
+                this.graphicFullscreenBtn.onclick = () => {
+                    if (!document.fullscreenElement) {
+                        this.preview.requestFullscreen().catch(()=>{});
+                    } else {
+                        document.exitFullscreen().catch(()=>{});
+                    }
+                };
             }
 
             updatePreview(item) {
@@ -4479,12 +4603,6 @@
                 
                 if (this.currentVideo) {
                     this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
-                }
-                if (this._fullscreenChangeHandler) {
-                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandler);
-                }
-                if (this._fullscreenChangeHandlerWeb) {
-                    document.removeEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
                 }
                 
                 const oldNav = this.preview.querySelector('.graphic-slide-nav');
@@ -4913,174 +5031,6 @@
                 }
             }
 
-            setupVideoControls() {
-                const video = this.currentVideo;
-                if (!video) return;
-                
-                this.videoPlayBtn.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
-                video.onclick = () => video.paused ? video.play().catch(()=>{}) : video.pause();
-                
-                const progressBar = this.videoControlsGroup.querySelector('.progress-bar');
-                progressBar.onclick = (e) => {
-                    if (isNaN(video.duration)) return;
-                    const rect = progressBar.getBoundingClientRect();
-                    video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
-                };
-                
-                this.videoMuteBtn.onclick = () => {
-                    video.muted = !video.muted;
-                    this.isVideoMuted = video.muted;
-                    this.videoMuteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-                };
-                
-                this.videoFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        const container = this.preview;
-                        if (container) {
-                            video.style.maxHeight = '100vh';
-                            video.style.width = '100%';
-                            video.style.height = '100%';
-                            video.style.objectFit = 'contain';
-                            
-                            container.requestFullscreen()
-                                .then(() => {
-                                    setTimeout(() => {
-                                        video.style.maxHeight = '100vh';
-                                        video.style.width = '100%';
-                                        video.style.height = '100%';
-                                        video.style.objectFit = 'contain';
-                                        container.style.display = 'flex';
-                                        container.style.alignItems = 'center';
-                                        container.style.justifyContent = 'center';
-                                        container.style.background = '#000';
-                                        this.previewOverlay.style.display = 'none';
-                                        this.videoControlsGroup.style.display = 'none';
-                                        this.webControlsGroup.style.display = 'none';
-                                        this.graphicControlsGroup.style.display = 'none';
-                                        this.previewControls.style.display = 'flex';
-                                        const videoFullscreenBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
-                                        if (videoFullscreenBtn) {
-                                            this.videoControlsGroup.style.display = 'flex';
-                                            this.videoControlsGroup.querySelectorAll('*').forEach(el => {
-                                                if (!el.classList.contains('video-fullscreen-btn')) {
-                                                    el.style.display = 'none';
-                                                }
-                                            });
-                                        }
-                                    }, 50);
-                                })
-                                .catch(() => {
-                                    if (video.requestFullscreen) {
-                                        video.requestFullscreen().catch(() => {});
-                                    }
-                                });
-                        }
-                    } else {
-                        document.exitFullscreen().catch(()=>{});
-                    }
-                };
-                
-                this._fullscreenChangeHandler = this._handleFullscreenChange.bind(this);
-                document.addEventListener('fullscreenchange', this._fullscreenChangeHandler);
-            }
-
-            setupWebControls() {
-                const img = this.preview.querySelector('.preview-media');
-                if (!img) return;
-                
-                const updateWebButtons = () => {
-                    const isFullscreen = !!document.fullscreenElement;
-                    if (isFullscreen) {
-                        this.webFitBtn.style.display = 'none';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'none';
-                        this.previewOverlay.style.display = 'none';
-                    } else {
-                        this.webFitBtn.style.display = 'inline-flex';
-                        const divider = this.webControlsGroup.querySelector('.divider');
-                        if (divider) divider.style.display = 'inline-block';
-                        this.previewOverlay.style.display = 'block';
-                        if (this.isWebFit) {
-                            this.preview.classList.add('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = 'auto';
-                            img.style.maxHeight = 'none';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = '100%';
-                            this.webFitBtn.classList.add('active');
-                            this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
-                            this.webFitBtn.title = 'Reset view';
-                            this.preview.scrollTop = 0;
-                        } else {
-                            this.preview.classList.remove('web-fit-mode');
-                            img.style.objectFit = 'contain';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.maxHeight = '550px';
-                            img.style.maxWidth = '100%';
-                            img.style.minHeight = 'auto';
-                            this.webFitBtn.classList.remove('active');
-                            this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
-                            this.webFitBtn.title = 'Fit width';
-                        }
-                    }
-                };
-                
-                this._fullscreenChangeHandlerWeb = this._handleFullscreenChangeWeb.bind(this);
-                document.addEventListener('fullscreenchange', this._fullscreenChangeHandlerWeb);
-                
-                this.webFitBtn.onclick = () => {
-                    if (document.fullscreenElement) return;
-                    this.isWebFit = !this.isWebFit;
-                    if (this.isWebFit) {
-                        img.style.objectFit = 'contain';
-                        img.style.width = '100%';
-                        img.style.height = 'auto';
-                        img.style.maxHeight = 'none';
-                        img.style.maxWidth = '100%';
-                        img.style.minHeight = '100%';
-                        this.preview.classList.add('web-fit-mode');
-                        this.webFitBtn.classList.add('active');
-                        this.webFitBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
-                        this.webFitBtn.title = 'Reset view';
-                        this.preview.scrollTop = 0;
-                        void this.preview.offsetHeight;
-                    } else {
-                        img.style.objectFit = 'contain';
-                        img.style.width = '100%';
-                        img.style.height = '100%';
-                        img.style.maxHeight = '550px';
-                        img.style.maxWidth = '100%';
-                        img.style.minHeight = 'auto';
-                        this.preview.classList.remove('web-fit-mode');
-                        this.preview.scrollTop = 0;
-                        this.preview.scrollLeft = 0;
-                        this.webFitBtn.classList.remove('active');
-                        this.webFitBtn.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
-                        this.webFitBtn.title = 'Fit width';
-                    }
-                };
-                
-                this.webFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(()=>{});
-                    } else {
-                        document.exitFullscreen().catch(()=>{});
-                    }
-                };
-            }
-
-            setupGraphicControls() {
-                this.graphicFullscreenBtn.onclick = () => {
-                    if (!document.fullscreenElement) {
-                        this.preview.requestFullscreen().catch(()=>{});
-                    } else {
-                        document.exitFullscreen().catch(()=>{});
-                    }
-                };
-            }
-
             clearPreview() {
                 if (this.currentVideo) {
                     this.currentVideo.removeEventListener('timeupdate', this._updateVideoProgress);
@@ -5387,7 +5337,7 @@
 
             async init() {
                 try {
-                    // Initialize loading tracker first - ONLY FOR INITIAL LOADING SCREEN
+                    // Initialize loading tracker - ONLY FOR INITIAL LOADING SCREEN
                     this.initLoadingTracker();
                     
                     // Initialize hero video
@@ -5396,7 +5346,7 @@
                     // Initialize about staggered animation
                     initAboutStaggeredAnimation();
                     
-                    // Initialize portfolio - UNCHANGED
+                    // Initialize portfolio
                     this.manager = new SplitScreenManager();
                     
                     // Setup other features
@@ -5418,8 +5368,9 @@
                 this.loadingTracker = new LoadingTracker();
                 
                 // Update UI on progress
-                this.loadingTracker.onProgress = (percent, statusText) => {
+                this.loadingTracker.onProgress = (percent) => {
                     const detailText = this.loadingTracker.getDetailStatus();
+                    const statusText = this.loadingTracker.getStatusText();
                     updateLoadingUI(percent, statusText, detailText);
                 };
                 
@@ -5512,3 +5463,4 @@
     </script>
 </body>
 </html>
+```
