@@ -710,6 +710,7 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* ===================== HERO ACTIONS & MUTE BUTTON - FIXED FOR MOBILE ===================== */
         .hero-actions-bottom {
             position: absolute;
             bottom: 40px;
@@ -720,48 +721,24 @@
             gap: 12px;
         }
 
-        @media (max-width: 768px) {
-            .hero-actions-bottom {
-                bottom: 20px;
-                left: 20px;
-                gap: 8px;
-            }
-            .hero-actions-bottom .btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
+        .hero-actions-bottom .btn {
+            padding: 12px 28px;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 480px) {
-            .hero-actions-bottom {
-                bottom: 16px;
-                left: 50%;
-                transform: translateX(-50%);
-                gap: 6px;
-                flex-direction: column;
-                width: calc(100% - 32px);
-                align-items: center;
-            }
-            .hero-actions-bottom .btn {
-                width: 100%;
-                justify-content: center;
-                padding: 10px 16px;
-                font-size: 0.85rem;
-            }
-        }
-
+        /* Video controls - moved to top right on mobile to avoid overlap */
         .video-controls {
             position: absolute;
             bottom: 24px;
             right: 24px;
-            z-index: 2;
+            z-index: 3;
         }
 
         .video-controls button {
             width: 40px;
             height: 40px;
             border: none;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             color: white;
             border-radius: 50%;
             cursor: pointer;
@@ -770,11 +747,82 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .video-controls button:hover {
             background: var(--secondary-color);
             transform: scale(1.1);
+        }
+
+        /* ===== FIX: Mobile Hero Buttons & Mute ===== */
+        @media (max-width: 768px) {
+            .hero-actions-bottom {
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 8px;
+                flex-direction: row;
+                justify-content: center;
+                width: auto;
+                max-width: 90%;
+            }
+            
+            .hero-actions-bottom .btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            
+            /* Move mute button to top right on tablet */
+            .video-controls {
+                bottom: auto;
+                top: calc(var(--header-height) + 16px);
+                right: 16px;
+            }
+            
+            .video-controls button {
+                width: 36px;
+                height: 36px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-actions-bottom {
+                bottom: 16px;
+                gap: 6px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: auto;
+                max-width: 92%;
+            }
+            
+            .hero-actions-bottom .btn {
+                padding: 8px 14px;
+                font-size: 0.7rem;
+                white-space: nowrap;
+                flex: 0 1 auto;
+            }
+            
+            .hero-actions-bottom .btn i {
+                font-size: 0.65rem;
+            }
+            
+            /* Move mute button to top right on mobile */
+            .video-controls {
+                bottom: auto;
+                top: calc(var(--header-height) + 12px);
+                right: 12px;
+            }
+            
+            .video-controls button {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
         }
 
         /* ===================== BUTTONS ===================== */
@@ -1330,39 +1378,6 @@
             margin-top: auto !important;
         }
 
-        /* ✅ FIX: Keep controls visible in fullscreen */
-        .split-preview:fullscreen .preview-controls {
-            display: flex !important;
-            position: fixed !important;
-            bottom: 40px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            z-index: 99999 !important;
-            background: rgba(0,0,0,0.6) !important;
-            backdrop-filter: blur(10px) !important;
-            padding: 8px 16px !important;
-            border-radius: 50px !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        /* ✅ FIX: Video controls stay visible in fullscreen */
-        .split-preview:fullscreen .video-controls-group {
-            display: flex !important;
-        }
-
-        /* Hide other controls in fullscreen */
-        .split-preview:fullscreen .web-controls-group,
-        .split-preview:fullscreen .graphic-controls-group {
-            display: none !important;
-        }
-
-        /* Hide overlay in fullscreen */
-        .split-preview:fullscreen .preview-overlay {
-            display: none !important;
-        }
-
         .preview-controls button {
             width: 36px;
             height: 36px;
@@ -1725,17 +1740,6 @@
             .split-preview .preview-overlay h3 {
                 font-size: 1.1rem;
             }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 25px !important;
-                padding: 5px 10px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
-                min-width: 26px;
-                min-height: 26px;
-            }
             .split-list .load-more-btn {
                 padding: 8px 20px;
                 font-size: 0.8rem;
@@ -1811,18 +1815,6 @@
             }
             .split-preview.web-fit-mode .preview-controls {
                 bottom: 75px !important;
-            }
-            .split-preview:fullscreen .preview-controls {
-                bottom: 20px !important;
-                padding: 4px 8px !important;
-                gap: 4px !important;
-            }
-            .split-preview:fullscreen .preview-controls button {
-                width: 22px;
-                height: 22px;
-                font-size: 0.55rem;
-                min-width: 22px;
-                min-height: 22px;
             }
             .split-list .load-more-btn {
                 padding: 6px 16px;
@@ -2386,11 +2378,11 @@
         /* ===================== CONTACT ===================== */
         #contact {
             text-align: center;
-            background: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+            background: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('assets/images/contact-bg.webp') center/cover no-repeat;
         }
 
         [data-theme="dark"] #contact {
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('assets/images/contact-bg.webp') center/cover no-repeat;
         }
 
         .contact-wrapper {
@@ -2752,31 +2744,58 @@
             color: white;
         }
 
-        /* ===================== FIX: Only force controls visible when needed ===================== */
-        /* This rule ONLY applies when the preview has a video (motion project) */
-        .split-preview:has(video.preview-media) .video-controls-group {
+        /* ============================================================
+                   FIX: Proper fullscreen controls management
+                   ============================================================ */
+        
+        /* In fullscreen, show the appropriate controls based on project type */
+        .split-preview:fullscreen .video-controls-group {
+            display: none !important;
+        }
+        
+        .split-preview:fullscreen .web-controls-group {
+            display: none !important;
+        }
+        
+        .split-preview:fullscreen .graphic-controls-group {
+            display: none !important;
+        }
+        
+        /* Only show video controls in fullscreen for motion projects */
+        .split-preview:fullscreen.motion-project .video-controls-group {
             display: flex !important;
         }
-
-        /* Force controls to be visible and clickable when in fullscreen */
-        .split-preview:fullscreen .preview-controls,
-        .split-preview:fullscreen .preview-controls * {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
-        }
-
-        /* Ensure video controls are always visible when a video is playing in fullscreen */
-        .split-preview:fullscreen:has(video.preview-media) .video-controls-group {
+        
+        /* Only show web controls in fullscreen for web projects */
+        .split-preview:fullscreen.web-project .web-controls-group {
             display: flex !important;
+        }
+        
+        /* Only show graphic controls in fullscreen for graphic projects */
+        .split-preview:fullscreen.graphic-project .graphic-controls-group {
+            display: flex !important;
+        }
+        
+        /* Keep controls visible in fullscreen */
+        .split-preview:fullscreen .preview-controls {
+            display: flex !important;
+            position: fixed !important;
+            bottom: 40px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 99999 !important;
+            background: rgba(0,0,0,0.6) !important;
+            backdrop-filter: blur(10px) !important;
+            padding: 8px 16px !important;
+            border-radius: 50px !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
             opacity: 1 !important;
             visibility: visible !important;
         }
-
-        /* Keep controls visible after exiting fullscreen for motion projects */
-        .split-preview:has(video.preview-media) .preview-controls {
-            opacity: 1 !important;
-            visibility: visible !important;
+        
+        /* Hide overlay in fullscreen */
+        .split-preview:fullscreen .preview-overlay {
+            display: none !important;
         }
     </style>
 </head>
@@ -2784,7 +2803,7 @@
     <!-- ==================== LOADING OVERLAY ==================== -->
     <div id="loading-overlay">
         <div class="loading-content">
-            <img src="tunetek_loading.gif" alt="Loading animation" class="loading-gif">
+            <img src="assets/images/tunetek_loading.gif" alt="Loading animation" class="loading-gif">
             <div class="loading-percentage" id="loading-percentage">0%</div>
             <div class="loading-progress-container">
                 <div class="loading-progress-bar" id="loading-progress-bar"></div>
@@ -2797,7 +2816,7 @@
     <header id="main-header" role="banner">
         <div class="header-container">
             <a href="#hero" class="logo" aria-label="Tunetek Studio Design Home">
-                <img src="logo_transparent.png" alt="Tunetek Studio Design Logo" width="40" height="40">
+                <img src="assets/images/logo_transparent.png" alt="Tunetek Studio Design Logo" width="40" height="40">
                 <div class="logo-text">
                     <span class="tunetek">Tunetek</span>
                     <span class="studio-design">Studio Design</span>
@@ -2842,6 +2861,7 @@
             </video>
         </div>
 
+        <!-- Mute button - now positioned at top right on mobile -->
         <div class="video-controls">
             <button id="mute-btn" aria-label="Toggle sound">
                 <i class="fas fa-volume-mute"></i>
@@ -2882,7 +2902,7 @@
                     <p class="service-desc" data-i18n="services.graphic.desc">
                         We create visually stunning designs that communicate your brand's message effectively. From logos to complete brand identities.
                     </p>
-                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop&crop=center" alt="Graphic Design" class="service-image" loading="lazy">
+                    <img src="assets/images/graphic-design-service.webp" alt="Graphic Design" class="service-image" loading="lazy">
                 </div>
 
                 <div class="service-card fade-in fade-in-delay-1">
@@ -2893,7 +2913,7 @@
                     <p class="service-desc" data-i18n="services.motion.desc">
                         Bring your ideas to life with captivating motion graphics and animations. Perfect for explainer videos and social media.
                     </p>
-                    <img src="https://images.unsplash.com/photo-1579389083078-4e7018379f7e?w=600&h=400&fit=crop&crop=center" alt="Motion Design" class="service-image" loading="lazy">
+                    <img src="assets/images/motion-design-service.webp" alt="Motion Design" class="service-image" loading="lazy">
                 </div>
 
                 <div class="service-card fade-in fade-in-delay-2">
@@ -2904,7 +2924,7 @@
                     <p class="service-desc" data-i18n="services.web.desc">
                         We design responsive, user-friendly websites that not only look great but perform exceptionally across all devices.
                     </p>
-                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=400&fit=crop&crop=center" alt="Web Design" class="service-image" loading="lazy">
+                    <img src="assets/images/web-design-service.webp" alt="Web Design" class="service-image" loading="lazy">
                 </div>
             </div>
         </div>
@@ -3031,7 +3051,7 @@
 
             <div class="about-grid">
                 <div class="about-image fade-in">
-                    <img src="profil.jpg" alt="Wassef Ben Slimane - Founder of Tunetek Studio Design" loading="lazy">
+                    <img src="assets/images/profil.jpg" alt="Wassef Ben Slimane - Founder of Tunetek Studio Design" loading="lazy">
                 </div>
 
                 <div class="about-content fade-in fade-in-delay-1">
@@ -4080,6 +4100,17 @@
                 this.preview.style.overflow = 'hidden';
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
+                
+                // Add class to preview for fullscreen control targeting
+                this.preview.classList.remove('motion-project', 'web-project', 'graphic-project');
+                if (item.category === 'motion') {
+                    this.preview.classList.add('motion-project');
+                } else if (item.category === 'web') {
+                    this.preview.classList.add('web-project');
+                } else if (item.category === 'graphic') {
+                    this.preview.classList.add('graphic-project');
+                }
+                
                 this.updatePreview(item);
             }
 
@@ -4113,14 +4144,14 @@
                     // Show overlay again
                     this.previewOverlay.style.display = 'block';
                     
-                    // FIX: Always show preview controls with proper visibility
+                    // Always show preview controls
                     this.previewControls.style.display = 'flex';
                     this.previewControls.style.position = 'absolute';
                     this.previewControls.style.bottom = '80px';
                     this.previewControls.style.opacity = '1';
                     this.previewControls.style.visibility = 'visible';
                     
-                    // FIX: Only show motion controls if this is a motion project
+                    // Show appropriate controls based on category
                     if (this.currentCategoryType === 'motion') {
                         this.videoControlsGroup.style.display = 'flex';
                         this.videoControlsGroup.style.opacity = '1';
@@ -4426,17 +4457,6 @@
                 this.setupVideoControls();
                 this.setupWebControls();
                 this.setupGraphicControls();
-                
-                if (document.fullscreenElement) {
-                    this.previewOverlay.style.display = 'none';
-                    this.previewControls.style.display = 'flex';
-                    this.videoControlsGroup.style.display = 'none';
-                    this.webControlsGroup.style.display = 'flex';
-                    this.graphicControlsGroup.style.display = 'none';
-                    const divider = this.webControlsGroup.querySelector('.divider');
-                    if (divider) divider.style.display = 'none';
-                    this.webFitBtn.style.display = 'none';
-                }
             }
 
             createLoadingOverlay(element, type) {
@@ -4717,7 +4737,7 @@
                                         
                                         this.previewOverlay.style.display = 'none';
                                         
-                                        // FIX: Keep controls visible with !important via inline styles
+                                        // Keep controls visible
                                         this.previewControls.style.setProperty('display', 'flex', 'important');
                                         this.previewControls.style.setProperty('position', 'fixed', 'important');
                                         this.previewControls.style.setProperty('bottom', '40px', 'important');
@@ -4725,12 +4745,22 @@
                                         this.previewControls.style.setProperty('visibility', 'visible', 'important');
                                         this.previewControls.style.setProperty('z-index', '99999', 'important');
                                         
-                                        this.videoControlsGroup.style.setProperty('display', 'flex', 'important');
-                                        this.videoControlsGroup.style.setProperty('opacity', '1', 'important');
-                                        this.videoControlsGroup.style.setProperty('visibility', 'visible', 'important');
-                                        
-                                        this.webControlsGroup.style.display = 'none';
-                                        this.graphicControlsGroup.style.display = 'none';
+                                        // Only show video controls for motion
+                                        if (this.currentCategoryType === 'motion') {
+                                            this.videoControlsGroup.style.setProperty('display', 'flex', 'important');
+                                            this.videoControlsGroup.style.setProperty('opacity', '1', 'important');
+                                            this.videoControlsGroup.style.setProperty('visibility', 'visible', 'important');
+                                            this.webControlsGroup.style.display = 'none';
+                                            this.graphicControlsGroup.style.display = 'none';
+                                        } else if (this.currentCategoryType === 'web') {
+                                            this.webControlsGroup.style.display = 'flex';
+                                            this.videoControlsGroup.style.display = 'none';
+                                            this.graphicControlsGroup.style.display = 'none';
+                                        } else if (this.currentCategoryType === 'graphic') {
+                                            this.graphicControlsGroup.style.display = 'flex';
+                                            this.videoControlsGroup.style.display = 'none';
+                                            this.webControlsGroup.style.display = 'none';
+                                        }
                                         
                                         const fsBtn = this.videoControlsGroup.querySelector('.video-fullscreen-btn');
                                         if (fsBtn) fsBtn.innerHTML = '<i class="fas fa-compress"></i>';
@@ -4887,6 +4917,7 @@
                 }
                 
                 this.currentCategoryType = null;
+                this.preview.classList.remove('motion-project', 'web-project', 'graphic-project');
                 
                 const existingMedia = this.preview.querySelector('.preview-media');
                 if (existingMedia) existingMedia.remove();
@@ -5244,7 +5275,10 @@
                 if (muteBtn && video) {
                     video.muted = true;
                     muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    muteBtn.addEventListener('click', () => { video.muted = !video.muted; muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>'; });
+                    muteBtn.addEventListener('click', () => { 
+                        video.muted = !video.muted; 
+                        muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>'; 
+                    });
                 }
             }
 
