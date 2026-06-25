@@ -3286,7 +3286,8 @@
                         <i class="fab fa-facebook"></i> Facebook
                     </a>
                     <a href="https://www.instagram.com/tunetek_studio_design/" target="_blank" rel="noopener" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i> Instagram                    </a>
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
                     <a href="https://www.linkedin.com/company/tunetekstudiodesign" target="_blank" rel="noopener" aria-label="LinkedIn">
                         <i class="fab fa-linkedin-in"></i> LinkedIn
                     </a>
@@ -4018,7 +4019,7 @@
         }
 
         // =====================================================================
-        // SPLIT SCREEN MANAGER - UNCHANGED (preserved as requested)
+        // SPLIT SCREEN MANAGER - WITH MOTION THUMBNAIL FIX
         // =====================================================================
         class SplitScreenManager {
             constructor() {
@@ -4086,9 +4087,6 @@
             }
 
             async init() {
-                // Note: loading progress is now handled by RealLoadingManager
-                // This runs independently
-                
                 this.allProjects = this.projectManager.loadAllProjects();
                 this.setupCounts();
                 this.setupFilters();
@@ -4268,6 +4266,9 @@
                 }, 300);
             }
 
+            // ================================================================
+            // FIXED: createListItem with WebP poster for motion thumbnails
+            // ================================================================
             createListItem(item, index) {
                 const div = document.createElement('div');
                 div.className = 'list-item' + (index === 0 && !this.currentProject ? ' active' : '');
@@ -4281,6 +4282,8 @@
                 if (item.isVideo) {
                     const vid = document.createElement('video');
                     vid.src = filePath;
+                    // Use WebP poster for instant thumbnail loading
+                    vid.poster = filePath.replace('.mp4', '.webp');
                     vid.muted = true;
                     vid.playsInline = true;
                     vid.preload = 'metadata';
@@ -4334,7 +4337,6 @@
                 this.preview.scrollTop = 0;
                 this.preview.scrollLeft = 0;
                 
-                // Add class to preview for fullscreen control targeting
                 this.preview.classList.remove('motion-project', 'web-project', 'graphic-project');
                 if (item.category === 'motion') {
                     this.preview.classList.add('motion-project');
@@ -5339,7 +5341,6 @@
                     }
                 });
                 
-                // Update error messages
                 this.errorElements.forEach(el => {
                     const key = el.dataset.i18nError;
                     if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
@@ -5347,7 +5348,6 @@
                     }
                 });
                 
-                // Update form success/error messages
                 const successMsg = document.querySelector('#form-success span[data-i18n]');
                 const errorMsg = document.querySelector('#form-error span[data-i18n]');
                 if (successMsg && TRANSLATIONS[lang] && TRANSLATIONS[lang]['contact.success']) {
@@ -5427,20 +5427,16 @@
             init() {
                 if (!this.form) return;
                 
-                // Get language manager reference
                 this.languageManager = window.languageManager;
                 
-                // Add validation events
                 Object.values(this.fields).forEach(field => {
                     const el = field.element;
                     if (!el) return;
                     
-                    // Validate on blur
                     el.addEventListener('blur', () => {
                         this.validateField(field);
                     });
                     
-                    // Clear error on input
                     el.addEventListener('input', () => {
                         if (el.classList.contains('error')) {
                             this.clearFieldError(field);
@@ -5448,7 +5444,6 @@
                     });
                 });
                 
-                // Form submit
                 this.form.addEventListener('submit', (e) => {
                     e.preventDefault();
                     this.handleSubmit();
@@ -5498,7 +5493,6 @@
                 el.classList.remove('success');
                 group.classList.add('has-error');
                 
-                // Update error message based on language
                 if (this.languageManager) {
                     const lang = this.languageManager.currentLang;
                     if (TRANSLATIONS[lang] && TRANSLATIONS[lang][errorKey]) {
@@ -5535,13 +5529,10 @@
                 const submitBtn = document.getElementById('form-submit-btn');
                 const originalText = submitBtn.innerHTML;
                 
-                // Hide previous messages
                 successMsg.classList.remove('visible');
                 errorMsg.classList.remove('visible');
                 
-                // Validate all fields
                 if (!this.validateAll()) {
-                    // Scroll to first error
                     const firstError = this.form.querySelector('.form-group.has-error');
                     if (firstError) {
                         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -5549,7 +5540,6 @@
                     return;
                 }
                 
-                // Submit form
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                 submitBtn.disabled = true;
                 
@@ -5566,7 +5556,6 @@
                     if (response.ok) {
                         successMsg.classList.add('visible');
                         this.form.reset();
-                        // Clear success states
                         Object.values(this.fields).forEach(field => {
                             field.element.classList.remove('success', 'error');
                         });
@@ -5648,11 +5637,9 @@
 
             async init() {
                 try {
-                    // Start the REAL loading manager first
                     const realLoader = new RealLoadingManager();
                     realLoader.start();
                     
-                    // Then initialize everything else
                     initHeroVideo();
                     initAboutStaggeredAnimation();
                     
@@ -5664,7 +5651,6 @@
                     this.setupHamburgerMenu();
                 } catch (error) {
                     console.error('Failed to initialize app:', error);
-                    // Force hide loading overlay if there's an error
                     const overlay = document.getElementById('loading-overlay');
                     if (overlay) overlay.classList.add('hidden');
                 }
