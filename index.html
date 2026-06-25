@@ -1502,6 +1502,7 @@
             opacity: 1;
         }
 
+        /* ===================== SPLIT LIST - WITH VIEW TOGGLE ===================== */
         .split-list {
             padding: 20px 24px;
             overflow-y: auto;
@@ -1518,19 +1519,76 @@
             margin-bottom: 16px;
         }
 
-        .split-list .list-header h4 {
+        .list-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .list-header-left h4 {
             font-family: var(--font-heading);
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-color);
+            margin: 0;
         }
 
-        .split-list .list-header .count {
+        .list-header-left .count {
             font-size: 0.8rem;
             opacity: 0.5;
         }
 
-        .split-list .list-item {
+        /* View Toggle Buttons */
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            background: var(--accent-color);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            flex-shrink: 0;
+        }
+
+        .view-toggle .view-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+        }
+
+        .view-toggle .view-btn:hover {
+            opacity: 0.8;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .view-toggle .view-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            opacity: 1;
+            box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
+        }
+
+        [data-theme="dark"] .view-toggle {
+            background: var(--card-bg);
+            border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] .view-toggle .view-btn:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* List View (Default) */
+        .list-view .list-item {
             display: flex;
             align-items: center;
             gap: 16px;
@@ -1540,28 +1598,11 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid transparent;
             margin-bottom: 6px;
+            flex-direction: row;
+            text-align: left;
         }
 
-        .split-list .list-item:hover {
-            background: rgba(0,0,0,0.03);
-            transform: translateX(4px);
-        }
-
-        .split-list .list-item.active {
-            background: rgba(255, 107, 0, 0.08);
-            border-color: var(--secondary-color);
-            transform: translateX(6px);
-        }
-
-        [data-theme="dark"] .split-list .list-item:hover {
-            background: rgba(255,255,255,0.03);
-        }
-
-        [data-theme="dark"] .split-list .list-item.active {
-            background: rgba(255, 107, 0, 0.12);
-        }
-
-        .split-list .list-item .thumb {
+        .list-view .list-item .thumb {
             width: 56px;
             height: 42px;
             border-radius: 8px;
@@ -1570,20 +1611,20 @@
             background: #f0f0f0;
         }
 
-        .split-list .list-item .thumb img,
-        .split-list .list-item .thumb video {
+        .list-view .list-item .thumb img,
+        .list-view .list-item .thumb video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        .split-list .list-item .info {
+        .list-view .list-item .info {
             flex: 1;
             min-width: 0;
         }
 
-        .split-list .list-item .info h5 {
+        .list-view .list-item .info h5 {
             font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-color);
@@ -1592,7 +1633,7 @@
             text-overflow: ellipsis;
         }
 
-        .split-list .list-item .info .cat-tag {
+        .list-view .list-item .info .cat-tag {
             font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -1600,17 +1641,167 @@
             font-weight: 600;
         }
 
-        .split-list .list-item .arrow {
+        .list-view .list-item .arrow {
             color: var(--text-color);
             opacity: 0.2;
             transition: all 0.3s ease;
         }
 
-        .split-list .list-item.active .arrow,
-        .split-list .list-item:hover .arrow {
+        .list-view .list-item.active .arrow,
+        .list-view .list-item:hover .arrow {
             opacity: 1;
             color: var(--secondary-color);
             transform: translateX(4px);
+        }
+
+        /* Grid View */
+        .grid-view {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            padding: 4px 0;
+        }
+
+        .grid-view .list-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            padding: 12px !important;
+            border-radius: 12px !important;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid transparent;
+            background: var(--tertiary-color);
+            gap: 8px;
+            margin-bottom: 0;
+            min-height: 160px;
+        }
+
+        .grid-view .list-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-color: var(--border-light);
+        }
+
+        .grid-view .list-item.active {
+            border-color: var(--secondary-color);
+            background: rgba(255, 107, 0, 0.06);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.12);
+        }
+
+        [data-theme="dark"] .grid-view .list-item {
+            background: var(--card-bg);
+        }
+
+        [data-theme="dark"] .grid-view .list-item.active {
+            background: rgba(255, 107, 0, 0.12);
+        }
+
+        .grid-view .list-item .thumb {
+            width: 100% !important;
+            height: 100px !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #f0f0f0;
+        }
+
+        .grid-view .list-item .thumb img,
+        .grid-view .list-item .thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .grid-view .list-item .info {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .grid-view .list-item .info h5 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
+        }
+
+        .grid-view .list-item .info .cat-tag {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .grid-view .list-item .arrow {
+            display: none !important;
+        }
+
+        .grid-view .list-item .thumb video {
+            object-fit: cover;
+        }
+
+        /* Load more button in grid view */
+        .grid-view + .load-more-container {
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive Grid */
+        @media (max-width: 768px) {
+            .grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 10px;
+            }
+            .grid-view .list-item .thumb {
+                height: 80px !important;
+            }
+            .grid-view .list-item {
+                min-height: 130px;
+                padding: 10px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 8px;
+            }
+            .grid-view .list-item .thumb {
+                height: 65px !important;
+            }
+            .grid-view .list-item {
+                min-height: 110px;
+                padding: 8px !important;
+            }
+            .grid-view .list-item .info h5 {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* ===================== LIST ITEMS COMMON STYLES ===================== */
+        .list-item:hover {
+            background: rgba(0,0,0,0.03);
+            transform: translateX(4px);
+        }
+
+        .list-item.active {
+            background: rgba(255, 107, 0, 0.08);
+            border-color: var(--secondary-color);
+            transform: translateX(6px);
+        }
+
+        [data-theme="dark"] .list-item:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        [data-theme="dark"] .list-item.active {
+            background: rgba(255, 107, 0, 0.12);
         }
 
         .split-list .list-loading {
@@ -1720,6 +1911,17 @@
                 flex-direction: column;
                 gap: 12px;
             }
+            .list-header-left h4 {
+                font-size: 1rem;
+            }
+            .view-toggle .view-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
+            }
+            .grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
@@ -1743,11 +1945,11 @@
                 max-height: 350px;
                 padding: 12px 16px;
             }
-            .split-list .list-item {
+            .list-view .list-item {
                 padding: 10px 12px;
                 gap: 12px;
             }
-            .split-list .list-item .thumb {
+            .list-view .list-item .thumb {
                 width: 44px;
                 height: 34px;
             }
@@ -1770,6 +1972,26 @@
                 padding: 8px 20px;
                 font-size: 0.8rem;
                 min-height: 36px;
+            }
+            .list-header-left {
+                gap: 8px;
+            }
+            .list-header-left .count {
+                font-size: 0.7rem;
+            }
+            .grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 8px;
+            }
+            .grid-view .list-item .thumb {
+                height: 70px !important;
+            }
+            .grid-view .list-item {
+                min-height: 120px;
+                padding: 8px !important;
+            }
+            .grid-view .list-item .info h5 {
+                font-size: 0.7rem;
             }
         }
 
@@ -1800,11 +2022,11 @@
                 max-height: 300px;
                 padding: 8px 12px;
             }
-            .split-list .list-item {
+            .list-view .list-item {
                 padding: 8px 10px;
                 gap: 10px;
             }
-            .split-list .list-item .thumb {
+            .list-view .list-item .thumb {
                 width: 36px;
                 height: 28px;
             }
@@ -1846,6 +2068,31 @@
                 padding: 6px 16px;
                 font-size: 0.7rem;
                 min-height: 32px;
+            }
+            .view-toggle .view-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+            .list-header-left h4 {
+                font-size: 0.9rem;
+            }
+            .grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 6px;
+            }
+            .grid-view .list-item .thumb {
+                height: 55px !important;
+            }
+            .grid-view .list-item {
+                min-height: 95px;
+                padding: 6px !important;
+            }
+            .grid-view .list-item .info h5 {
+                font-size: 0.6rem;
+            }
+            .grid-view .list-item .info .cat-tag {
+                font-size: 0.5rem;
             }
         }
 
@@ -3117,14 +3364,24 @@
 
                 <div class="split-list" id="splitList">
                     <div class="list-header">
-                        <h4 data-i18n="portfolio.projects">Projects</h4>
-                        <span class="count" id="listCount">0 projects</span>
+                        <div class="list-header-left">
+                            <h4 data-i18n="portfolio.projects">Projects</h4>
+                            <span class="count" id="listCount">0 projects</span>
+                        </div>
+                        <div class="view-toggle" id="viewToggle">
+                            <button class="view-btn active" data-view="grid" title="Grid View" aria-label="Grid view">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn" data-view="list" title="List View" aria-label="List view">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="list-loading" id="listLoading">
                         <i class="fas fa-spinner fa-spin"></i>
                         <p data-i18n="portfolio.loading">Loading projects...</p>
                     </div>
-                    <div id="listContainer"></div>
+                    <div id="listContainer" class="list-view"></div>
                 </div>
             </div>
         </div>
@@ -3361,15 +3618,15 @@
         const FADE_TIMEOUT = 400;
         const HEADER_HEIGHT = 72;
         const PROJECTS_PER_PAGE = 12;
-        const HERO_VIDEO_TIMEOUT = 10000; // 10 seconds max wait for hero video
+        const HERO_VIDEO_TIMEOUT = 10000;
 
         // =====================================================================
-        // REAL LOADING MANAGER - ONLY TRACKS HTML, CSS, AND HERO VIDEO
+        // REAL LOADING MANAGER
         // =====================================================================
         class RealLoadingManager {
             constructor() {
-                this.htmlLoaded = true; // HTML is always loaded when script runs
-                this.cssLoaded = true; // CSS is always loaded when script runs
+                this.htmlLoaded = true;
+                this.cssLoaded = true;
                 this.heroVideoLoaded = false;
                 this.heroVideoError = false;
                 this.isComplete = false;
@@ -3382,7 +3639,6 @@
                 this.loadingText = document.getElementById('loading-text');
                 this.loadingStatus = document.getElementById('loading-status');
                 
-                // Bind methods
                 this._updateUI = this._updateUI.bind(this);
                 this._onVideoReady = this._onVideoReady.bind(this);
                 this._onVideoError = this._onVideoError.bind(this);
@@ -3390,13 +3646,8 @@
             }
             
             start() {
-                // HTML and CSS are already loaded
                 this._updateUI();
-                
-                // Start tracking hero video
                 this._trackHeroVideo();
-                
-                // Fallback: if video takes too long, force hide
                 this.videoTimeout = setTimeout(this._forceHide, HERO_VIDEO_TIMEOUT);
             }
             
@@ -3407,18 +3658,15 @@
                     return;
                 }
                 
-                // Check if video is already loaded
-                if (video.readyState >= 4) { // HAVE_ENOUGH_DATA
+                if (video.readyState >= 4) {
                     this._onVideoReady();
                     return;
                 }
                 
-                // Listen for events
                 video.addEventListener('canplaythrough', this._onVideoReady);
                 video.addEventListener('loadeddata', this._onVideoReady);
                 video.addEventListener('error', this._onVideoError);
                 
-                // Also check if video is already playing (might be cached)
                 if (video.currentTime > 0 && video.readyState >= 3) {
                     this._onVideoReady();
                 }
@@ -3428,7 +3676,6 @@
                 if (this.heroVideoLoaded) return;
                 this.heroVideoLoaded = true;
                 
-                // Clean up listeners
                 const video = document.getElementById('heroVideo');
                 if (video) {
                     video.removeEventListener('canplaythrough', this._onVideoReady);
@@ -3443,7 +3690,6 @@
             _onVideoError() {
                 if (this.heroVideoError) return;
                 this.heroVideoError = true;
-                // Still mark as loaded so we don't block the page
                 this.heroVideoLoaded = true;
                 this._updateUI();
                 this._checkComplete();
@@ -3455,13 +3701,11 @@
                     this.isComplete = true;
                     this._updateUI();
                     
-                    // Clear timeout
                     if (this.videoTimeout) {
                         clearTimeout(this.videoTimeout);
                         this.videoTimeout = null;
                     }
                     
-                    // Fade out loading overlay
                     setTimeout(() => {
                         this.loadingOverlay.classList.add('hidden');
                     }, 500);
@@ -3470,7 +3714,6 @@
             
             _forceHide() {
                 if (this.isComplete) return;
-                // Force complete if video is taking too long
                 if (!this.heroVideoLoaded) {
                     this.heroVideoLoaded = true;
                     this._updateUI();
@@ -3479,7 +3722,6 @@
             }
             
             _updateUI() {
-                // Calculate progress: 33% HTML, 33% CSS, 34% Hero Video
                 let progress = 0;
                 let status = '';
                 
@@ -3498,11 +3740,9 @@
                 
                 this.progress = Math.min(Math.round(progress), 100);
                 
-                // Update UI
                 this.progressBar.style.width = this.progress + '%';
                 this.percentageDisplay.textContent = this.progress + '%';
                 
-                // Update status text
                 if (this.progress < 33) {
                     this.loadingText.textContent = 'Loading page...';
                     this.loadingStatus.textContent = 'Initializing...';
@@ -3532,7 +3772,7 @@
         }
 
         // =====================================================================
-        // FILE MANIFEST - NOW WITH WebP FOR GRAPHIC AND WEB SECTIONS
+        // FILE MANIFEST
         // =====================================================================
         const GITHUB_BASE = 'https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/';
 
@@ -3838,10 +4078,8 @@
                 'footer.socialTitle': 'Follow Us',
                 'footer.copyright': '© 2016 - 2026 Tunetek Studio Design. All rights reserved.',
                 'footer.credit': 'Created with ❤ by Wassef Ben Slimane',
-                // Form validation errors
                 'form.required': 'This field is required',
-                'form.email': 'Please enter a valid email address',
-                'form.minlength': 'Please enter at least {0} characters'
+                'form.email': 'Please enter a valid email address'
             },
             fr: {
                 'nav.home': 'Accueil',
@@ -3898,10 +4136,8 @@
                 'footer.socialTitle': 'Suivez-nous',
                 'footer.copyright': '© 2016 - 2026 Tunetek Studio Design. Tous droits réservés.',
                 'footer.credit': 'Créé avec ❤ par Wassef Ben Slimane',
-                // Form validation errors
                 'form.required': 'Ce champ est requis',
-                'form.email': 'Veuillez entrer une adresse email valide',
-                'form.minlength': 'Veuillez entrer au moins {0} caractères'
+                'form.email': 'Veuillez entrer une adresse email valide'
             }
         };
 
@@ -4019,7 +4255,7 @@
         }
 
         // =====================================================================
-        // SPLIT SCREEN MANAGER - WITH MOTION THUMBNAIL FIX
+        // SPLIT SCREEN MANAGER - WITH GRID/LIST VIEW TOGGLE
         // =====================================================================
         class SplitScreenManager {
             constructor() {
@@ -4038,6 +4274,7 @@
                 this.graphicCurrentIndex = 0;
                 this.graphicProjectFiles = [];
                 this.currentCategoryType = null;
+                this.currentView = 'list';
                 
                 this.currentPage = 0;
                 this.itemsPerPage = PROJECTS_PER_PAGE;
@@ -4062,6 +4299,7 @@
                     motion: document.getElementById('countMotion'),
                     web: document.getElementById('countWeb')
                 };
+                this.viewToggle = document.getElementById('viewToggle');
                 
                 this.videoControlsGroup = document.getElementById('videoControlsGroup');
                 this.webControlsGroup = document.getElementById('webControlsGroup');
@@ -4075,13 +4313,13 @@
                 this.graphicFullscreenBtn = document.getElementById('graphicFullscreenBtn');
                 this.previewControls = document.getElementById('previewControls');
                 
-                // Bind methods
                 this._updateVideoProgress = this._updateVideoProgress.bind(this);
                 this._handleFullscreenChange = this._handleFullscreenChange.bind(this);
                 this._handleFullscreenChangeWeb = this._handleFullscreenChangeWeb.bind(this);
                 this._graphicKeyHandler = null;
                 this._fullscreenChangeHandler = null;
                 this._fullscreenChangeHandlerWeb = null;
+                this._handleViewToggle = this._handleViewToggle.bind(this);
                 
                 this.init();
             }
@@ -4091,6 +4329,7 @@
                 this.setupCounts();
                 this.setupFilters();
                 this.setupSearch();
+                this.setupViewToggle();
                 this.buildList('all');
             }
 
@@ -4106,6 +4345,51 @@
                 this.countElements.graphic.textContent = counts.graphic;
                 this.countElements.motion.textContent = counts.motion;
                 this.countElements.web.textContent = counts.web;
+            }
+
+            setupViewToggle() {
+                // Restore saved preference
+                const savedView = localStorage.getItem('portfolioView') || 'list';
+                this.currentView = savedView;
+                
+                // Set active state
+                const buttons = this.viewToggle.querySelectorAll('.view-btn');
+                buttons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.view === savedView);
+                });
+                
+                // Apply view
+                this.applyView(savedView);
+                
+                // Add click listeners
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const view = btn.dataset.view;
+                        if (view === this.currentView) return;
+                        this._handleViewToggle(view);
+                    });
+                });
+            }
+
+            _handleViewToggle(view) {
+                this.currentView = view;
+                localStorage.setItem('portfolioView', view);
+                
+                // Update button states
+                this.viewToggle.querySelectorAll('.view-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.view === view);
+                });
+                
+                this.applyView(view);
+            }
+
+            applyView(view) {
+                this.listContainer.classList.remove('list-view', 'grid-view');
+                if (view === 'grid') {
+                    this.listContainer.classList.add('grid-view');
+                } else {
+                    this.listContainer.classList.add('list-view');
+                }
             }
 
             getProjectsForCategory(category) {
@@ -4246,6 +4530,9 @@
                     this.listContainer.appendChild(loadMoreContainer);
                 }
                 
+                // Re-apply view after rendering
+                this.applyView(this.currentView);
+                
                 if (this.filteredItems.length > 0 && !this.currentProject) {
                     this.selectProject(this.filteredItems[0], 0);
                 } else if (this.currentProject) {
@@ -4266,9 +4553,6 @@
                 }, 300);
             }
 
-            // ================================================================
-            // FIXED: createListItem with WebP poster for motion thumbnails
-            // ================================================================
             createListItem(item, index) {
                 const div = document.createElement('div');
                 div.className = 'list-item' + (index === 0 && !this.currentProject ? ' active' : '');
@@ -4282,7 +4566,6 @@
                 if (item.isVideo) {
                     const vid = document.createElement('video');
                     vid.src = filePath;
-                    // Use WebP poster for instant thumbnail loading
                     vid.poster = filePath.replace('.mp4', '.webp');
                     vid.muted = true;
                     vid.playsInline = true;
@@ -5389,7 +5672,7 @@
         }
 
         // =====================================================================
-        // FORM VALIDATION - DUAL LANGUAGE + DUAL THEME
+        // FORM VALIDATION
         // =====================================================================
         class FormValidator {
             constructor() {
@@ -5580,7 +5863,7 @@
         }
 
         // =====================================================================
-        // ABOUT SECTION - STAGGERED LUXURY ANIMATION
+        // ABOUT SECTION ANIMATION
         // =====================================================================
         function initAboutStaggeredAnimation() {
             const paragraphs = document.querySelectorAll('.about-paragraph');
