@@ -1747,13 +1747,67 @@
             object-fit: cover;
         }
 
-        /* Load more button in grid view */
-        .grid-view + .load-more-container {
+        /* ===================== LOAD MORE BUTTON - UNIFIED STYLE ===================== */
+        .load-more-container {
+            text-align: center;
+            padding: 20px 0 10px;
+            width: 100%;
+        }
+
+        /* Same style for both list and grid views */
+        .load-more-btn {
+            padding: 12px 36px;
+            border: 2px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .load-more-btn:hover {
+            background: var(--secondary-color);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.2);
+        }
+
+        .load-more-btn:active {
+            transform: translateY(0px);
+        }
+
+        /* Dark theme support */
+        [data-theme="dark"] .load-more-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        [data-theme="dark"] .load-more-btn:hover {
+            background: var(--secondary-color);
+            color: white !important;
+        }
+
+        /* Grid view - make button span full width */
+        .grid-view .load-more-container {
             grid-column: 1 / -1;
         }
 
-        /* Responsive Grid */
+        /* Responsive */
         @media (max-width: 768px) {
+            .load-more-btn {
+                padding: 10px 28px;
+                font-size: 0.85rem;
+                min-height: 42px;
+            }
             .grid-view {
                 grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
                 gap: 10px;
@@ -1768,6 +1822,11 @@
         }
 
         @media (max-width: 480px) {
+            .load-more-btn {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+                min-height: 38px;
+            }
             .grid-view {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
                 gap: 8px;
@@ -1781,6 +1840,9 @@
             }
             .grid-view .list-item .info h5 {
                 font-size: 0.65rem;
+            }
+            .grid-view .list-item .info .cat-tag {
+                font-size: 0.5rem;
             }
         }
 
@@ -1828,32 +1890,6 @@
             font-size: 2.5rem;
             display: block;
             margin-bottom: 12px;
-        }
-
-        .split-list .load-more-container {
-            text-align: center;
-            padding: 20px 0 10px;
-        }
-
-        .split-list .load-more-btn {
-            padding: 10px 30px;
-            border: 2px solid var(--secondary-color);
-            background: transparent;
-            color: var(--secondary-color);
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all var(--transition);
-            font-family: var(--font-body);
-            min-height: 44px;
-        }
-
-        .split-list .load-more-btn:hover {
-            background: var(--secondary-color);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.2);
         }
 
         .split-list::-webkit-scrollbar {
@@ -1968,29 +2004,10 @@
             .split-preview .preview-overlay h3 {
                 font-size: 1.1rem;
             }
-            .split-list .load-more-btn {
-                padding: 8px 20px;
-                font-size: 0.8rem;
-                min-height: 36px;
-            }
             .list-header-left {
                 gap: 8px;
             }
             .list-header-left .count {
-                font-size: 0.7rem;
-            }
-            .grid-view {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                gap: 8px;
-            }
-            .grid-view .list-item .thumb {
-                height: 70px !important;
-            }
-            .grid-view .list-item {
-                min-height: 120px;
-                padding: 8px !important;
-            }
-            .grid-view .list-item .info h5 {
                 font-size: 0.7rem;
             }
         }
@@ -2064,11 +2081,6 @@
             .split-preview.web-fit-mode .preview-controls {
                 bottom: 75px !important;
             }
-            .split-list .load-more-btn {
-                padding: 6px 16px;
-                font-size: 0.7rem;
-                min-height: 32px;
-            }
             .view-toggle .view-btn {
                 width: 28px;
                 height: 28px;
@@ -2076,23 +2088,6 @@
             }
             .list-header-left h4 {
                 font-size: 0.9rem;
-            }
-            .grid-view {
-                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-                gap: 6px;
-            }
-            .grid-view .list-item .thumb {
-                height: 55px !important;
-            }
-            .grid-view .list-item {
-                min-height: 95px;
-                padding: 6px !important;
-            }
-            .grid-view .list-item .info h5 {
-                font-size: 0.6rem;
-            }
-            .grid-view .list-item .info .cat-tag {
-                font-size: 0.5rem;
             }
         }
 
