@@ -3185,6 +3185,9 @@
                 <div class="hero-loading-spinner"></div>
             </div>
             <video class="hero-video" autoplay loop muted playsinline preload="metadata" id="heroVideo">
+                <!-- WebM first (preferred by most browsers - smaller, faster) -->
+                <source src="https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/hero-video.webm" type="video/webm">
+                <!-- MP4 fallback (for Safari and older browsers) -->
                 <source src="https://raw.githubusercontent.com/WBenz/Tunetek-Studio-Design/main/hero-video.mp4" type="video/mp4">
             </video>
         </div>
